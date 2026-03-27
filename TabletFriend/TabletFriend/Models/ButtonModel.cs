@@ -1,12 +1,16 @@
-﻿using MaterialDesignThemes.Wpf;
+﻿// using MaterialDesignThemes.Wpf;
 using System;
 using System.IO;
 using System.Numerics;
-using System.Windows.Controls;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
+// using System.Windows.Controls;
+// using System.Windows.Media;
+// using System.Windows.Media.Imaging;
 using TabletFriend.Actions;
 using TabletFriend.Data;
+using Avalonia.Controls;
+using Avalonia.Media;
+using Avalonia.Media.Imaging;
+using IconPacks.Avalonia.MaterialDesign;
 
 namespace TabletFriend.Models
 {
@@ -15,7 +19,7 @@ namespace TabletFriend.Models
 		public ButtonAction Action;
 
 		public string Text = "";
-		public object Icon;
+		public object? Icon;
 
 		public Vector2 Position = Vector2.Zero;
 		public Vector2 Size = Vector2.One;
@@ -49,7 +53,7 @@ namespace TabletFriend.Models
 				{
 					var ico = new Image();
 
-					ico.Source = new BitmapImage(new Uri(Path.Combine(AppState.CurrentDirectory, data.Icon)));
+					ico.Source = new Bitmap(Path.Combine(AppState.CurrentDirectory, data.Icon));
 					ico.Stretch = (Stretch)data.IconStretch;
 
 					Icon = ico;
@@ -57,9 +61,9 @@ namespace TabletFriend.Models
 				else
 				{
 					var iconName = data.Icon.Replace("_", "").Replace("-", ""); // Sanitizing the icon.
-					if (Enum.TryParse<PackIconKind>(iconName, true, out var kind))
+					if (Enum.TryParse<PackIconMaterialDesignKind>(iconName, true, out var kind))
 					{
-						var ico = new PackIcon();
+						var ico = new PackIconMaterialDesign();
 						ico.Kind = kind;
 
 						Icon = ico;

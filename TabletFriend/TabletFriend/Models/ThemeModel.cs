@@ -1,5 +1,5 @@
 ﻿using System.Globalization;
-using System.Windows.Media;
+using Avalonia.Media;
 using TabletFriend.Data;
 
 namespace TabletFriend.Models
