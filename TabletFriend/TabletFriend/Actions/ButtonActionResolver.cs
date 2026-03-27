@@ -165,21 +165,25 @@ namespace TabletFriend.Actions
 		/// </summary>
 		private static Dictionary<string, string> _translationTable = new Dictionary<string, string>(StringComparer.InvariantCultureIgnoreCase)
 		{
-			{ "Windows", nameof(KeyCode.LWin) },
-			{ "Win", nameof(KeyCode.LWin) },
-			{ "Shift", nameof(KeyCode.LShift) },
-			{ "Ctrl", nameof(KeyCode.LControl) },
-			{ "Alt", nameof(KeyCode.LAlt) },
-			{ "0", nameof(KeyCode.D0) },
-			{ "1", nameof(KeyCode.D1) },
-			{ "2", nameof(KeyCode.D2) },
-			{ "3", nameof(KeyCode.D3) },
-			{ "4", nameof(KeyCode.D4) },
-			{ "5", nameof(KeyCode.D5) },
-			{ "6", nameof(KeyCode.D6) },
-			{ "7", nameof(KeyCode.D7) },
-			{ "8", nameof(KeyCode.D8) },
-			{ "9", nameof(KeyCode.D9) },
+			{ "Windows", "Super" },   // Linux “Super” key
+            { "Win", "Super" },
+            { "Shift", "Shift" },
+            { "Ctrl", "Ctrl" },
+            { "Alt", "Alt" },
+            { "0", "0" },
+            { "1", "1" },
+            { "2", "2" },
+            { "3", "3" },
+            { "4", "4" },
+            { "5", "5" },
+            { "6", "6" },
+            { "7", "7" },
+            { "8", "8" },
+            { "9", "9" },
+            { "Enter", "Return" },    // xdotool uses Return
+            { "Esc", "Escape" },
+            { "Backspace", "BackSpace" }
+            // Add F1-F12 or others as needed
 		};
 	}
 }
