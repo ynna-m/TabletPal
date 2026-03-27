@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using WindowsInput.Events;
+// using WindowsInput.Events;
 
 namespace TabletFriend.Actions
 {
@@ -73,7 +73,8 @@ namespace TabletFriend.Actions
 				return ResolveUndockAction();
 			}
 
-			return new KeyAction(StringToKeyCode(actionString));
+			// return new KeyAction(StringToKeyCode(actionString));
+            return new KeyAction(actionString);
 		}
 
 		private static ButtonAction ResolveToggleAction(string actionString) =>
@@ -127,28 +128,28 @@ namespace TabletFriend.Actions
 		}
 
 
-		private static KeyCode[] StringToKeyCode(string keyString)
-		{
-			try
-			{
-				var args = keyString.Replace(" ", "").Replace("_", "").Split("+");
-				var keysList = new List<KeyCode>();
+		// private static KeyCode[] StringToKeyCode(string keyString)
+		// {
+		// 	try
+		// 	{
+		// 		var args = keyString.Replace(" ", "").Replace("_", "").Split("+");
+		// 		var keysList = new List<KeyCode>();
 
-				foreach (var arg in args)
-				{
-					keysList.Add(Enum.Parse<KeyCode>(Translate(arg), true));
-				}
+		// 		foreach (var arg in args)
+		// 		{
+		// 			keysList.Add(Enum.Parse<KeyCode>(Translate(arg), true));
+		// 		}
 
-				return keysList.ToArray();
-			}
-			catch (Exception e)
-			{
-				throw new FormatException(
-					"Error parsing '" + keyString + "'. Command or key combination may be invalid. "
-					+ Environment.NewLine + e.Message
-				);
-			}
-		}
+		// 		return keysList.ToArray();
+		// 	}
+		// 	catch (Exception e)
+		// 	{
+		// 		throw new FormatException(
+		// 			"Error parsing '" + keyString + "'. Command or key combination may be invalid. "
+		// 			+ Environment.NewLine + e.Message
+		// 		);
+		// 	}
+		// }
 
 		private static string Translate(string inputKey)
 		{
