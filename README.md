@@ -1,4 +1,4 @@
-# Tablet Friend - In Progress. Nothing's working yet as of 03/27/2026
+# Tablet Pal - In Progress. Nothing's working yet as of 03/27/2026. Not even description is right, right now.
 
 ![logo](icons/logo.png)
 
