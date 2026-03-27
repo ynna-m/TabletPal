@@ -1,6 +1,9 @@
-﻿using System.Windows;
+﻿// using System.Windows;
 using TabletFriend.Models;
-using WpfAppBar;
+using TabletFriend.Docking;
+using Avalonia.Threading;
+using MsBox.Avalonia;
+using MsBox.Avalonia.Enums;
 
 namespace TabletFriend
 {
@@ -20,8 +23,8 @@ namespace TabletFriend
 
 		private void OnFilesChanged(object[] args)
 		{
-			Application.Current.Dispatcher.Invoke(
-				delegate
+			Dispatcher.UIThread.Post(
+				()=>
 				{
 					LoadTheme(AppState.CurrentThemeName);
 				}
@@ -41,39 +44,60 @@ namespace TabletFriend
 		}
 
 
-		public void LoadTheme(string path)
+		public async void LoadTheme(string path)
 		{
 			
 			if (AppState.Themes.Count == 0)
 			{
-				MessageBox.Show(
-					"No themes found!",
-					"Load failure!",
-					MessageBoxButton.OK,
-					MessageBoxImage.Error
-				);
+                var box = MessageBoxManager.GetMessageBoxStandard(
+                    "Load failure!",
+                    "No themes found!",
+                    ButtonEnum.Ok,
+                    Icon.Error
+                );
+                await box.ShowAsync();
+				// MessageBox.Show(
+				// 	"No themes found!",
+				// 	"Load failure!",
+				// 	MessageBoxButton.OK,
+				// 	MessageBoxImage.Error
+				// );
 				return;
 			}
 			if (!AppState.Themes.TryGetValue(path, out var theme)) // TODO: fix the check lul.
 			{
 				if (AppState.Themes.ContainsKey("default"))
 				{
-					MessageBox.Show(
-						"Cannot load '" + path + "'! Trying to fall back to default theme.",
-						"Load failure!",
-						MessageBoxButton.OK,
-						MessageBoxImage.Error
-					);
+                    var box = MessageBoxManager.GetMessageBoxStandard(
+                        "Load failure!",
+                        $"Cannot load '{path}'! Trying to fall back to default theme.",
+                        ButtonEnum.Ok,
+                        Icon.Error
+                    );
+                    await box.ShowAsync();
+					// MessageBox.Show(
+					// 	"Cannot load '" + path + "'! Trying to fall back to default theme.",
+					// 	"Load failure!",
+					// 	MessageBoxButton.OK,
+					// 	MessageBoxImage.Error
+					// );
 					theme = AppState.Themes["default"];
 				}
 				else
 				{
-					MessageBox.Show(
-						"No default theme found! Make sure you have a valid theme named 'default.yaml'",
-						"Man you really screwed up",
-						MessageBoxButton.OK,
-						MessageBoxImage.Error
-					);
+                    var box = MessageBoxManager.GetMessageBoxStandard(
+                        "Man you really screwed up",
+                        "No default theme found! Make sure you have a valid theme named 'default.yaml'",
+                        ButtonEnum.Ok,
+                        Icon.Error
+                    );
+                    await box.ShowAsync();
+					// MessageBox.Show(
+					// 	"No default theme found! Make sure you have a valid theme named 'default.yaml'",
+					// 	"Man you really screwed up",
+					// 	MessageBoxButton.OK,
+					// 	MessageBoxImage.Error
+					// );
 
 					theme = _fallbackTheme;
 				}

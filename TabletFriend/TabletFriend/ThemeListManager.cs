@@ -1,7 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.IO;
-using System.Windows;
-using System.Windows.Controls;
+using Avalonia.Controls;
+using Avalonia.Interactivity;
+using Avalonia.Threading;
 
 namespace TabletFriend
 {
@@ -30,8 +31,8 @@ namespace TabletFriend
 
 		private void OnUpdateThemeList(object[] obj = null)
 		{
-			Application.Current.Dispatcher.Invoke(
-				delegate
+			Dispatcher.UIThread.Post(
+				()=>
 				{
 					Menu.Items.Clear();
 					foreach (var theme in AppState.Themes.Keys)
@@ -40,7 +41,7 @@ namespace TabletFriend
 						{
 							Header = Path.GetFileNameWithoutExtension(theme).Replace("_", " "),
 							DataContext = theme,
-							IsCheckable = true,
+							ToggleType = MenuItemToggleType.Radio,
 							IsChecked = theme == AppState.CurrentThemeName
 						};
 						Menu.Items.Add(item);
@@ -70,7 +71,7 @@ namespace TabletFriend
 				{
 					Header = item.Header,
 					DataContext = item.DataContext,
-					IsCheckable = item.IsCheckable,
+					ToggleType = item.ToggleType,
 					IsChecked = item.IsChecked,
 				};
 				menu.Items.Add(newItem);

@@ -7,7 +7,9 @@ using System.Net;
 using System.Net.Http;
 using System.Reflection;
 using System.Threading.Tasks;
-using System.Windows;
+// using System.Windows;
+using MsBox.Avalonia;
+using MsBox.Avalonia.Enums;
 
 namespace TabletFriend
 {
@@ -17,7 +19,7 @@ namespace TabletFriend
 
 		private static readonly HttpClient _client = new HttpClient();
 
-		private const string _repoLink = "https://api.github.com/repos/Martenfur/TabletFriend/releases/latest";
+		private const string _repoLink = "https://api.github.com/repos/ynna-m/TabletPal/releases/latest";
 
 		private static string _downloadsPath =>
 			Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "Downloads\\tablet_friend");
@@ -49,23 +51,29 @@ namespace TabletFriend
 			{
 				return;
 			}
-			var result = MessageBox.Show(
-				"A new version of Tablet Friend is available."
-				+ Environment.NewLine
-				+ Environment.NewLine
-				+ "v" + newVersion
-				+ Environment.NewLine
-				+ Environment.NewLine
-				+ changes
-				+ Environment.NewLine
-				+ Environment.NewLine
-				+ "Would you like to download it?",
-				"Update!",
-				MessageBoxButton.YesNo,
-				MessageBoxImage.Question
-			);
+            var box = MessageBoxManager.GetMessageBoxStandard(
+                    "Update available!"
+                    ,"A new version of Tablet Friend is available.\n\nv" + newVersion + "\n\n" + changes + "\n\nWould you like to download it?",
+                    ButtonEnum.YesNo
+                    ,Icon.Question);
+            var result = await box.ShowAsync();
+			// var result = MessageBox.Show(
+			// 	"A new version of Tablet Friend is available."
+			// 	+ Environment.NewLine
+			// 	+ Environment.NewLine
+			// 	+ "v" + newVersion
+			// 	+ Environment.NewLine
+			// 	+ Environment.NewLine
+			// 	+ changes
+			// 	+ Environment.NewLine
+			// 	+ Environment.NewLine
+			// 	+ "Would you like to download it?",
+			// 	"Update!",
+			// 	MessageBoxButton.YesNo,
+			// 	MessageBoxImage.Question
+			// );
 
-			if (result != MessageBoxResult.Yes)
+			if (result != ButtonResult.Yes)
 			{
 				return;
 			}
@@ -76,15 +84,21 @@ namespace TabletFriend
 			}
 			catch (Exception e)
 			{
-				 MessageBox.Show(
-					"DOWNLOAD FAILED:"
-					+ Environment.NewLine
-					+ Environment.NewLine
-					+ e.Message,
-					"Download failed!",
-					MessageBoxButton.OK,
-					MessageBoxImage.Error
-				);
+                var boxError = MessageBoxManager.GetMessageBoxStandard(
+                    "Download failed!"
+                    ,$"DOWNLOAD FAILED:\n\n{e.Message}",
+                    ButtonEnum.Ok
+                    ,Icon.Error);
+                await boxError.ShowAsync();
+				//  MessageBox.Show(
+				// 	"DOWNLOAD FAILED:"
+				// 	+ Environment.NewLine
+				// 	+ Environment.NewLine
+				// 	+ e.Message,
+				// 	"Download failed!",
+				// 	MessageBoxButton.OK,
+				// 	MessageBoxImage.Error
+				// );
 
 				return;
 			}
@@ -112,19 +126,24 @@ namespace TabletFriend
 					await cliente.DownloadFileTaskAsync(new Uri(link), outFile);
 				}
 			}
-
-			MessageBox.Show(
-				"A new version of Tablet Friend has been downloaded. "
-				+ "Please unzip and install the new version. Tablet Friend will be closed.",
-				"Update!",
-				MessageBoxButton.OK,
-				MessageBoxImage.Information
-			);
+            var box = MessageBoxManager.GetMessageBoxStandard(
+                    "Update downloaded!"
+                    ,$"A new version of Tablet Friend has been downloaded. Please unzip and install the new version. Tablet Friend will be closed.",
+                    ButtonEnum.Ok
+                    ,Icon.Info);
+            await box.ShowAsync();
+			// MessageBox.Show(
+			// 	"A new version of Tablet Friend has been downloaded. "
+			// 	+ "Please unzip and install the new version. Tablet Friend will be closed.",
+			// 	"Update!",
+			// 	MessageBoxButton.OK,
+			// 	MessageBoxImage.Information
+			// );
 
 			var startInfo = new ProcessStartInfo()
 			{
 				Arguments = versionedDownloadsPath,
-				FileName = "explorer.exe"
+				FileName = "xdg-open"
 			};
 			Process.Start(startInfo);
 		}

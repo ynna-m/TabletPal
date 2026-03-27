@@ -2,13 +2,15 @@
 using System.Diagnostics;
 using System.IO;
 using System.Numerics;
-using System.Printing;
-using System.Windows;
+// using System.Printing;
+// using System.Windows;
 using TabletFriend.Actions;
 using TabletFriend.Models;
-using WindowsInput.Events;
-using WpfAppBar;
-
+// using WindowsInput.Events;
+// using WpfAppBar;
+using MsBox.Avalonia;
+using MsBox.Avalonia.Enums;
+using Avalonia.Threading;
 namespace TabletFriend
 {
 	public class LayoutManager
@@ -19,7 +21,7 @@ namespace TabletFriend
 				new ButtonModel()
 				{
 					Text = "ERROR",
-					Action = new KeyAction(KeyCode.N),
+					Action = new KeyAction("N"),
 					Size = new Vector2(4, 2)
 				}
 			}
@@ -37,8 +39,7 @@ namespace TabletFriend
 
 		private void OnFilesChanged(object[] args)
 		{
-			Application.Current.Dispatcher.Invoke(
-				delegate
+			Dispatcher.UIThread.Post(()=>
 				{
 					// Full reload every time.
 					LoadLayout(AppState.CurrentLayoutName);
@@ -80,7 +81,7 @@ namespace TabletFriend
 		}
 
 
-		public void LoadLayout(string path)
+		public async void LoadLayout(string path)
 		{
 			Debug.WriteLine("Loading " + path);
 
@@ -88,34 +89,46 @@ namespace TabletFriend
 
 			if (AppState.Layouts.Count == 0)
 			{
-				MessageBox.Show(
-					"No layouts found!",
-					"Load failure!",
-					MessageBoxButton.OK,
-					MessageBoxImage.Error
-				);
+                var boxError = MessageBoxManager.GetMessageBoxStandard(
+                    "Load failure!","No layouts found! Make sure you have at least one valid layout in the layouts folder.",
+                    ButtonEnum.Ok, Icon.Error);
+                await boxError.ShowAsync();
+				// MessageBox.Show(
+				// 	"No layouts found!",
+				// 	"Load failure!",
+				// 	MessageBoxButton.OK,
+				// 	MessageBoxImage.Error
+				// );
 				return;
 			}
 			if (!AppState.Layouts.TryGetValue(path, out var layout)) // TODO: fix the check lul.
 			{
 				if (AppState.Layouts.ContainsKey("default"))
 				{
-					MessageBox.Show(
-						"Cannot load '" + path +"'! Trying to fall back to default layout.",
-						"Load failure!",
-						MessageBoxButton.OK,
-						MessageBoxImage.Error
-					);
+                    var boxError = MessageBoxManager.GetMessageBoxStandard(
+                        "Load failure!",$"Cannot load '{path}'! Trying to fall back to default layout.",
+                        ButtonEnum.Ok, Icon.Error);
+                    await boxError.ShowAsync();
+					// MessageBox.Show(
+					// 	"Cannot load '" + path +"'! Trying to fall back to default layout.",
+					// 	"Load failure!",
+					// 	MessageBoxButton.OK,
+					// 	MessageBoxImage.Error
+					// );
 					layout = AppState.Layouts["default"];
 				}
 				else
 				{
-					MessageBox.Show(
-						"No default layout found! Make sure you have a valid layout named 'default.yaml'",
-						"Man you really screwed up",
-						MessageBoxButton.OK,
-						MessageBoxImage.Error
-					);
+                    var boxError = MessageBoxManager.GetMessageBoxStandard(
+                        "Man you really screwed up","No default layout found! Make sure you have a valid layout named 'default.yaml'.",
+                        ButtonEnum.Ok, Icon.Error);
+                    await boxError.ShowAsync();
+					// MessageBox.Show(
+					// 	"No default layout found! Make sure you have a valid layout named 'default.yaml'",
+					// 	"Man you really screwed up",
+					// 	MessageBoxButton.OK,
+					// 	MessageBoxImage.Error
+					// );
 					// Nothing to fall back on, we're fucked.
 					layout = _fallbackLayout;
 				}

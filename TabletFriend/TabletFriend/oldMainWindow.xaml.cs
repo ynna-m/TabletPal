@@ -18,7 +18,7 @@ namespace TabletFriend
 	/// <summary>
 	/// Interaction logic for MainWindow.xaml
 	/// </summary>
-	public partial class MainWindow : Window, INotifyPropertyChanged
+	public partial class oldMainWindow : Window, INotifyPropertyChanged
 	{
 		private LayoutManager _layout;
 		private ThemeManager _theme;
@@ -36,7 +36,7 @@ namespace TabletFriend
 			PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(property));
 		}
 
-		public MainWindow()
+		public oldMainWindow()
 		{
 			var focusMonitor = new AppFocusMonitor(); // Has to be at the very top or else it hangs on starup. Why? No idea. 
 

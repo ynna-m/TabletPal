@@ -1,8 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.IO;
-using System.Windows;
-using System.Windows.Controls;
-
+// using System.Windows;
+// using System.Windows.Controls;
+using Avalonia.Controls;
+using Avalonia.Threading;
+using Avalonia.Interactivity;
 namespace TabletFriend
 {
 	public class LayoutListManager
@@ -30,8 +32,7 @@ namespace TabletFriend
 
 		private void OnUpdateLayoutList(object[] obj = null)
 		{
-			Application.Current.Dispatcher.Invoke(
-				delegate
+			Dispatcher.UIThread.Post(()=>
 				{
 					Menu.Items.Clear();
 					foreach (var layout in AppState.Layouts.Keys)
@@ -40,7 +41,7 @@ namespace TabletFriend
 						{
 							Header = Path.GetFileNameWithoutExtension(layout).Replace("_", " "),
 							DataContext = layout,
-							IsCheckable = true,
+							ToggleType = MenuItemToggleType.Radio,
 							IsChecked = layout == AppState.CurrentLayoutName
 						};
 						Menu.Items.Add(item);
@@ -67,7 +68,7 @@ namespace TabletFriend
 				{
 					Header = item.Header,
 					DataContext = item.DataContext,
-					IsCheckable = item.IsCheckable,
+					ToggleType = MenuItemToggleType.Radio,
 					IsChecked = item.IsChecked,
 				};
 				items.Add(newItem);
@@ -89,7 +90,7 @@ namespace TabletFriend
 				{
 					Header = item.Header,
 					DataContext = item.DataContext,
-					IsCheckable = item.IsCheckable,
+                    ToggleType = item.ToggleType,
 					IsChecked = item.IsChecked,
 				};
 				menu.Items.Add(newItem);

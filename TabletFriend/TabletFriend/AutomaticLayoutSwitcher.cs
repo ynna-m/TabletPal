@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
-using System.Windows;
+using Avalonia;
+using Avalonia.Threading;
 
 namespace TabletFriend
 {
@@ -52,22 +53,36 @@ namespace TabletFriend
 				// Yep. Can happen.
 				return;
 			}
-			Application.Current.Dispatcher.Invoke(
-				delegate
-				{
-					if (MatchesApp(app, out var key))
-					{
-						EventBeacon.SendEvent(Events.ChangeLayout, key, LayoutChangeMethod.Automatic);
-					}
-					else
-					{
-						if (AppState.LastManuallySetLayout != null)
-						{
-							EventBeacon.SendEvent(Events.ChangeLayout, AppState.LastManuallySetLayout, LayoutChangeMethod.Automatic);
-						}
-					}
-				}
-			);
+            Dispatcher.UIThread.Post(() =>
+            {
+                if (MatchesApp(app, out var key))
+                {
+                    EventBeacon.SendEvent(Events.ChangeLayout, key, LayoutChangeMethod.Automatic);
+                }
+                else
+                {
+                    if (AppState.LastManuallySetLayout != null)
+                    {
+                        EventBeacon.SendEvent(Events.ChangeLayout, AppState.LastManuallySetLayout, LayoutChangeMethod.Automatic);
+                    }
+                }
+            });
+			// Application.Current.Dispatcher.Invoke(
+			// 	delegate
+			// 	{
+			// 		if (MatchesApp(app, out var key))
+			// 		{
+			// 			EventBeacon.SendEvent(Events.ChangeLayout, key, LayoutChangeMethod.Automatic);
+			// 		}
+			// 		else
+			// 		{
+			// 			if (AppState.LastManuallySetLayout != null)
+			// 			{
+			// 				EventBeacon.SendEvent(Events.ChangeLayout, AppState.LastManuallySetLayout, LayoutChangeMethod.Automatic);
+			// 			}
+			// 		}
+			// 	}
+			// );
 		}
 
 		private bool MatchesApp(string app, out string layout)

@@ -1,5 +1,5 @@
 ﻿using System.IO;
-using System.Windows;
+using Avalonia.Threading;
 
 namespace TabletFriend
 {
@@ -38,17 +38,16 @@ namespace TabletFriend
 		}
 
 
-		private void RefreshLists()
+		private async void RefreshLists()
 		{
-			Application.Current.Dispatcher.Invoke(
-				delegate
+			Dispatcher.UIThread.Post(async ()=>
 				{
-					var layouts = Importer.ImportLayouts();
+					var layouts = await Importer.ImportLayouts();
 					if (AppState.Layouts == null || layouts.Count > 0)
 					{
 						AppState.Layouts = layouts;
 					}
-					var themes = Importer.ImportThemes();
+					var themes = await Importer.ImportThemes();
 					if (AppState.Themes == null || themes.Count > 0)
 					{
 						AppState.Themes = themes;

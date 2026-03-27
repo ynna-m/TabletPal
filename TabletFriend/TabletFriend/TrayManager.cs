@@ -1,24 +1,30 @@
-﻿using Hardcodet.Wpf.TaskbarNotification;
+﻿// using Hardcodet.Wpf.TaskbarNotification;
 using Microsoft.Win32;
 using System;
 using System.Diagnostics;
-using System.Drawing;
+// using System.Drawing;
 using System.IO;
 using System.Threading;
-using System.Windows;
-using System.Windows.Controls;
+// using System.Windows;
+// using System.Windows.Controls;
 using TabletFriend.Docking;
-using TabletFriend.TabletMode;
-using WpfAppBar;
+// using TabletFriend.TabletMode;
+// using WpfAppBar;
+using Avalonia.Controls;
+using Avalonia.Interactivity;
+using Avalonia.Threading;
+using Avalonia.Media; 
+using Avalonia.Media.Imaging;
+using IconPacks.Avalonia.MaterialDesign;
 
 namespace TabletFriend
 {
 	public class TrayManager
 	{
-		private TaskbarIcon _icon;
+		private TrayIcon _icon;
 		private MenuItem _autostartMenuItem;
 		private MenuItem _autoUpdateMenuItem;
-		private MenuItem _autohideMenuItem;
+		// private MenuItem _autohideMenuItem;
 		private MenuItem _perAppLayoutsMenuItem;
 		private readonly string _iconPathBlack = AppState.CurrentDirectory + "/files/icons/tray/tray_black.ico";
 		private readonly string _iconPathWhite = AppState.CurrentDirectory + "/files/icons/tray/tray_white.ico";
@@ -35,20 +41,20 @@ namespace TabletFriend
 			_themeList = themeList;
 			_focusMonitor = focusMonitor;
 
-			_icon = new TaskbarIcon();
+			_icon = new TrayIcon();
 
 			if (_isLightTheme)
 			{
-				_icon.Icon = new Icon(_iconPathBlack);
+				_icon.Icon = new WindowIcon(_iconPathBlack);
 			}
 			else
 			{ 
-				_icon.Icon = new Icon(_iconPathWhite);
+				_icon.Icon = new WindowIcon(_iconPathWhite);
 			}
 
-			_icon.Visibility = Visibility.Visible;
-			_icon.ContextMenu = new ContextMenu();
-			_icon.TrayLeftMouseDown += MouseDown;
+			_icon.IsVisible = Visibility.Visible;
+			_icon.Menu = new NativeMenu();
+			_icon.MouseDown += MouseDown;
 			CreateMenu();
 
 			EventBeacon.Subscribe(Events.ChangeLayout, OnUpdateLayoutList);
@@ -63,7 +69,7 @@ namespace TabletFriend
 		private void OnUpdateLayoutList(object[] obj = null)
 		{
 			// Secondary quick access context menu.
-			Application.Current.Dispatcher.Invoke(
+			Dispatcher.UIThread.Post(
 				() =>
 				{
 					_icon.ContextMenu.Items.Clear();
@@ -101,16 +107,16 @@ namespace TabletFriend
 				_autoUpdateMenuItem = AddSubmenuItem(settings, "check for updates", OnAutoUpdateToggle);
 			}
 
-			if (AppState.Settings.ToolbarAutohideEnabled)
-			{
-				_autohideMenuItem = AddSubmenuItem(settings, "disable toolbar autohide", OnAutohideToggle);
-				ToolbarAutohider.StartWatching();
-			}
-			else
-			{
-				_autohideMenuItem = AddSubmenuItem(settings, "enable toolbar autohide", OnAutohideToggle);
-				ToolbarAutohider.StopWatching();
-			}
+			// if (AppState.Settings.ToolbarAutohideEnabled)
+			// {
+			// 	_autohideMenuItem = AddSubmenuItem(settings, "disable toolbar autohide", OnAutohideToggle);
+			// 	ToolbarAutohider.StartWatching();
+			// }
+			// else
+			// {
+			// 	_autohideMenuItem = AddSubmenuItem(settings, "enable toolbar autohide", OnAutohideToggle);
+			// 	ToolbarAutohider.StopWatching();
+			// }
 
 			if (AppState.Settings.PerAppLayoutsEnabled)
 			{
@@ -174,22 +180,22 @@ namespace TabletFriend
 			EventBeacon.SendEvent(Events.UpdateSettings);
 		}
 
-		private void OnAutohideToggle(object sender, RoutedEventArgs e)
-		{
-			AppState.Settings.ToolbarAutohideEnabled = !AppState.Settings.ToolbarAutohideEnabled;
+		// private void OnAutohideToggle(object sender, RoutedEventArgs e)
+		// {
+		// 	AppState.Settings.ToolbarAutohideEnabled = !AppState.Settings.ToolbarAutohideEnabled;
 
-			if (AppState.Settings.ToolbarAutohideEnabled)
-			{
-				_autohideMenuItem.Header = "disable toolbar autohide";
-				ToolbarAutohider.StartWatching();
-			}
-			else
-			{
-				_autohideMenuItem.Header = "enable toolbar autohide";
-				ToolbarAutohider.StopWatching();
-			}
-			EventBeacon.SendEvent(Events.UpdateSettings);
-		}
+		// 	if (AppState.Settings.ToolbarAutohideEnabled)
+		// 	{
+		// 		_autohideMenuItem.Header = "disable toolbar autohide";
+		// 		ToolbarAutohider.StartWatching();
+		// 	}
+		// 	else
+		// 	{
+		// 		_autohideMenuItem.Header = "enable toolbar autohide";
+		// 		ToolbarAutohider.StopWatching();
+		// 	}
+		// 	EventBeacon.SendEvent(Events.UpdateSettings);
+		// }
 
 		private void OnPerAppLayoutsToggle(object sender, RoutedEventArgs e)
 		{

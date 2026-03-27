@@ -1,17 +1,20 @@
 ﻿using System;
 using System.IO;
 using System.Windows;
-using WpfAppBar;
+// using WpfAppBar;
 using YamlDotNet.Serialization;
 using YamlDotNet.Serialization.NamingConventions;
+using TabletFriend.Docking;
+using Avalonia;
+using Avalonia.Controls;
 
 namespace TabletFriend
 {
 	public class Settings
 	{
 		public bool AddToAutostart = true;
-		public double WindowX = 0;
-		public double WindowY = 0;
+		public int WindowX = 0;
+		public int WindowY = 0;
 		public string Layout = "default";
 		public string Theme = "default";
 		public DockingMode DockingMode = DockingMode.None;
@@ -19,7 +22,7 @@ namespace TabletFriend
 		public bool FirstLaunch = true;
 
 		public bool UpdateCheckingEnabled = true;
-		public bool ToolbarAutohideEnabled = true;
+		public bool ToolbarAutohideEnabled = false;
 		public bool PerAppLayoutsEnabled = true;
 
 		public Settings()
@@ -37,8 +40,17 @@ namespace TabletFriend
 			{
 				EventBeacon.SendEvent(Events.ChangeLayout, Layout);
 			}
-			Application.Current.MainWindow.Left = WindowX;
-			Application.Current.MainWindow.Top = WindowY;
+			// Application.Current.MainWindow.Left = WindowX;
+			// Application.Current.MainWindow.Top = WindowY;
+            if (Application.Current?.ApplicationLifetime 
+                is Avalonia.Controls.ApplicationLifetimes.IClassicDesktopStyleApplicationLifetime desktop)
+            {
+                var window = desktop.MainWindow;
+                if (window != null)
+                {
+                    window.Position = new PixelPoint((int)WindowX, (int)WindowY);
+                }
+            }
 			
 			EventBeacon.SendEvent(Events.DockingChanged, DockingMode);
 		}
@@ -56,14 +68,24 @@ namespace TabletFriend
 				Layout = Path.GetRelativePath(AppState.CurrentDirectory, AppState.LastManuallySetLayout);
 			}
 			Theme = Path.GetRelativePath(AppState.CurrentDirectory, AppState.CurrentThemeName);
-			if (!double.IsNaN(Application.Current.MainWindow.Left))
-			{
-				WindowX = Application.Current.MainWindow.Left;
-			}
-			if (!double.IsNaN(Application.Current.MainWindow.Top))
-			{
-				WindowY = Application.Current.MainWindow.Top;
-			}
+			// if (!double.IsNaN(Application.Current.MainWindow.Left))
+			// {
+			// 	WindowX = Application.Current.MainWindow.Left;
+			// }
+			// if (!double.IsNaN(Application.Current.MainWindow.Top))
+			// {
+			// 	WindowY = Application.Current.MainWindow.Top;
+			// }
+            if (Application.Current?.ApplicationLifetime 
+                is Avalonia.Controls.ApplicationLifetimes.IClassicDesktopStyleApplicationLifetime desktop)
+            {
+                var window = desktop.MainWindow;
+                if (window != null)
+                {
+                    WindowX = window.Position.X;
+                    WindowY = window.Position.Y;
+                }
+            }
 			Save();
 		}
 

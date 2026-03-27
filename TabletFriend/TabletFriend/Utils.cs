@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Numerics;
-using System.Windows.Media;
+using Avalonia.Media;
 using TabletFriend.Models;
-using WpfAppBar;
+using TabletFriend.Docking;
 
 namespace TabletFriend
 {
@@ -38,7 +38,7 @@ namespace TabletFriend
 		public static Color StringToColor(string hexColor)
 		{
 			// TODO: Change the format from ARGB to RGBA.
-			return (Color)ColorConverter.ConvertFromString(hexColor);
+			return Color.Parse(hexColor);
 		}
 	}
 }

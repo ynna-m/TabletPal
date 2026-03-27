@@ -4,6 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using Avalonia.Controls.Primitives;
+using Avalonia.Threading;
+using TabletFriend.InputSender;
 // using System.Windows;
 // using System.Windows.Controls.Primitives;
 // using WindowsInput;
@@ -14,14 +17,15 @@ namespace TabletFriend
 {
 	public static class ToggleManager
 	{
-		public static HashSet<KeyCode> _heldKeys = new HashSet<KeyCode>();
+		public static HashSet<string> _heldKeys = new HashSet<string>();
 		private static long _inputLocked;
+        private static readonly IInputSender _inputSender = InputSenderFactory.Create();
 
-		private static IKeyboardEventSource _keyboard;
+		// private static IKeyboardEventSource _keyboard;
 
-		private static Dictionary<KeyCode, List<ToggleButton>> _buttons = new Dictionary<KeyCode, List<ToggleButton>>();
+		private static Dictionary<string, List<ToggleButton>> _buttons = new Dictionary<string, List<ToggleButton>>();
 
-		public static void AddButton(KeyCode key, ToggleButton button)
+		public static void AddButton(string key, ToggleButton button)
 		{
 			List<ToggleButton> list;
 
@@ -35,14 +39,13 @@ namespace TabletFriend
 		}
 
 
-		public static void DisableAllButtons(KeyCode key)
+		public static void DisableAllButtons(string key)
 		{
 			if (_buttons.TryGetValue(key, out var list))
 			{
 				foreach (var button in list.ToArray())
 				{
-					Application.Current.Dispatcher.Invoke(
-						delegate
+					Dispatcher.UIThread.Post(()=>
 						{
 							button.IsChecked = false;
 						}
@@ -52,7 +55,7 @@ namespace TabletFriend
 		}
 
 
-		private static ToggleButton[] GetButtons(KeyCode key)
+		private static ToggleButton[] GetButtons(string key)
 		{
 			if (_buttons.TryGetValue(key, out var list))
 			{
@@ -62,7 +65,7 @@ namespace TabletFriend
 		}
 
 
-		private static void SetButtons(KeyCode key, bool active)
+		private static void SetButtons(string key, bool active)
 		{
 			var buttons = GetButtons(key);
 			if (buttons == null)
@@ -80,18 +83,18 @@ namespace TabletFriend
 
 
 		public static void ClearButtons() =>
-			_buttons = new Dictionary<KeyCode, List<ToggleButton>>();
+			_buttons = new Dictionary<string, List<ToggleButton>>();
 
 
-		public static bool IsHeld(KeyCode key) =>
+		public static bool IsHeld(string key) =>
 			_heldKeys.Contains(key);
 
 		public static void Init()
 		{
-			_keyboard = Capture.Global.KeyboardAsync();
+			// _keyboard = Capture.Global.KeyboardAsync();
 
-			//Capture all events from the keyboard
-			_keyboard.KeyEvent += KeyEvent;
+			// //Capture all events from the keyboard
+			// _keyboard.KeyEvent += KeyEvent;
 		}
 
 
@@ -101,13 +104,15 @@ namespace TabletFriend
 
 			if (!IsHeld(key))
 			{
-				await Simulate.Events().Hold(key).Invoke();
+                await _inputSender.SendHold(key);
+				// await Simulate.Events().Hold(key).Invoke();
 				_heldKeys.Add(key);
 				SetButtons(key, true);
 			}
 			else
 			{
-				await Simulate.Events().Release(key).Invoke();
+				// await Simulate.Events().Release(key).Invoke();
+				await _inputSender.SendRelease(key);
 				_heldKeys.Remove(key);
 				SetButtons(key, false);
 			}
@@ -115,18 +120,18 @@ namespace TabletFriend
 			Interlocked.Exchange(ref _inputLocked, 0);
 		}
 
-		private static void KeyEvent(object sender, EventSourceEventArgs<KeyboardEvent> e)
-		{
-			var key = e.Data?.KeyUp?.Key;
-			if (!key.HasValue)
-			{
-				key = e.Data?.KeyDown?.Key;
-			}
-			if (Interlocked.Read(ref _inputLocked) == 0 && key.HasValue && IsHeld(key.Value))
-			{
-				DisableAllButtons(key.Value);
-				_heldKeys.Remove(key.Value);
-			}
-		}
+		// private static void KeyEvent(object sender, EventSourceEventArgs<KeyboardEvent> e)
+		// {
+		// 	var key = e.Data?.KeyUp?.Key;
+		// 	if (!key.HasValue)
+		// 	{
+		// 		key = e.Data?.KeyDown?.Key;
+		// 	}
+		// 	if (Interlocked.Read(ref _inputLocked) == 0 && key.HasValue && IsHeld(key.Value))
+		// 	{
+		// 		DisableAllButtons(key.Value);
+		// 		_heldKeys.Remove(key.Value);
+		// 	}
+		// }
 	}
 }

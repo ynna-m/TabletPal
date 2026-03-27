@@ -1,25 +1,28 @@
-﻿using MaterialDesignThemes.Wpf;
-using System;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Input;
-using TabletFriend.Models;
-using WpfAppBar;
+﻿using TabletFriend.Models;
+using TabletFriend.Docking;
+using Avalonia.Controls;
+using Avalonia.Input;
+using Avalonia.Interactivity;
+using Avalonia.Media;
+using Avalonia.Media.Imaging;
+using IconPacks.Avalonia.MaterialDesign;
+using Avalonia;
+using Avalonia.Styling;
 
 namespace TabletFriend
 {
 	public static class TitlebarManager
 	{
 
-		private const PackIconKind _defaultIcon = PackIconKind.RhombusMediumOutline;
-		private const PackIconKind _minimizedIcon = PackIconKind.RhombusMedium;
+		private const PackIconMaterialDesignKind _defaultIcon = PackIconMaterialDesignKind.CircleOutline;
+		private const PackIconMaterialDesignKind _minimizedIcon = PackIconMaterialDesignKind.Circle;
 		private const double _baseTitlebarHeight = 12;
 
 		private static bool _minimizedMode = false;
 		private static bool _minimized = false;
 		public static bool Minimized => _minimized;
 
-		private static PackIcon _ico;
+		private static PackIconMaterialDesign _ico;
 		private static MainWindow _window;
 		private static ThemeModel _theme;
 		private static LayoutModel _layout;
@@ -48,8 +51,8 @@ namespace TabletFriend
 			_layout = layout;
 			_maximizedWindowHeight = maximizedWindowHeight;
 
-			_window.MouseEnter -= OnMouseEnter;
-			_window.MouseLeave -= OnMouseLeave;
+			_window.PointerEntered -= OnMouseEnter;
+			_window.PointerExited -= OnMouseLeave;
 
 			if (AppState.Settings.DockingMode != DockingMode.None)
 			{
@@ -59,8 +62,8 @@ namespace TabletFriend
 
 			CreateButton();
 
-			_window.MouseEnter += OnMouseEnter;
-			_window.MouseLeave += OnMouseLeave;
+			_window.PointerEntered += OnMouseEnter;
+			_window.PointerExited += OnMouseLeave;
 
 			_grace = true;
 
@@ -78,8 +81,8 @@ namespace TabletFriend
 			uiButton.Width = 32;
 			uiButton.Height = GetTitlebarHeight(_layout);
 
-			uiButton.Style = Application.Current.Resources["shy"] as Style;
-			_ico = new PackIcon();
+			uiButton.Styles.Add(Application.Current.Resources["shy"] as Styles);
+			_ico = new PackIconMaterialDesign();
 			if (_minimizedMode)
 			{
 				_ico.Kind = _minimizedIcon;
@@ -97,7 +100,7 @@ namespace TabletFriend
 
 		}
 
-		private static void OnMouseLeave(object sender, MouseEventArgs e)
+		private static void OnMouseLeave(object sender, PointerEventArgs e)
 		{
 			if (_minimizedMode && !_grace)
 			{
@@ -106,7 +109,7 @@ namespace TabletFriend
 			_grace = false;
 		}
 
-		private static void OnMouseEnter(object sender, MouseEventArgs e)
+		private static void OnMouseEnter(object sender, PointerEventArgs e)
 		{
 			if (_minimizedMode)
 			{
@@ -124,7 +127,7 @@ namespace TabletFriend
 			}
 			else
 			{
-				if (!_window.IsMouseOver)
+				if (!_window.IsPointerOver)
 				{
 					Minimize();
 				}

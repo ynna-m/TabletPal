@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Diagnostics;
 using System.IO;
-using System.Windows;
-
+using MsBox.Avalonia;
+using MsBox.Avalonia.Enums;
+/***
+*Needs to be updated to just installing to Home directory in Linux.
+**/
 namespace TabletFriend
 {
 	public static class Installer
@@ -10,7 +13,7 @@ namespace TabletFriend
 		private static readonly string _preferredDirectory =
 			Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "TabletFriend");
 
-		public static void TryInstall()
+		public async static void TryInstall()
 		{
 			if (!AppState.Settings.FirstLaunch)
 			{
@@ -20,27 +23,34 @@ namespace TabletFriend
 			{
 				return;
 			}
-			var result = MessageBox.Show(
-				"Welcome to Tablet Friend! See the https://github.com/Martenfur/TabletFriend#readme if you have any questions. Would you like to move Tablet Friend to AppData?",
-				"Hello",
-				MessageBoxButton.YesNo,
-				MessageBoxImage.Question
-			);
-			if (result == MessageBoxResult.Yes)
+            var box = MessageBoxManager.GetMessageBoxStandard(
+                    "Hello!"
+                    ,"Welcome to Tablet Friend! See the https://github.com/Martenfur/TabletFriend#readme if you have any questions. Would you like to move Tablet Friend to AppData?",
+                    ButtonEnum.YesNo
+                    ,Icon.Question);
+            var result = await box.ShowAsync();
+			// var result = MessageBox.Show(
+			// 	"Welcome to Tablet Friend! See the https://github.com/Martenfur/TabletFriend#readme if you have any questions. Would you like to move Tablet Friend to AppData?",
+			// 	"Hello",
+			// 	MessageBoxButton.YesNo,
+			// 	MessageBoxImage.Question
+			// );
+			if (result == ButtonResult.Yes)
 			{
 				try
 				{
 					if (Directory.Exists(_preferredDirectory))
 					{
-						MessageBox.Show(
-							"Another version of Tablet Friend detected. 'files' directory will be overwritten. " +
-							"Previous version's layouts, themes and icons will be moved to 'files.backup'. " +
-							Environment.NewLine +
-							"WARNING: If you are updating from 1.0 to 2.0, layout and theme structure has been changed. " +
-							"If you have your own layouts you will need to update them manually. See https://github.com/Martenfur/TabletFriend#readme for the instructions.",
-							"Update",
-							MessageBoxButton.OK
-						);
+
+						// MessageBox.Show(
+						// 	"Another version of Tablet Friend detected. 'files' directory will be overwritten. " +
+						// 	"Previous version's layouts, themes and icons will be moved to 'files.backup'. " +
+						// 	Environment.NewLine +
+						// 	"WARNING: If you are updating from 1.0 to 2.0, layout and theme structure has been changed. " +
+						// 	"If you have your own layouts you will need to update them manually. See https://github.com/Martenfur/TabletFriend#readme for the instructions.",
+						// 	"Update",
+						// 	MessageBoxButton.OK
+						// );
 						if (Directory.Exists(Path.Combine(_preferredDirectory, "files")))
 						{
 							DirectoryCopy(
@@ -56,12 +66,16 @@ namespace TabletFriend
 				}
 				catch (Exception e)
 				{
-					MessageBox.Show(
-						"Failed to copy the files: '" + e.Message + "'. Make sure all other instances of Tablet Friend are closed and try again.",
-						"Error!",
-						MessageBoxButton.OK,
-						MessageBoxImage.Error
-					);
+                    var boxError = MessageBoxManager.GetMessageBoxStandard(
+                        "Error!",$"Failed to copy the files: {e.Message}. Make sure all other instances of Tablet Friend are closed and try again.",
+                        ButtonEnum.Ok, Icon.Error);
+                    await boxError.ShowAsync();
+					// MessageBox.Show(
+					// 	"Failed to copy the files: '" + e.Message + "'. Make sure all other instances of Tablet Friend are closed and try again.",
+					// 	"Error!",
+					// 	MessageBoxButton.OK,
+					// 	MessageBoxImage.Error
+					// );
 				}
 				Process.GetCurrentProcess().Kill();
 				Environment.Exit(0);
