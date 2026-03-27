@@ -1,4 +1,4 @@
-# Tablet Friend
+# Tablet Friend - In Progress. Nothing's working yet as of 03/27/2026
 
 ![logo](icons/logo.png)
 
