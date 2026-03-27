@@ -1,13 +1,13 @@
 ﻿using System.Threading.Tasks;
-using WindowsInput.Events;
+// using WindowsInput.Events;
 
 namespace TabletFriend.Actions
 {
 	public class ToggleAction : ButtonAction
 	{
-		public readonly KeyCode Key;
+		public readonly string Key;
 
-		public ToggleAction(KeyCode key)
+		public ToggleAction(string key)
 		{
 			Key = key;
 		}

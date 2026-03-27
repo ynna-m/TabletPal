@@ -8,7 +8,7 @@ namespace TabletFriend.Actions
 	{
 		private const string _typeKeyword = "type ";
 		private const string _toggleKeyword = "toggle ";
-		private const string _cmdKeyword = "cmd ";
+		private const string _terminalKeyword = "terminal ";
 		private const string _waitKeyword = "wait ";
 		private const string _holdKeyword = "hold ";
 		private const string _releaseKeyword = "release ";
@@ -36,9 +36,9 @@ namespace TabletFriend.Actions
 			{
 				return ResolveToggleAction(actionString.Substring(_toggleKeyword.Length));
 			}
-			if (actionString.StartsWith(_cmdKeyword))
+			if (actionString.StartsWith(_terminalKeyword))
 			{
-				return ResolveCmdAction(actionString.Substring(_cmdKeyword.Length));
+				return ResolveTerminalAction(actionString.Substring(_terminalKeyword.Length));
 			}
 			if (actionString.StartsWith(_waitKeyword))
 			{
@@ -78,19 +78,19 @@ namespace TabletFriend.Actions
 		}
 
 		private static ButtonAction ResolveToggleAction(string actionString) =>
-			new ToggleAction(StringToKeyCode(actionString)[0]);
+			new ToggleAction(actionString);
 
 		private static ButtonAction ResolveHoldAction(string actionString) =>
-			new HoldAction(StringToKeyCode(actionString));
+			new HoldAction(actionString);
 
 		private static ButtonAction ResolveReleaseAction(string actionString) =>
-			new ReleaseAction(StringToKeyCode(actionString));
+			new ReleaseAction(actionString);
 
 		private static ButtonAction ResolveTypeAction(string actionString) =>
 			new TypeAction(actionString.Trim());
 
-		private static ButtonAction ResolveCmdAction(string actionString) =>
-			new CmdAction(actionString.Trim());
+		private static ButtonAction ResolveTerminalAction(string actionString) =>
+			new TerminalAction(actionString.Trim());
 
 		private static ButtonAction ResolveWaitAction(string actionString) =>
 			new WaitAction(int.Parse(actionString));
@@ -99,7 +99,7 @@ namespace TabletFriend.Actions
 			new LayoutAction(actionString);
 		
 		private static ButtonAction ResolveRepeatAction(string actionString) =>
-			new RepeatAction(StringToKeyCode(actionString));
+			new RepeatAction(actionString);
 		
 		private static ButtonAction ResolveHideAction() =>
 			new HideAction();

@@ -1,14 +1,14 @@
 ﻿using System.Threading.Tasks;
-using WindowsInput;
-using WindowsInput.Events;
+// using WindowsInput;
+// using WindowsInput.Events;
 
 namespace TabletFriend.Actions
 {
 	public class HoldAction : ButtonAction
 	{
-		private readonly KeyCode[] _keys;
+		private readonly string _keys;
 
-		public HoldAction(KeyCode[] keys)
+		public HoldAction(string keys)
 		{
 			_keys = keys;
 		}

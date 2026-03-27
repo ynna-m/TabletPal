@@ -1,10 +1,10 @@
-﻿using WindowsInput.Events;
+﻿// using WindowsInput.Events;
 
 namespace TabletFriend.Actions
 {
 	public class RepeatAction : KeyAction
 	{
-		public RepeatAction(KeyCode[] keys) : base(keys)
+		public RepeatAction(string keys) : base(keys)
 		{
 		}
 	}

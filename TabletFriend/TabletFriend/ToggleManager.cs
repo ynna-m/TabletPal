@@ -4,11 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls.Primitives;
-using WindowsInput;
-using WindowsInput.Events;
-using WindowsInput.Events.Sources;
+// using System.Windows;
+// using System.Windows.Controls.Primitives;
+// using WindowsInput;
+// using WindowsInput.Events;
+// using WindowsInput.Events.Sources;
 
 namespace TabletFriend
 {
@@ -95,7 +95,7 @@ namespace TabletFriend
 		}
 
 
-		public static async Task Toggle(KeyCode key)
+		public static async Task Toggle(string key)
 		{
 			Interlocked.Exchange(ref _inputLocked, 1);
 
