@@ -87,10 +87,10 @@ namespace TabletFriend
 
             Opened += OnOpened;
         }
-        private void InitializeComponent()
-        {
-            AvaloniaXamlLoader.Load(this);
-        }
+        // private void InitializeComponent()
+        // {
+        //     AvaloniaXamlLoader.Load(this);
+        // }
         private async void OnPointerEnter(object? sender, Avalonia.Input.PointerEventArgs e)
         {
             await AnimateOpacity(this.Opacity, MaxOpacity, FadeInDurationMs);
@@ -263,6 +263,27 @@ namespace TabletFriend
                 BeginMoveDrag(e);
             }
         }
+        public async void OnPointerEnteredFade(object sender, PointerEventArgs e)
+        {
+            await FadeTo(MaxOpacity, 100);
+        }
 
+        public async void OnPointerExitedFade(object sender, PointerEventArgs e)
+        {
+            await FadeTo(MinOpacity, 300);
+        }
+
+        private async Task FadeTo(double target, int durationMs)
+        {
+            double start = Opacity;
+            int steps = 20;
+            int delay = durationMs / steps;
+
+            for (int i = 1; i <= steps; i++)
+            {
+                Opacity = start + (target - start) * i / steps;
+                await Task.Delay(delay);
+            }
+        }    
     }
 }

@@ -13,12 +13,14 @@ using TabletFriend.Models;
 using TabletFriend.Docking;
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
+using Avalonia.Styling;
 using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Media;
 using Avalonia.Media.Imaging;
-using IconPacks.Avalonia.MaterialDesign;
 using Avalonia;
+using Avalonia.Platform;
+using IconPacks.Avalonia.MaterialDesign;
 
 namespace TabletFriend
 {
@@ -110,12 +112,22 @@ namespace TabletFriend
 			{
 				if (AppState.Settings.DockingMode == DockingMode.Top || AppState.Settings.DockingMode == DockingMode.Bottom)
 				{
-					offset.X = (float)(SystemParameters.PrimaryScreenWidth - newWidth) / 2;
-				}
+					// offset.X = (float)(SystemParameters.PrimaryScreenWidth - newWidth) / 2;
+                    var screen = window.Screens?.Primary ?? window.Screens?.All[0];
+                    if (screen != null)
+                    {
+                        offset.X = (float)(screen.Bounds.Width - newWidth) / 2;
+                    }
+                }
 				else
 				{
-					offset.Y = (float)(SystemParameters.PrimaryScreenHeight - newHeight) / 2;
-				}
+					// offset.Y = (float)(SystemParameters.PrimaryScreenHeight - newHeight) / 2;
+                    var screen = window.Screens?.Primary ?? window.Screens?.All[0];
+                    if (screen != null)
+                    {
+                        offset.Y = (float)(screen.Bounds.Height - newHeight) / 2;
+                    }
+                }
 			}
 			else
 			{
@@ -131,16 +143,21 @@ namespace TabletFriend
 				window.MinOpacity = layout.MinOpacity;
 			}
 			window.MaxOpacity = layout.MaxOpacity;
-			window.BeginAnimation(UIElement.OpacityProperty, null);
+			// window.BeginAnimation(UIElement.OpacityProperty, null);
 			window.Opacity = layout.MaxOpacity;
-			if (window.IsMouseOver)
-			{
-				window.BeginAnimation(UIElement.OpacityProperty, window.FadeIn);
-			}
-			else
-			{
-				window.BeginAnimation(UIElement.OpacityProperty, window.FadeOut);
-			}
+			// if (window.IsPointerOver)
+			// {
+			// 	window.BeginAnimation(UIElement.OpacityProperty, window.FadeIn);
+			// }
+			// else
+			// {
+			// 	window.BeginAnimation(UIElement.OpacityProperty, window.FadeOut);
+			// }
+            window.PointerEntered -= window.OnPointerEnteredFade;
+            window.PointerExited -= window.OnPointerExitedFade;
+
+            window.PointerEntered += window.OnPointerEnteredFade;
+            window.PointerExited += window.OnPointerExitedFade;
 
 			Application.Current.Resources["PrimaryHueMidBrush"] = new SolidColorBrush(theme.PrimaryColor);
 			Application.Current.Resources["PrimaryHueMidForegroundBrush"] = new SolidColorBrush(theme.SecondaryColor);
@@ -203,7 +220,7 @@ namespace TabletFriend
 		{
 			var theme = AppState.CurrentTheme;
 
-			ButtonBase uiButton;
+			Button uiButton;
 			var isToggle = button.Action is ToggleAction;
 			var isRepeat = button.Action is RepeatAction;
 
@@ -216,7 +233,7 @@ namespace TabletFriend
 				if (isRepeat)
 				{
 					uiButton = new RepeatButton();
-					Stylus.SetIsPressAndHoldEnabled(uiButton, false);
+					// Stylus.SetIsPressAndHoldEnabled(uiButton, false);
 				}
 				else
 				{
@@ -254,8 +271,9 @@ namespace TabletFriend
 			}
 			if (fontWeight > 0)
 			{
-				text.FontWeight = FontWeight.FromOpenTypeWeight(Math.Min(999, fontWeight));
-			}
+				// text.FontWeight = FontWeight.FromOpenTypeWeight(Math.Min(999, fontWeight));
+                text.FontWeight = (FontWeight)Math.Clamp(fontWeight, 1, 999);
+            }
 
 			uiButton.Content = text;
 
@@ -264,12 +282,17 @@ namespace TabletFriend
 				uiButton.Content = button.Icon;
 				if (!string.IsNullOrEmpty(button.Text))
 				{
-					uiButton.ToolTip = new ToolTip()
-					{
-						Style = Application.Current.Resources["tool_tip"] as Style,
-						Content = button.Text,
-						HasDropShadow = true,
-					};
+                    var toolTip = new ToolTip(){
+                        Content = button.Text
+                    };
+                    toolTip.Styles.Add(Application.Current.Resources["tool_tip"] as Styles);
+					ToolTip.SetTip(uiButton, toolTip);
+                    // uiButton.ToolTip = new ToolTip()
+					// {
+					// 	Style = Application.Current.Resources["tool_tip"] as Style,
+					// 	Content = button.Text,
+					// 	HasDropShadow = true,
+					// };
 				}
 			}
 
@@ -281,7 +304,7 @@ namespace TabletFriend
 
 			if (isToggle)
 			{
-				uiButton.Style = Application.Current.Resources["toggle"] as Style;
+				uiButton.Styles.Add(Application.Current.Resources["toggle"] as Style);
 
 				var key = ((ToggleAction)button.Action).Key;
 				var toggle = (ToggleButton)uiButton;
@@ -295,17 +318,18 @@ namespace TabletFriend
 			{
 				if (style == null)
 				{
-					uiButton.Style = null;
+					uiButton.Styles.Clear();
 				}
 				else
 				{
-					uiButton.Style = Application.Current.Resources[style] as Style;
+					uiButton.Styles.Add(Application.Current.Resources[style] as Style);
 				}
 			}
 
 			if (button.Action != null)
 			{
-				uiButton.Click += (e, o) => _ = button.Action.Invoke();
+				// uiButton.Click += (e, o) => _ = button.Action.Invoke();
+                uiButton.Click += async (_, __) => await button.Action.Invoke();
 			}
 
 			Canvas.SetTop(uiButton, layout.CellSize * position.Y + layout.Margin + offset.Y);
