@@ -1,5 +1,6 @@
 ﻿using System.Threading.Tasks;
-using WpfAppBar;
+// using WpfAppBar;
+using TabletFriend.Docking;
 
 namespace TabletFriend.Actions
 {
