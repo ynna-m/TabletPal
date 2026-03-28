@@ -80,5 +80,17 @@ namespace TabletFriend
 
 			return menu;
 		}
+        public IEnumerable<NativeMenuItemBase> GetNativeMenuItems()
+        {
+            // var nativeMenu = new NativeMenu();
+            foreach (MenuItem item in Menu.Items)
+            {
+                var nativeItem = new NativeMenuItem(item.Header?.ToString() ?? "");
+                nativeItem.Click += (s, e) => EventBeacon.SendEvent(Events.ChangeLayout, item.DataContext);
+                // nativeMenu.Items.Add(nativeItem);
+                yield return nativeItem;
+            }
+            // return nativeMenu;
+        }
 	}
 }

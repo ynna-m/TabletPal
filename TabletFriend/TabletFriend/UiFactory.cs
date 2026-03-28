@@ -1,16 +1,24 @@
-﻿using MaterialDesignThemes.Wpf;
+﻿// using MaterialDesignThemes.Wpf;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Numerics;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Controls.Primitives;
-using System.Windows.Input;
-using System.Windows.Media;
+// using System.Windows;
+// using System.Windows.Controls;
+// using System.Windows.Controls.Primitives;
+// using System.Windows.Input;
+// using System.Windows.Media;
 using TabletFriend.Actions;
 using TabletFriend.Models;
-using WpfAppBar;
+using TabletFriend.Docking;
+using Avalonia.Controls;
+using Avalonia.Controls.Primitives;
+using Avalonia.Input;
+using Avalonia.Interactivity;
+using Avalonia.Media;
+using Avalonia.Media.Imaging;
+using IconPacks.Avalonia.MaterialDesign;
+using Avalonia;
 
 namespace TabletFriend
 {

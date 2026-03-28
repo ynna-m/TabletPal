@@ -1,32 +1,25 @@
-﻿// using Hardcodet.Wpf.TaskbarNotification;
-using Microsoft.Win32;
+﻿using Microsoft.Win32;
 using System;
 using System.Diagnostics;
-// using System.Drawing;
 using System.IO;
 using System.Threading;
-// using System.Windows;
-// using System.Windows.Controls;
 using TabletFriend.Docking;
-// using TabletFriend.TabletMode;
-// using WpfAppBar;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
 using Avalonia.Threading;
-using Avalonia.Media; 
-using Avalonia.Media.Imaging;
-using IconPacks.Avalonia.MaterialDesign;
+using System.Collections.Generic;
 
 namespace TabletFriend
 {
 	public class TrayManager
 	{
 		private TrayIcon _icon;
+        private ContextMenu _dockingContextMenu;
 		private MenuItem _autostartMenuItem;
 		private MenuItem _autoUpdateMenuItem;
 		// private MenuItem _autohideMenuItem;
 		private MenuItem _perAppLayoutsMenuItem;
-		private readonly string _iconPathBlack = AppState.CurrentDirectory + "/files/icons/tray/tray_black.ico";
+		// private readonly string _iconPathBlack = AppState.CurrentDirectory + "/files/icons/tray/tray_black.ico";
 		private readonly string _iconPathWhite = AppState.CurrentDirectory + "/files/icons/tray/tray_white.ico";
 		private readonly MainWindow _window;
 		private readonly LayoutListManager _layoutList;
@@ -40,28 +33,30 @@ namespace TabletFriend
 			_layoutList = layoutList;
 			_themeList = themeList;
 			_focusMonitor = focusMonitor;
-
+            
+            _dockingContextMenu = new ContextMenu();
 			_icon = new TrayIcon();
 
-			if (_isLightTheme)
-			{
-				_icon.Icon = new WindowIcon(_iconPathBlack);
-			}
-			else
-			{ 
+			// if (_isLightTheme)
+			// {
+			// 	_icon.Icon = new WindowIcon(_iconPathBlack);
+			// }
+			// else
+			// { 
 				_icon.Icon = new WindowIcon(_iconPathWhite);
-			}
+			// }
 
-			_icon.IsVisible = Visibility.Visible;
+			_icon.IsVisible = true;
+
 			_icon.Menu = new NativeMenu();
-			_icon.MouseDown += MouseDown;
+			_icon.Clicked += MouseDown;
 			CreateMenu();
 
 			EventBeacon.Subscribe(Events.ChangeLayout, OnUpdateLayoutList);
 			EventBeacon.Subscribe(Events.FilesChanged, OnUpdateLayoutList);
 		}
 
-		private void MouseDown(object sender, RoutedEventArgs e)
+		private void MouseDown(object sender, EventArgs e)
 		{
 			EventBeacon.SendEvent(Events.ToggleMinimize);
 		}
@@ -72,8 +67,8 @@ namespace TabletFriend
 			Dispatcher.UIThread.Post(
 				() =>
 				{
-					_icon.ContextMenu.Items.Clear();
-					_icon.ContextMenu = new ContextMenu();
+					_icon.Menu.Items.Clear();
+					_icon.Menu = new NativeMenu();
 					CreateMenu();
 				}
 			);
@@ -81,22 +76,30 @@ namespace TabletFriend
 
 		private void CreateMenu()
 		{
-			
-			_icon.ContextMenu.Items.Add(_layoutList.CloneMenu());
-			_icon.ContextMenu.Items.Add(_themeList.CloneMenu());
-
-			DockingMenuFactory.CreateDockingMenu(_icon.ContextMenu);
+			foreach (var nativeItem in _layoutList.GetNativeMenuItems())
+            {
+                _icon.Menu.Items.Add(nativeItem);
+            }
+            foreach (var nativeItem in _themeList.GetNativeMenuItems())
+            {
+                _icon.Menu.Items.Add(nativeItem);
+            }
+			// _icon.ContextMenu.Items.Add(_layoutList.CloneMenu());
+			// _icon.ContextMenu.Items.Add(_themeList.CloneMenu());
+            _dockingContextMenu.Items.Add(_layoutList.CloneMenu());
+            _dockingContextMenu.Items.Add(_themeList.CloneMenu());
+			DockingMenuFactory.CreateDockingMenu(_dockingContextMenu);
 
 			var settings = new MenuItem() { Header = "settings" };
 
-			if (AppState.Settings.AddToAutostart)
-			{
-				_autostartMenuItem = AddSubmenuItem(settings, "remove from autostart", OnAutostartToggle);
-			}
-			else
-			{
-				_autostartMenuItem = AddSubmenuItem(settings, "add to autostart", OnAutostartToggle);
-			}
+			// if (AppState.Settings.AddToAutostart)
+			// {
+			// 	_autostartMenuItem = AddSubmenuItem(settings, "remove from autostart", OnAutostartToggle);
+			// }
+			// else
+			// {
+			// 	_autostartMenuItem = AddSubmenuItem(settings, "add to autostart", OnAutostartToggle);
+			// }
 
 			if (AppState.Settings.UpdateCheckingEnabled)
 			{
@@ -131,39 +134,49 @@ namespace TabletFriend
 			AddSubmenuItem(settings, "open files directory...", OnOpenLayoutsDirectory);
 			_focusedApp = AddSubmenuItem(settings, "focused app: none");
 			_focusMonitor.OnAppChanged += OnAppChanged;
-			_icon.ContextMenu.Items.Add(settings);
 
-			_icon.ContextMenu.Items.Add(new Separator());
+            foreach (var nativeItem in ConvertToNativeMenuItems(settings))
+            {
+                _icon.Menu.Items.Add(nativeItem);
+            }
+			
+			_icon.Menu.Add(new NativeMenuItemSeparator());
 			AddMenuItem("about", OnAbout);
 			AddMenuItem("quit", OnQuit);
 		}
 
 		private void OnAppChanged(string app)
 		{
-			_focusedApp.Dispatcher.Invoke(
-				() =>
-				{
-					_focusedApp.Header = "focused app: " + app;
-				}
-			);	
+			// _focusedApp.Dispatcher.Invoke(
+			// 	() =>
+			// 	{
+			// 		_focusedApp.Header = "focused app: " + app;
+			// 	}
+			// );	
+            Dispatcher.UIThread.Post(
+                () =>
+                {
+                    _focusedApp.Header = "focused app: " + app;
+                }
+            );
 		}
 
-		private void OnAutostartToggle(object sender, RoutedEventArgs e)
-		{
-			AppState.Settings.AddToAutostart = !AppState.Settings.AddToAutostart;
+		// private void OnAutostartToggle(object sender, RoutedEventArgs e)
+		// {
+		// 	AppState.Settings.AddToAutostart = !AppState.Settings.AddToAutostart;
 
-			if (AppState.Settings.AddToAutostart)
-			{
-				AutostartManager.SetAutostart();
-				_autostartMenuItem.Header = "remove from autostart";
-			}
-			else
-			{
-				AutostartManager.ResetAutostart();
-				_autostartMenuItem.Header = "add to autostart";
-			}
-			EventBeacon.SendEvent(Events.UpdateSettings);
-		}
+		// 	if (AppState.Settings.AddToAutostart)
+		// 	{
+		// 		AutostartManager.SetAutostart();
+		// 		_autostartMenuItem.Header = "remove from autostart";
+		// 	}
+		// 	else
+		// 	{
+		// 		AutostartManager.ResetAutostart();
+		// 		_autostartMenuItem.Header = "add to autostart";
+		// 	}
+		// 	EventBeacon.SendEvent(Events.UpdateSettings);
+		// }
 
 		private void OnAutoUpdateToggle(object sender, RoutedEventArgs e)
 		{
@@ -218,13 +231,13 @@ namespace TabletFriend
 			var startInfo = new ProcessStartInfo()
 			{
 				Arguments = AppState.LayoutsRoot,
-				FileName = "http://github.com/Martenfur/TabletFriend",
+				FileName = "http://github.com/ynna-m/TabletFriend",
 				UseShellExecute = true,
 			};
 			Process.Start(startInfo);
 		}
 
-		private MenuItem AddMenuItem(string header, RoutedEventHandler click = null)
+		private MenuItem AddMenuItem(string header, EventHandler<RoutedEventArgs> click = null)
 		{
 			var item = new MenuItem() { Header = header };
 			if (click != null)
@@ -235,11 +248,15 @@ namespace TabletFriend
 			{
 				item.IsEnabled = false;
 			}
-			_icon.ContextMenu.Items.Add(item);
+            foreach (var nativeItem in ConvertToNativeMenuItems(item))
+            {
+                _icon.Menu.Items.Add(nativeItem);
+            }
+			// _icon.Menu.Items.Add(item);
 			return item;
 		}
 
-		private MenuItem AddSubmenuItem(MenuItem menu, string header, RoutedEventHandler click = null)
+		private MenuItem AddSubmenuItem(MenuItem menu, string header, EventHandler<RoutedEventArgs> click = null)
 		{
 			var item = new MenuItem() { Header = header };
 			if (click != null)
@@ -273,18 +290,30 @@ namespace TabletFriend
 			Process.GetCurrentProcess().Kill();
 		}
 
-		private bool _isLightTheme
-		{
-			get
-			{
-				var key = Registry.GetValue(
-					@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Themes\Personalize", 
-					"SystemUsesLightTheme", 
-					0
-				);
-				return !(key == null || (int)key == 0);
-			}
-		}
-
+        public IEnumerable<NativeMenuItemBase> ConvertToNativeMenuItems(MenuItem Menu)
+        {
+            // var nativeMenu = new NativeMenu();
+            foreach (MenuItem item in Menu.Items)
+            {
+                var nativeItem = new NativeMenuItem(item.Header?.ToString() ?? "");
+                nativeItem.Click += (s, e) => EventBeacon.SendEvent(Events.ChangeLayout, item.DataContext);
+                // nativeMenu.Items.Add(nativeItem);
+                yield return nativeItem;
+            }
+            // return nativeMenu;
+        }
+		// private bool _isLightTheme
+		// {
+		// 	get
+		// 	{
+		// 		var key = Registry.GetValue(
+		// 			@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Themes\Personalize", 
+		// 			"SystemUsesLightTheme", 
+		// 			0
+		// 		);
+		// 		return !(key == null || (int)key == 0);
+		// 	}
+		// }
+        
 	}
 }
