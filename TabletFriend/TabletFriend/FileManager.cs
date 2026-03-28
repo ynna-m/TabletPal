@@ -1,7 +1,7 @@
 ﻿using System.IO;
 using Avalonia.Threading;
 
-namespace TabletFriend
+namespace TabletPal
 {
 	public class FileManager
 	{

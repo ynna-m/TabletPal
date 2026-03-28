@@ -1,6 +1,6 @@
 ﻿// using System.Runtime.InteropServices;
 
-// namespace TabletFriend.TabletMode
+// namespace TabletPal.TabletMode
 // {
 //     public class TabletModeDetector
 //     {

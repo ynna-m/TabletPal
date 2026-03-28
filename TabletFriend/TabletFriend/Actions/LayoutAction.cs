@@ -1,7 +1,7 @@
 ﻿using System.IO;
 using System.Threading.Tasks;
 
-namespace TabletFriend.Actions
+namespace TabletPal.Actions
 {
 	public class LayoutAction : ButtonAction
 	{

@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 using MsBox.Avalonia;
 using MsBox.Avalonia.Enums;
 
-namespace TabletFriend
+namespace TabletPal
 {
 	public static class UpdateChecker
 	{
@@ -22,7 +22,7 @@ namespace TabletFriend
 		private const string _repoLink = "https://api.github.com/repos/ynna-m/TabletPal/releases/latest";
 
 		private static string _downloadsPath =>
-			Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "Downloads\\tablet_friend");
+			Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "Downloads", "tablet_pal");
 
 		
 		public static async Task Check()
@@ -53,12 +53,12 @@ namespace TabletFriend
 			}
             var box = MessageBoxManager.GetMessageBoxStandard(
                     "Update available!"
-                    ,"A new version of Tablet Friend is available.\n\nv" + newVersion + "\n\n" + changes + "\n\nWould you like to download it?",
+                    ,"A new version of Tablet Pal is available.\n\nv" + newVersion + "\n\n" + changes + "\n\nWould you like to download it?",
                     ButtonEnum.YesNo
                     ,Icon.Question);
             var result = await box.ShowAsync();
 			// var result = MessageBox.Show(
-			// 	"A new version of Tablet Friend is available."
+			// 	"A new version of Tablet Pal is available."
 			// 	+ Environment.NewLine
 			// 	+ Environment.NewLine
 			// 	+ "v" + newVersion
@@ -128,13 +128,13 @@ namespace TabletFriend
 			}
             var box = MessageBoxManager.GetMessageBoxStandard(
                     "Update downloaded!"
-                    ,$"A new version of Tablet Friend has been downloaded. Please unzip and install the new version. Tablet Friend will be closed.",
+                    ,$"A new version of Tablet Pal has been downloaded. Please unzip and install the new version. Tablet Pal will be closed.",
                     ButtonEnum.Ok
                     ,Icon.Info);
             await box.ShowAsync();
 			// MessageBox.Show(
-			// 	"A new version of Tablet Friend has been downloaded. "
-			// 	+ "Please unzip and install the new version. Tablet Friend will be closed.",
+			// 	"A new version of Tablet Pal has been downloaded. "
+			// 	+ "Please unzip and install the new version. Tablet Pal will be closed.",
 			// 	"Update!",
 			// 	MessageBoxButton.OK,
 			// 	MessageBoxImage.Information

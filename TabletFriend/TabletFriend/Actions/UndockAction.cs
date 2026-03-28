@@ -1,8 +1,8 @@
 ﻿using System.Threading.Tasks;
 // using WpfAppBar;
-using TabletFriend.Docking;
+using TabletPal.Docking;
 
-namespace TabletFriend.Actions
+namespace TabletPal.Actions
 {
 	public class UndockAction : ButtonAction
 	{

@@ -1,5 +1,5 @@
-﻿using TabletFriend.Models;
-using TabletFriend.Docking;
+﻿using TabletPal.Models;
+using TabletPal.Docking;
 using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Interactivity;
@@ -9,7 +9,7 @@ using IconPacks.Avalonia.MaterialDesign;
 using Avalonia;
 using Avalonia.Styling;
 
-namespace TabletFriend
+namespace TabletPal
 {
 	public static class TitlebarManager
 	{

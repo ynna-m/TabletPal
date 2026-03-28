@@ -1,9 +1,9 @@
 ﻿using System.Threading.Tasks;
-using TabletFriend.InputSender;
+using TabletPal.InputSender;
 // using WindowsInput;
 // using WindowsInput.Events;
 
-namespace TabletFriend.Actions
+namespace TabletPal.Actions
 {
 	public class KeyAction : ButtonAction
 	{

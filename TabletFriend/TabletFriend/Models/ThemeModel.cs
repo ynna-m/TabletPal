@@ -1,8 +1,8 @@
 ﻿using System.Globalization;
 using Avalonia.Media;
-using TabletFriend.Data;
+using TabletPal.Data;
 
-namespace TabletFriend.Models
+namespace TabletPal.Models
 {
 	public class ThemeModel
 	{

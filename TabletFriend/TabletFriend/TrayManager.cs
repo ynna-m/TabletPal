@@ -3,13 +3,13 @@ using System;
 using System.Diagnostics;
 using System.IO;
 using System.Threading;
-using TabletFriend.Docking;
+using TabletPal.Docking;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
 using Avalonia.Threading;
 using System.Collections.Generic;
 
-namespace TabletFriend
+namespace TabletPal
 {
 	public class TrayManager
 	{
@@ -231,7 +231,7 @@ namespace TabletFriend
 			var startInfo = new ProcessStartInfo()
 			{
 				Arguments = AppState.LayoutsRoot,
-				FileName = "http://github.com/ynna-m/TabletFriend",
+				FileName = "http://github.com/ynna-m/TabletPal",
 				UseShellExecute = true,
 			};
 			Process.Start(startInfo);

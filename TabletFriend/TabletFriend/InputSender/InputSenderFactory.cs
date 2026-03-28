@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace TabletFriend.InputSender
+namespace TabletPal.InputSender
 {
     public static class InputSenderFactory
     {

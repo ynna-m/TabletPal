@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.31613.86
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TabletFriend", "TabletFriend\TabletFriend.csproj", "{9F294959-3411-49EA-BD9D-7A71678E76BA}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TabletPal", "TabletPal\TabletPal.csproj", "{9F294959-3411-49EA-BD9D-7A71678E76BA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

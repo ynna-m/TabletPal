@@ -2,19 +2,19 @@
 
 ![logo](icons/logo.png)
 
-### [DOWNLOAD](https://github.com/Martenfur/TabletFriend/releases/latest)
+### [DOWNLOAD](https://github.com/Martenfur/TabletPal/releases/latest)
 
-### [SAMPLE LAYOUT](TabletFriend/TabletFriend/files/layouts/sample_layout.yaml)
+### [SAMPLE LAYOUT](TabletPal/TabletPal/files/layouts/sample_layout.yaml)
 
 ### [VIDEO GUIDE](https://www.youtube.com/watch?v=rWkRrhrKmSY)
 
-Hey there! Working without a keyboard is hard. When you are on a tablet, you realize how much you miss certain key combinations. Well, no more! Tablet Friend will make your life on Surface Pro or any other Windows tablet easier by providing a highly customizable set of on-screen toolbars.
+Hey there! Working without a keyboard is hard. When you are on a tablet, you realize how much you miss certain key combinations. Well, no more! Tablet Pal will make your life on Surface Pro or any other Windows tablet easier by providing a highly customizable set of on-screen toolbars.
 
-Whether you are an artist, a casual Windows tablet fan or simply a touchscreen enjoyer, Tablet Friend is the perfect companion for getting stuff done. 
+Whether you are an artist, a casual Windows tablet fan or simply a touchscreen enjoyer, Tablet Pal is the perfect companion for getting stuff done. 
 
 ![showoff](docs/pics/showoff.png)
 
-Here's what Tablet Friend can do:
+Here's what Tablet Pal can do:
 
 - Press buttons and button combinations.
 - Toggle buttons.
@@ -31,17 +31,17 @@ Here's what Tablet Friend can do:
 
 ## Getting started
 
-Grab the latest release from [this page](https://github.com/Martenfur/TabletFriend/releases/latest), unzip it... and that's it! No multistep installations, no hassle, you can start using the thing right away. 
+Grab the latest release from [this page](https://github.com/Martenfur/TabletPal/releases/latest), unzip it... and that's it! No multistep installations, no hassle, you can start using the thing right away. 
 
 ## Making your own toolbars
 
-Let's be honest - the default toolbars will probably not be enough for you. But that's ok. It's you who knows best what you need, this is why Tablet Friend is a great toolbar constructor first and a great toolbar second.
+Let's be honest - the default toolbars will probably not be enough for you. But that's ok. It's you who knows best what you need, this is why Tablet Pal is a great toolbar constructor first and a great toolbar second.
 
 First, right-click the tray icon and press the 'open files directory' button. 
 
 ![menu](docs/pics/menu.png)
 
-This will open a directory with a bunch of `.yaml` files. These are your toolbars - you can open them with any text editor you like. I know, I know, editing some config files directly may seem scary - luckily, Tablet Friend makes it as easy and intuitive as possible. 
+This will open a directory with a bunch of `.yaml` files. These are your toolbars - you can open them with any text editor you like. I know, I know, editing some config files directly may seem scary - luckily, Tablet Pal makes it as easy and intuitive as possible. 
 
 Let's make a new toolbar - create a file named `my_toolbar.yaml` in the `toolbars` directory, open it and paste this inside:
 
@@ -52,7 +52,7 @@ buttons:
 		text: cut
  ```
 
-Yes, it's that simple. Let's break down what we just wrote: `buttons` is a collection of buttons. This is where all your buttons will go. `cut_button` is the name of your button. **Note that all button names should be unique.** Its `action` is a ctrl+x press. And it will display `text` that says "cut" on it. Now, right-click Tablet Friend toolbar and choose "my toolbar" from the list. You don't need to relaunch the program - it updates everything automatically. If you did everything correctly, you will see this:
+Yes, it's that simple. Let's break down what we just wrote: `buttons` is a collection of buttons. This is where all your buttons will go. `cut_button` is the name of your button. **Note that all button names should be unique.** Its `action` is a ctrl+x press. And it will display `text` that says "cut" on it. Now, right-click Tablet Pal toolbar and choose "my toolbar" from the list. You don't need to relaunch the program - it updates everything automatically. If you did everything correctly, you will see this:
 
 ![s1](docs/pics/s1.png)
 
@@ -76,7 +76,7 @@ Now, press `Ctrl+S` and your toolbar will update automatically. Magic!
 
 ![s2](docs/pics/s2.png)
 
-Paste button is wider that the others, because its `size` is 2 cells wide and 1 cell high. You also may wonder how do you specify button positions. That's the best thing - you don't. Instead of tediously calculating all the positions by hand, you let Tablet Friend handle this for you. 
+Paste button is wider that the others, because its `size` is 2 cells wide and 1 cell high. You also may wonder how do you specify button positions. That's the best thing - you don't. Instead of tediously calculating all the positions by hand, you let Tablet Pal handle this for you. 
 
 All buttons are put on the layout from left to right in a single line - until they run out of space. Every layout has a property called 'layout_width'. It tells the layout how many cells it has before it will be forced to put buttons on a second line. By default, this value is 2, but you can change it. Simply paste this on the very first line of your config:
 
@@ -90,7 +90,7 @@ Press Ctrl+S and your layout will change to this:
 
 Because there is enough space now, all buttons can fit on the same line. You can play around and see what happens at different button sizes, layout width and button amounts. This system is very intuitive once you get the hang of it.
 
-However, what if you want to space out your buttons, or create a specific shape out of your buttons? For that, Tablet Friend has spacers. Change your config to look like this:
+However, what if you want to space out your buttons, or create a specific shape out of your buttons? For that, Tablet Pal has spacers. Change your config to look like this:
 
 ```yaml
 layout_width: 2
@@ -121,14 +121,14 @@ It is **VERY IMPORTANT** that you use tab characters `	`  instead of spaces for 
 
 ### App-specific layouts
 
-Having a layout is great but what if you want to have one layout for your drawing app, another for note taking and a completely separate one for web browsing? You're in luck because since version 2.0, Tablet Friend has app-specific layout support!
+Having a layout is great but what if you want to have one layout for your drawing app, another for note taking and a completely separate one for web browsing? You're in luck because since version 2.0, Tablet Pal has app-specific layout support!
 
 Simply add this line to the top of your layout config:
 ```yaml 
 app: mspaint
 ```
 And now, every time we open Microsoft Paint, the layout will automatically switch to this one. But how do we know what exact name an app has? 
-For this, you must focus on the app you want, right-click the Tablet Friend tray icon, select `settings` and look at the `focused app` label. It always tells the app you're focusing on. 
+For this, you must focus on the app you want, right-click the Tablet Pal tray icon, select `settings` and look at the `focused app` label. It always tells the app you're focusing on. 
 ![app_name](docs/pics/app_name.png)
 
 You can also use wildcards:
@@ -144,7 +144,7 @@ You can also disable automatic switching altogether by going into `settings` and
 
 **NOTE**: In order for transition between layouts to be smooth and quick, `layout_width`, `button_size` and `margin` should be exactly the same between layouts.
 
-This, of course, are not all the features Tablet Friend offers. You can check out a more [advanced example](TabletFriend/TabletFriend/files/layouts/sample_layout.yaml) with all features listed.
+This, of course, are not all the features Tablet Pal offers. You can check out a more [advanced example](TabletPal/TabletPal/files/layouts/sample_layout.yaml) with all features listed.
 
 ## Migrating to 2.0
 
@@ -185,8 +185,8 @@ buttons:
 
 Note that unmodified 1.0 layouts and themes will still function but may get rendered differently.
 
-## Making Tablet Friend better
+## Making Tablet Pal better
 
-Tablet Friend is opensource, licensed under MIT and 100% free. You can help out the development by submitting your own toolbars to the [issues](https://github.com/Martenfur/TabletFriend/issues) board or helping out with the code. 
+Tablet Pal is opensource, licensed under MIT and 100% free. You can help out the development by submitting your own toolbars to the [issues](https://github.com/Martenfur/TabletPal/issues) board or helping out with the code. 
 
 If you have any questions, you can contact me at `chaifoxes@gmail.com`

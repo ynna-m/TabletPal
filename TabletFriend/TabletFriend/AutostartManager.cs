@@ -5,14 +5,14 @@
 // using System.IO;
 // using System.Reflection;
 
-// namespace TabletFriend
+// namespace TabletPal
 // {
 // 	public class AutostartManager
 // 	{
-// 		private const string _key = "TabletFriend";
+// 		private const string _key = "TabletPal";
 
 // 		private static readonly string _appPath =
-// 			'"' + Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, "TabletFriend.exe") + '"';
+// 			'"' + Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, "TabletPal.exe") + '"';
 
 // 		public static bool IsAutostartSet => (string)GetKey().GetValue(_key) == _appPath;
 

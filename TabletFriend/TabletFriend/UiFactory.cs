@@ -8,9 +8,9 @@ using System.Numerics;
 // using System.Windows.Controls.Primitives;
 // using System.Windows.Input;
 // using System.Windows.Media;
-using TabletFriend.Actions;
-using TabletFriend.Models;
-using TabletFriend.Docking;
+using TabletPal.Actions;
+using TabletPal.Models;
+using TabletPal.Docking;
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
 using Avalonia.Styling;
@@ -22,7 +22,7 @@ using Avalonia;
 using Avalonia.Platform;
 using IconPacks.Avalonia.MaterialDesign;
 
-namespace TabletFriend
+namespace TabletPal
 {
 	public static class UiFactory
 	{

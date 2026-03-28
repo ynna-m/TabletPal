@@ -1,10 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.Numerics;
 using Avalonia.Media;
-using TabletFriend.Models;
-using TabletFriend.Docking;
+using TabletPal.Models;
+using TabletPal.Docking;
 
-namespace TabletFriend
+namespace TabletPal
 {
 	public static class Utils
 	{

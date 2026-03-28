@@ -5,7 +5,7 @@
 // using System.Timers;
 // using System.Windows;
 
-// namespace TabletFriend.TabletMode
+// namespace TabletPal.TabletMode
 // {
 // 	public static class ToolbarAutohider
 // 	{

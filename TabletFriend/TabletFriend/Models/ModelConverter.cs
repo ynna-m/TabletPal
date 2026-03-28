@@ -1,6 +1,6 @@
 ﻿using System.Numerics;
 
-namespace TabletFriend.Models
+namespace TabletPal.Models
 {
 	public static class ModelConverter
 	{

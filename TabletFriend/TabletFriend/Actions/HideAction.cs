@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 
-namespace TabletFriend.Actions
+namespace TabletPal.Actions
 {
 	public class HideAction : ButtonAction
 	{

@@ -9,11 +9,11 @@
 // using System.Windows.Controls;
 // using System.Windows.Input;
 // using System.Windows.Interop;
-// using TabletFriend.Docking;
-// using TabletFriend.TabletMode;
+// using TabletPal.Docking;
+// using TabletPal.TabletMode;
 // using WpfAppBar;
 
-// namespace TabletFriend
+// namespace TabletPal
 // {
 // 	/// <summary>
 // 	/// Interaction logic for MainWindow.xaml

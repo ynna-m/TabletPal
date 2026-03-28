@@ -1,7 +1,7 @@
 ﻿using System.Threading.Tasks;
-using TabletFriend.Docking;
+using TabletPal.Docking;
 
-namespace TabletFriend.Actions
+namespace TabletPal.Actions
 {
 	public class DockAction : ButtonAction
 	{

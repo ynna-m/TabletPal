@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 // using WindowsInput.Events;
 
-namespace TabletFriend.Actions
+namespace TabletPal.Actions
 {
 	public static class ButtonActionResolver
 	{

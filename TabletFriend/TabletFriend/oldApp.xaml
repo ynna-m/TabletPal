@@ -1,7 +1,7 @@
-﻿<Application x:Class="TabletFriend.App"
+﻿<!-- <Application x:Class="TabletPal.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:local="clr-namespace:TabletFriend"
+             xmlns:local="clr-namespace:TabletPal"
              StartupUri="MainWindow.xaml">
 	<Application.Resources>
 		<ResourceDictionary>
@@ -124,4 +124,4 @@
 		</ResourceDictionary>
 
 	</Application.Resources>
-</Application>
+</Application> -->

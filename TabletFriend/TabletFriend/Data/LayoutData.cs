@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace TabletFriend.Data
+namespace TabletPal.Data
 {
 	public class LayoutData
 	{

@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
-using TabletFriend.Data;
+using TabletPal.Data;
 
-namespace TabletFriend.Models
+namespace TabletPal.Models
 {
 	public class LayoutModel : IDisposable
 	{

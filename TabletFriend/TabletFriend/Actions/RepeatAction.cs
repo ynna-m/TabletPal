@@ -1,6 +1,6 @@
 ﻿// using WindowsInput.Events;
 
-namespace TabletFriend.Actions
+namespace TabletPal.Actions
 {
 	public class RepeatAction : KeyAction
 	{

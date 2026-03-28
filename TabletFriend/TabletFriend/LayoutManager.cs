@@ -4,14 +4,14 @@ using System.IO;
 using System.Numerics;
 // using System.Printing;
 // using System.Windows;
-using TabletFriend.Actions;
-using TabletFriend.Models;
+using TabletPal.Actions;
+using TabletPal.Models;
 // using WindowsInput.Events;
 // using WpfAppBar;
 using MsBox.Avalonia;
 using MsBox.Avalonia.Enums;
 using Avalonia.Threading;
-namespace TabletFriend
+namespace TabletPal
 {
 	public class LayoutManager
 	{

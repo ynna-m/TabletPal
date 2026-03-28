@@ -1,7 +1,7 @@
 ﻿using System.Diagnostics;
 using System.Threading.Tasks;
 
-namespace TabletFriend.Actions
+namespace TabletPal.Actions
 {
 	public class TerminalAction : ButtonAction
 	{

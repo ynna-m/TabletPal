@@ -4,7 +4,7 @@ using System.Text.RegularExpressions;
 using Avalonia;
 using Avalonia.Threading;
 
-namespace TabletFriend
+namespace TabletPal
 {
 	public class AutomaticLayoutSwitcher
 	{

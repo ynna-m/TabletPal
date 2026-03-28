@@ -1,5 +1,5 @@
 ﻿
-namespace TabletFriend
+namespace TabletPal
 {
 	public enum ButtonVisibility
 	{

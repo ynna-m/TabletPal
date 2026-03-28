@@ -6,12 +6,12 @@ using MsBox.Avalonia.Enums;
 /***
 *Needs to be updated to just installing to Home directory in Linux.
 **/
-namespace TabletFriend
+namespace TabletPal
 {
 	public static class Installer
 	{
 		private static readonly string _preferredDirectory =
-			Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "TabletFriend");
+			Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "TabletPal");
 
 		public async static void TryInstall()
 		{
@@ -25,12 +25,12 @@ namespace TabletFriend
 			}
             var box = MessageBoxManager.GetMessageBoxStandard(
                     "Hello!"
-                    ,"Welcome to Tablet Friend! See the https://github.com/Martenfur/TabletFriend#readme if you have any questions. Would you like to move Tablet Friend to AppData?",
+                    ,"Welcome to Tablet Pal! See the https://github.com/ynna-m/TabletPal#readme if you have any questions. Would you like to move Tablet Pal to AppData?",
                     ButtonEnum.YesNo
                     ,Icon.Question);
             var result = await box.ShowAsync();
 			// var result = MessageBox.Show(
-			// 	"Welcome to Tablet Friend! See the https://github.com/Martenfur/TabletFriend#readme if you have any questions. Would you like to move Tablet Friend to AppData?",
+			// 	"Welcome to Tablet Pal! See the https://github.com/Martenfur/TabletPal#readme if you have any questions. Would you like to move Tablet Pal to AppData?",
 			// 	"Hello",
 			// 	MessageBoxButton.YesNo,
 			// 	MessageBoxImage.Question
@@ -42,12 +42,22 @@ namespace TabletFriend
 					if (Directory.Exists(_preferredDirectory))
 					{
 
+                        var boxLayoutInfo = MessageBoxManager.GetMessageBoxStandard(
+                            "Update"
+                            ,"Another version of Tablet Pal detected. 'files' directory will be overwritten. " +
+                            "Previous version's layouts, themes and icons will be moved to 'files.backup'. " +
+                            Environment.NewLine +
+                            "WARNING: If you are updating from 1.0 to 2.0, layout and theme structure has been changed. " +
+                            "If you have your own layouts you will need to update them manually. See https://github.com/ynna-m/TabletPal#readme for the instructions."
+                            , ButtonEnum.YesNo
+                            ,Icon.Info);
+                        await boxLayoutInfo.ShowAsync();
 						// MessageBox.Show(
-						// 	"Another version of Tablet Friend detected. 'files' directory will be overwritten. " +
+						// 	"Another version of Tablet Pal detected. 'files' directory will be overwritten. " +
 						// 	"Previous version's layouts, themes and icons will be moved to 'files.backup'. " +
 						// 	Environment.NewLine +
 						// 	"WARNING: If you are updating from 1.0 to 2.0, layout and theme structure has been changed. " +
-						// 	"If you have your own layouts you will need to update them manually. See https://github.com/Martenfur/TabletFriend#readme for the instructions.",
+						// 	"If you have your own layouts you will need to update them manually. See https://github.com/Martenfur/TabletPal#readme for the instructions.",
 						// 	"Update",
 						// 	MessageBoxButton.OK
 						// );
@@ -62,16 +72,16 @@ namespace TabletFriend
 					DirectoryCopy(AppState.CurrentDirectory, _preferredDirectory, "*.dll");
 					DirectoryCopy(AppState.CurrentDirectory, _preferredDirectory, "*.exe");
 					DirectoryCopy(AppState.CurrentDirectory, _preferredDirectory, "*.json");
-					Process.Start(Path.Combine(_preferredDirectory, "TabletFriend.exe"));
+					Process.Start(Path.Combine(_preferredDirectory, "TabletPal.exe"));
 				}
 				catch (Exception e)
 				{
                     var boxError = MessageBoxManager.GetMessageBoxStandard(
-                        "Error!",$"Failed to copy the files: {e.Message}. Make sure all other instances of Tablet Friend are closed and try again.",
+                        "Error!",$"Failed to copy the files: {e.Message}. Make sure all other instances of Tablet Pal are closed and try again.",
                         ButtonEnum.Ok, Icon.Error);
                     await boxError.ShowAsync();
 					// MessageBox.Show(
-					// 	"Failed to copy the files: '" + e.Message + "'. Make sure all other instances of Tablet Friend are closed and try again.",
+					// 	"Failed to copy the files: '" + e.Message + "'. Make sure all other instances of Tablet Pal are closed and try again.",
 					// 	"Error!",
 					// 	MessageBoxButton.OK,
 					// 	MessageBoxImage.Error

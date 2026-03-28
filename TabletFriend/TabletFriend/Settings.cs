@@ -4,11 +4,11 @@ using System.Windows;
 // using WpfAppBar;
 using YamlDotNet.Serialization;
 using YamlDotNet.Serialization.NamingConventions;
-using TabletFriend.Docking;
+using TabletPal.Docking;
 using Avalonia;
 using Avalonia.Controls;
 
-namespace TabletFriend
+namespace TabletPal
 {
 	public class Settings
 	{

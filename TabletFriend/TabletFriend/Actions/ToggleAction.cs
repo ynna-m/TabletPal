@@ -1,7 +1,7 @@
 ﻿using System.Threading.Tasks;
 // using WindowsInput.Events;
 
-namespace TabletFriend.Actions
+namespace TabletPal.Actions
 {
 	public class ToggleAction : ButtonAction
 	{

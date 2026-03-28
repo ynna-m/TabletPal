@@ -1,8 +1,8 @@
 ﻿using System.Threading.Tasks;
-using TabletFriend.InputSender;
+using TabletPal.InputSender;
 // using WindowsInput;
 
-namespace TabletFriend.Actions
+namespace TabletPal.Actions
 {
 	public class TypeAction : ButtonAction
 	{

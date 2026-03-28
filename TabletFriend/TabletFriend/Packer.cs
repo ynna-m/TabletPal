@@ -1,6 +1,6 @@
 ﻿using System.Numerics;
 
-namespace TabletFriend
+namespace TabletPal
 {
 	public class Packer
 	{

@@ -1,5 +1,5 @@
 ﻿
-namespace TabletFriend.Data
+namespace TabletPal.Data
 {
 	public class ButtonData
 	{

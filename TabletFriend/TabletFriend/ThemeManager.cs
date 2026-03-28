@@ -1,11 +1,11 @@
 ﻿// using System.Windows;
-using TabletFriend.Models;
-using TabletFriend.Docking;
+using TabletPal.Models;
+using TabletPal.Docking;
 using Avalonia.Threading;
 using MsBox.Avalonia;
 using MsBox.Avalonia.Enums;
 
-namespace TabletFriend
+namespace TabletPal
 {
 	public class ThemeManager
 	{

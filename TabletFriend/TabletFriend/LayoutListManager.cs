@@ -5,7 +5,7 @@ using System.IO;
 using Avalonia.Controls;
 using Avalonia.Threading;
 using Avalonia.Interactivity;
-namespace TabletFriend
+namespace TabletPal
 {
 	public class LayoutListManager
 	{

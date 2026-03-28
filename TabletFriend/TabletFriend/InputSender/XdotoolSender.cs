@@ -3,7 +3,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace TabletFriend.InputSender
+namespace TabletPal.InputSender
 {
     public class XdotoolSender : IInputSender
     {

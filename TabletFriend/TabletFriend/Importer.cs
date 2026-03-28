@@ -5,15 +5,15 @@ using System.Reflection.Metadata.Ecma335;
 using System.Threading;
 // using System.Windows;
 // using System.Windows.Controls.Primitives;
-using TabletFriend.Data;
-using TabletFriend.Models;
+using TabletPal.Data;
+using TabletPal.Models;
 using YamlDotNet.Serialization;
 using YamlDotNet.Serialization.NamingConventions;
 using System.Threading.Tasks;
 using MsBox.Avalonia;
 using MsBox.Avalonia.Enums;
 
-namespace TabletFriend
+namespace TabletPal
 {
 	public static class Importer
 	{

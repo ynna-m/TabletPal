@@ -249,7 +249,7 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Platform;
 
-namespace TabletFriend.Docking
+namespace TabletPal.Docking
 {
     public enum DockingMode
     {

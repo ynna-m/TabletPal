@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using TabletFriend.Models;
+using TabletPal.Models;
 
-namespace TabletFriend
+namespace TabletPal
 {
 	public static class AppState
 	{

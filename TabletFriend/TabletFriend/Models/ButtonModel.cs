@@ -5,14 +5,14 @@ using System.Numerics;
 // using System.Windows.Controls;
 // using System.Windows.Media;
 // using System.Windows.Media.Imaging;
-using TabletFriend.Actions;
-using TabletFriend.Data;
+using TabletPal.Actions;
+using TabletPal.Data;
 using Avalonia.Controls;
 using Avalonia.Media;
 using Avalonia.Media.Imaging;
 using IconPacks.Avalonia.MaterialDesign;
 
-namespace TabletFriend.Models
+namespace TabletPal.Models
 {
 	public class ButtonModel : IDisposable
 	{

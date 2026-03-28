@@ -7,12 +7,12 @@ using System;
 using System.ComponentModel;
 using System.IO;
 using System.Threading;
-using TabletFriend.Docking;
+using TabletPal.Docking;
 using System.Threading;
 using System.Threading.Tasks;
 
 
-namespace TabletFriend
+namespace TabletPal
 {
     public partial class MainWindow : Window, INotifyPropertyChanged
     {

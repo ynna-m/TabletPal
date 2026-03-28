@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
 
-namespace TabletFriend.Docking
+namespace TabletPal.Docking
 {
 	public static class DockingMenuFactory
 	{

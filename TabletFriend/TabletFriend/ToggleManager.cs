@@ -6,14 +6,14 @@ using System.Threading;
 using System.Threading.Tasks;
 using Avalonia.Controls.Primitives;
 using Avalonia.Threading;
-using TabletFriend.InputSender;
+using TabletPal.InputSender;
 // using System.Windows;
 // using System.Windows.Controls.Primitives;
 // using WindowsInput;
 // using WindowsInput.Events;
 // using WindowsInput.Events.Sources;
 
-namespace TabletFriend
+namespace TabletPal
 {
 	public static class ToggleManager
 	{

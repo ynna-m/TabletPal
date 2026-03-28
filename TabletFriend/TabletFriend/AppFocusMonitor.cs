@@ -5,13 +5,13 @@ using System.Threading;
 using System.Threading.Tasks;
 // using System.Windows.Automation;
 
-// namespace TabletFriend
+// namespace TabletPal
 // {
 // 	public class AppFocusMonitor : IDisposable
 // 	{
 // 		public HashSet<string> IgnoredApps = new HashSet<string>
 // 		{
-// 			"TabletFriend",
+// 			"TabletPal",
 // 			"explorer" // Explorer takes over when you click the taskbar. 
 // 		};
 
@@ -53,13 +53,13 @@ using System.Threading.Tasks;
 // 		}
 // 	}
 // }
-namespace TabletFriend
+namespace TabletPal
 {
     public class AppFocusMonitor : IDisposable
     {
         public HashSet<string> IgnoredApps = new()
         {
-            "TabletFriend"
+            "TabletPal"
         };
 
         public string FocusedApp { get; private set; }
