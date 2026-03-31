@@ -32,6 +32,8 @@ namespace TabletPal
 			ToggleManager.ClearButtons();
 			var theme = AppState.CurrentTheme;
 
+            Console.WriteLine($"UiFactory.cs: Creating UI with theme '{theme}' and settings-dockingmode '{AppState.Settings.DockingMode}'");
+
 			window.MainCanvas.Children.Clear();
 
 			var isDocked = AppState.Settings.DockingMode != DockingMode.None;
@@ -159,13 +161,13 @@ namespace TabletPal
             window.PointerEntered += window.OnPointerEnteredFade;
             window.PointerExited += window.OnPointerExitedFade;
 
-			Application.Current.Resources["PrimaryHueMidBrush"] = new SolidColorBrush(theme.PrimaryColor);
-			Application.Current.Resources["PrimaryHueMidForegroundBrush"] = new SolidColorBrush(theme.SecondaryColor);
-			Application.Current.Resources["MaterialDesignToolForeground"] = new SolidColorBrush(theme.SecondaryColor);
+			// Application.Current.Resources["PrimaryHueMidBrush"] = new SolidColorBrush(theme.PrimaryColor);
+			// Application.Current.Resources["PrimaryHueMidForegroundBrush"] = new SolidColorBrush(theme.SecondaryColor);
+			// Application.Current.Resources["MaterialDesignToolForeground"] = new SolidColorBrush(theme.SecondaryColor);
 
-			Application.Current.Resources["MaterialDesignPaper"] = new SolidColorBrush(theme.BackgroundColor);
-			Application.Current.Resources["MaterialDesignFont"] = new SolidColorBrush(theme.SecondaryColor);
-			Application.Current.Resources["MaterialDesignBody"] = new SolidColorBrush(theme.SecondaryColor);
+			// Application.Current.Resources["MaterialDesignPaper"] = new SolidColorBrush(theme.BackgroundColor);
+			// Application.Current.Resources["MaterialDesignFont"] = new SolidColorBrush(theme.SecondaryColor);
+			// Application.Current.Resources["MaterialDesignBody"] = new SolidColorBrush(theme.SecondaryColor);
 
 			window.MainBorder.Background = new SolidColorBrush(theme.BackgroundColor);
 
@@ -285,7 +287,7 @@ namespace TabletPal
                     var toolTip = new ToolTip(){
                         Content = button.Text
                     };
-                    toolTip.Styles.Add(Application.Current.Resources["tool_tip"] as Styles);
+                    // toolTip.Styles.Add(Application.Current.Resources["tool_tip"] as Styles);
 					ToolTip.SetTip(uiButton, toolTip);
                     // uiButton.ToolTip = new ToolTip()
 					// {
@@ -304,7 +306,7 @@ namespace TabletPal
 
 			if (isToggle)
 			{
-				uiButton.Styles.Add(Application.Current.Resources["toggle"] as Style);
+				// uiButton.Styles.Add(Application.Current.Resources["toggle"] as Style);
 
 				var key = ((ToggleAction)button.Action).Key;
 				var toggle = (ToggleButton)uiButton;
@@ -322,7 +324,7 @@ namespace TabletPal
 				}
 				else
 				{
-					uiButton.Styles.Add(Application.Current.Resources[style] as Style);
+					// uiButton.Styles.Add(Application.Current.Resources[style] as Style);
 				}
 			}
 

@@ -45,7 +45,7 @@ namespace TabletPal
 			{
 				foreach (var button in list.ToArray())
 				{
-					Dispatcher.UIThread.Post(()=>
+					Dispatcher.UIThread.Invoke(()=>
 						{
 							button.IsChecked = false;
 						}

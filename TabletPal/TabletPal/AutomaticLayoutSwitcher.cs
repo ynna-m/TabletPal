@@ -25,7 +25,8 @@ namespace TabletPal
 		private void OnUpdateLayoutList(params object[] obj)
 		{
 			_appSpecificLayouts.Clear();
-
+             Console.WriteLine($"AutomaticLayoutSwitcher: Running OnUpdateLayoutList");
+            Console.WriteLine($"AutomaticLayoutSwitcher: Updating app specific layouts: {AppState.Layouts.Count} layouts total");
 			foreach (var layout in AppState.Layouts)
 			{
 				if (string.IsNullOrEmpty(layout.Value.App))
@@ -53,7 +54,7 @@ namespace TabletPal
 				// Yep. Can happen.
 				return;
 			}
-            Dispatcher.UIThread.Post(() =>
+            Dispatcher.UIThread.Invoke(() =>
             {
                 if (MatchesApp(app, out var key))
                 {
@@ -100,6 +101,6 @@ namespace TabletPal
 		}
 
 		private static string WildCardToRegular(string value) =>
-			 "^" + Regex.Escape(value).Replace("\\*", ".*") + "$";
+			 "^" + Regex.Escape(value).Replace("/*", ".*") + "$";
 	}
 }

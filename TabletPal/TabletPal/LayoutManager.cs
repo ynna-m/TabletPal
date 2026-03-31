@@ -39,7 +39,7 @@ namespace TabletPal
 
 		private void OnFilesChanged(object[] args)
 		{
-			Dispatcher.UIThread.Post(()=>
+			Dispatcher.UIThread.Invoke(()=>
 				{
 					// Full reload every time.
 					LoadLayout(AppState.CurrentLayoutName);

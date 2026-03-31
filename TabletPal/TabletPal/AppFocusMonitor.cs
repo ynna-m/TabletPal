@@ -75,6 +75,7 @@ namespace TabletPal
 
         private async Task MonitorLoop(CancellationToken token)
         {
+            Console.WriteLine("Starting app focus monitor loop");
             while (!token.IsCancellationRequested)
             {
                 try
@@ -89,8 +90,9 @@ namespace TabletPal
                         OnAppChanged?.Invoke(FocusedApp);
                     }
                 }
-                catch
+                catch(Exception ex)
                 {
+                    Console.WriteLine($"Error occurred while monitoring app focus: {ex.Message}");
                     // swallow errors like original
                 }
 

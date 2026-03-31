@@ -5,6 +5,7 @@ using System.IO;
 using Avalonia.Controls;
 using Avalonia.Threading;
 using Avalonia.Interactivity;
+using System.Threading.Tasks;
 namespace TabletPal
 {
 	public class LayoutListManager
@@ -18,7 +19,7 @@ namespace TabletPal
 
 			OnUpdateLayoutList();
 			EventBeacon.Subscribe(Events.ChangeLayout, OnChangeLayout);
-			EventBeacon.Subscribe(Events.UpdateLayoutList, OnUpdateLayoutList);
+			EventBeacon.Subscribe(Events.UpdateLayoutList,  OnUpdateLayoutList);
 		}
 
 		private void OnChangeLayout(object[] obj)
@@ -32,7 +33,7 @@ namespace TabletPal
 
 		private void OnUpdateLayoutList(object[] obj = null)
 		{
-			Dispatcher.UIThread.Post(()=>
+			Dispatcher.UIThread.Invoke(()=>
 				{
 					Menu.Items.Clear();
 					foreach (var layout in AppState.Layouts.Keys)

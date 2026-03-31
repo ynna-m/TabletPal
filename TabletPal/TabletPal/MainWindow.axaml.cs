@@ -29,6 +29,7 @@ namespace TabletPal
 		private AutomaticLayoutSwitcher _layoutSwitcher;
 		private TrayManager _tray;
 		private FileManager _file;
+        private Settings _settings;
 
         public event PropertyChangedEventHandler PropertyChanged;
 
@@ -45,11 +46,14 @@ namespace TabletPal
 
             var focusMonitor = new AppFocusMonitor();
 
+            Console.WriteLine($"Current directory: {AppState.CurrentDirectory}");
             Directory.SetCurrentDirectory(AppState.CurrentDirectory);
 
             Topmost = true;
 
             PointerPressed += OnPointerPressed;
+
+            
 
             _file = new FileManager();
 
@@ -58,6 +62,9 @@ namespace TabletPal
             _theme = new ThemeManager();
             _layout = new LayoutManager();
 
+            // _settings = new Settings();
+            // _settings.Apply();
+            // _settings.Save();
             Settings.Load();
 
             Installer.TryInstall();
@@ -152,7 +159,7 @@ namespace TabletPal
         private void OnUpdateLayoutList(object[] obj = null)
 		{
 			// Secondary quick access context menu.
-			Dispatcher.UIThread.Post(
+			Dispatcher.UIThread.Invoke(
 				() =>
 				{
 					ContextMenu.Items.Clear();

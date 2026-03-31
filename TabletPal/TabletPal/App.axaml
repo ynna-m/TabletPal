@@ -40,6 +40,13 @@
       <Setter Property="CornerRadius" Value="999"/>
       <Setter Property="Padding" Value="0"/>
     </Style>
+ <!-- SHY -->
+    <Style x:Key="shy" Selector="Button">
+      <Setter Property="CornerRadius" Value="999"/>
+      <Setter Property="Padding" Value="0"/>
+        <Setter Property="Background" Value="{DynamicResource AccentFillColorDefaultBrush}"/>
+    </Style>
+
 
     <!-- TOOLTIP -->
     <Style x:Key="tool_tip" Selector="ToolTip">

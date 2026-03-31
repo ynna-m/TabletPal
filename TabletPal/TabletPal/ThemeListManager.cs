@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.IO;
+using System.Threading.Tasks;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
 using Avalonia.Threading;
@@ -31,7 +32,7 @@ namespace TabletPal
 
 		private void OnUpdateThemeList(object[] obj = null)
 		{
-			Dispatcher.UIThread.Post(
+			Dispatcher.UIThread.Invoke(
 				()=>
 				{
 					Menu.Items.Clear();

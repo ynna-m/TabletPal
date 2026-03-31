@@ -81,7 +81,7 @@ namespace TabletPal
 			uiButton.Width = 32;
 			uiButton.Height = GetTitlebarHeight(_layout);
 
-			uiButton.Styles.Add(Application.Current.Resources["shy"] as Styles);
+			// uiButton.Styles.Add(Application.Current.Resources["shy"] as Styles);
 			_ico = new PackIconMaterialDesign();
 			if (_minimizedMode)
 			{

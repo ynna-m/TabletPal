@@ -38,9 +38,9 @@ namespace TabletPal
 		}
 
 
-		private async void RefreshLists()
+		private void RefreshLists()
 		{
-			Dispatcher.UIThread.Post(async ()=>
+			Dispatcher.UIThread.Invoke(async ()=>
 				{
 					var layouts = await Importer.ImportLayouts();
 					if (AppState.Layouts == null || layouts.Count > 0)

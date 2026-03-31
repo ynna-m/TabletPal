@@ -19,7 +19,7 @@ namespace TabletPal
 			{
 				return;
 			}
-			if (AppState.CurrentDirectory.TrimEnd('\\') == _preferredDirectory.TrimEnd('\\'))
+			if (AppState.CurrentDirectory.TrimEnd('/') == _preferredDirectory.TrimEnd('/'))
 			{
 				return;
 			}

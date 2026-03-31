@@ -58,44 +58,64 @@ namespace TabletPal
 
 		private void OnUpdateSettings(object[] obj)
 		{
-			FirstLaunch = false;
-			if (AppState.LastManuallySetLayout == null)
-			{
-				Layout = Path.GetRelativePath(AppState.CurrentDirectory, AppState.CurrentLayoutName);
-			}
-			else
-			{
-				Layout = Path.GetRelativePath(AppState.CurrentDirectory, AppState.LastManuallySetLayout);
-			}
-			Theme = Path.GetRelativePath(AppState.CurrentDirectory, AppState.CurrentThemeName);
-			// if (!double.IsNaN(Application.Current.MainWindow.Left))
-			// {
-			// 	WindowX = Application.Current.MainWindow.Left;
-			// }
-			// if (!double.IsNaN(Application.Current.MainWindow.Top))
-			// {
-			// 	WindowY = Application.Current.MainWindow.Top;
-			// }
-            if (Application.Current?.ApplicationLifetime 
-                is Avalonia.Controls.ApplicationLifetimes.IClassicDesktopStyleApplicationLifetime desktop)
-            {
-                var window = desktop.MainWindow;
-                if (window != null)
+            // try
+            // {
+                Console.WriteLine($"Settings.cs - OnUpdateSettings() - Updating settings... {obj.Length} {AppState.CurrentLayoutName} args");
+                FirstLaunch = false;
+                if (AppState.LastManuallySetLayout == null)
                 {
-                    WindowX = window.Position.X;
-                    WindowY = window.Position.Y;
+                    Layout = Path.GetRelativePath(AppState.CurrentDirectory, AppState.CurrentLayoutName);
                 }
-            }
-			Save();
+                else
+                {
+                    Layout = Path.GetRelativePath(AppState.CurrentDirectory, AppState.LastManuallySetLayout);
+                }
+                Theme = Path.GetRelativePath(AppState.CurrentDirectory, AppState.CurrentThemeName);
+                Console.WriteLine($"Settings.cs - OnUpdateSettings() - Theme {Theme} CurrentThemeName {AppState.CurrentThemeName} args");
+                // if (!double.IsNaN(Application.Current.MainWindow.Left))
+                // {
+                // 	WindowX = Application.Current.MainWindow.Left;
+                // }
+                // if (!double.IsNaN(Application.Current.MainWindow.Top))
+                // {
+                // 	WindowY = Application.Current.MainWindow.Top;
+                // }
+                if (Application.Current?.ApplicationLifetime 
+                    is Avalonia.Controls.ApplicationLifetimes.IClassicDesktopStyleApplicationLifetime desktop)
+                {
+                    var window = desktop.MainWindow;
+                    if (window != null)
+                    {
+                        WindowX = window.Position.X;
+                        WindowY = window.Position.Y;
+                    }
+                }
+                Save();
+            // }
+            // catch (Exception e)
+            // {
+            //     Console.WriteLine($"Settings.cs - OnUpdateSettings() - error: {e.Message}");
+            // }
+			
 		}
 
 		public void Save()
 		{
-			var serializer = new SerializerBuilder()
-				.WithNamingConvention(UnderscoredNamingConvention.Instance)
-				.Build();
+            try
+            {
+                Console.WriteLine("Settings.cs - Save() - Saving settings...");
+                var serializer = new SerializerBuilder()
+                    .WithNamingConvention(UnderscoredNamingConvention.Instance)
+                    .Build();
 
-			File.WriteAllText(SettingsPath, serializer.Serialize(this));
+                File.WriteAllText(SettingsPath, serializer.Serialize(this));
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine($"Settings.cs - Save() - error: {e.Message}");
+                // throw;
+            }
+			
 		}
 
 
@@ -121,7 +141,7 @@ namespace TabletPal
 					}
 					catch (Exception e)
 					{
-
+                        Console.WriteLine($"Settings.cs - Load() - error: {e.Message}");
 					}
 				}
 

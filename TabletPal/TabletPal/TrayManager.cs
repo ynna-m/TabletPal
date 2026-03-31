@@ -8,6 +8,7 @@ using Avalonia.Controls;
 using Avalonia.Interactivity;
 using Avalonia.Threading;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace TabletPal
 {
@@ -64,7 +65,7 @@ namespace TabletPal
 		private void OnUpdateLayoutList(object[] obj = null)
 		{
 			// Secondary quick access context menu.
-			Dispatcher.UIThread.Post(
+			Dispatcher.UIThread.Invoke(
 				() =>
 				{
 					_icon.Menu.Items.Clear();
@@ -153,7 +154,7 @@ namespace TabletPal
 			// 		_focusedApp.Header = "focused app: " + app;
 			// 	}
 			// );	
-            Dispatcher.UIThread.Post(
+            Dispatcher.UIThread.Invoke(
                 () =>
                 {
                     _focusedApp.Header = "focused app: " + app;
