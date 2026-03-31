@@ -15,6 +15,7 @@
 		UseLayoutRounding="True"
 		CanResize="False"
         IsVisible="False"
+        SystemDecorations="None"
 		>
         <Border Name="MainBorder">
             <Canvas x:Name="MainCanvas" Name="MainCanvas"></Canvas>

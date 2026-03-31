@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using TabletPal.InputSender;
 // using WindowsInput;
 // using WindowsInput.Events;
@@ -17,7 +18,7 @@ namespace TabletPal.Actions
             _inputSender = InputSenderFactory.Create();
 		}
 
-		public override async Task Invoke() =>
+		public override async Task Invoke() => 
 			await _inputSender.SendChord(_keys);
 	}
 }

@@ -25,7 +25,7 @@ namespace TabletPal
 		private void OnUpdateLayoutList(params object[] obj)
 		{
 			_appSpecificLayouts.Clear();
-             Console.WriteLine($"AutomaticLayoutSwitcher: Running OnUpdateLayoutList");
+            Console.WriteLine($"AutomaticLayoutSwitcher: Running OnUpdateLayoutList");
             Console.WriteLine($"AutomaticLayoutSwitcher: Updating app specific layouts: {AppState.Layouts.Count} layouts total");
 			foreach (var layout in AppState.Layouts)
 			{
@@ -44,6 +44,7 @@ namespace TabletPal
 
 		private void OnAppChanged(string app)
 		{
+            Console.WriteLine($"AutomaticLayoutSwitcher- OnAppChanged - Detected app change: {app}");
 			if (!AppState.Settings.PerAppLayoutsEnabled)
 			{
 				return;

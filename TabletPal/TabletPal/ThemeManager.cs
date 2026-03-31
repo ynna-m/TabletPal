@@ -67,7 +67,7 @@ namespace TabletPal
                     // );
                     return;
                 }
-                Console.WriteLine($"ThemeManager.cs - LoadTheme() - Attempting to load theme: {path} {AppState.Themes.Count}");
+                // Console.WriteLine($"ThemeManager.cs - LoadTheme() - Attempting to load theme: {path} {AppState.Themes.Count}");
                 if (!AppState.Themes.TryGetValue(path, out var theme)) // TODO: fix the check lul.
                 {
                     if (AppState.Themes.ContainsKey("default"))

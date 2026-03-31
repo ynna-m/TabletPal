@@ -5,18 +5,18 @@ button_size: 14
 margin: 8
 
 buttons:
-	prev_desktop:
-		action: win+ctrl+left
-		size: 2,1
-		icon: chevron_triple_left
-		style: shy
-		text: previous desktop
-	next_desktop:
-		action: win+ctrl+right
-		size: 2,1
-		icon: chevron_triple_right
-		style: shy 
-		text: next desktop
+	# prev_desktop:
+	# 	action: win+ctrl+left
+	# 	size: 2,1
+	# 	icon: chevron_triple_left
+	# 	style: shy
+	# 	text: previous desktop
+	# next_desktop:
+	# 	action: win+ctrl+right
+	# 	size: 2,1
+	# 	icon: chevron_triple_right
+	# 	style: shy 
+	# 	text: next desktop
 
 	undo:
 		action: ctrl+z

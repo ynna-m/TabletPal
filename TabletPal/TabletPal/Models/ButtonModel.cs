@@ -61,13 +61,13 @@ namespace TabletPal.Models
 				else
 				{
 					var iconName = data.Icon.Replace("_", "").Replace("-", ""); // Sanitizing the icon.
-					if (Enum.TryParse<PackIconMaterialDesignKind>(iconName, true, out var kind))
-					{
-						var ico = new PackIconMaterialDesign();
-						ico.Kind = kind;
+					// if (Enum.TryParse<PackIconMaterialDesignKind>(iconName, true, out var kind))
+					// {
+					// 	var ico = new PackIconMaterialDesign();
+					// 	ico.Kind = kind;
 
-						Icon = ico;
-					}
+					// 	Icon = ico;
+					// }
 				}
 			}
 

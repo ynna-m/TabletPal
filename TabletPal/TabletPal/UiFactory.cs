@@ -32,7 +32,7 @@ namespace TabletPal
 			ToggleManager.ClearButtons();
 			var theme = AppState.CurrentTheme;
 
-            Console.WriteLine($"UiFactory.cs: Creating UI with theme '{theme}' and settings-dockingmode '{AppState.Settings.DockingMode}'");
+            // Console.WriteLine($"UiFactory.cs: Creating UI with theme '{theme}' and settings-dockingmode '{AppState.Settings.DockingMode}'");
 
 			window.MainCanvas.Children.Clear();
 
@@ -155,11 +155,11 @@ namespace TabletPal
 			// {
 			// 	window.BeginAnimation(UIElement.OpacityProperty, window.FadeOut);
 			// }
-            window.PointerEntered -= window.OnPointerEnteredFade;
-            window.PointerExited -= window.OnPointerExitedFade;
+            // window.PointerEntered -= window.OnPointerEnteredFade;
+            // window.PointerExited -= window.OnPointerExitedFade;
 
-            window.PointerEntered += window.OnPointerEnteredFade;
-            window.PointerExited += window.OnPointerExitedFade;
+            // window.PointerEntered += window.OnPointerEnteredFade;
+            // window.PointerExited += window.OnPointerExitedFade;
 
 			// Application.Current.Resources["PrimaryHueMidBrush"] = new SolidColorBrush(theme.PrimaryColor);
 			// Application.Current.Resources["PrimaryHueMidForegroundBrush"] = new SolidColorBrush(theme.SecondaryColor);
@@ -331,7 +331,20 @@ namespace TabletPal
 			if (button.Action != null)
 			{
 				// uiButton.Click += (e, o) => _ = button.Action.Invoke();
-                uiButton.Click += async (_, __) => await button.Action.Invoke();
+                // Console.WriteLine($"UiFactory.cs - Creating button with action: {button.Action}");
+                // uiButton.PointerPressed += async (_, __) =>
+                // {
+                //     window.CaptureFocusedWindow();
+                //     await button.Action.Invoke();
+                //     window.RestoreFocus();
+                // };
+                uiButton.Click += async (_, __) => {
+                    window.CaptureFocusedWindow();
+                    await button.Action.Invoke();
+                    window.RestoreFocus();
+                };
+
+
 			}
 
 			Canvas.SetTop(uiButton, layout.CellSize * position.Y + layout.Margin + offset.Y);

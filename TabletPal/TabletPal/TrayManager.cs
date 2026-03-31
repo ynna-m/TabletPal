@@ -9,6 +9,7 @@ using Avalonia.Interactivity;
 using Avalonia.Threading;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using System.Linq;
 
 namespace TabletPal
 {
@@ -16,10 +17,10 @@ namespace TabletPal
 	{
 		private TrayIcon _icon;
         private ContextMenu _dockingContextMenu;
-		private MenuItem _autostartMenuItem;
-		private MenuItem _autoUpdateMenuItem;
+		private NativeMenuItem _autostartMenuItem;
+		private NativeMenuItem _autoUpdateMenuItem;
 		// private MenuItem _autohideMenuItem;
-		private MenuItem _perAppLayoutsMenuItem;
+		private NativeMenuItem _perAppLayoutsMenuItem;
 		// private readonly string _iconPathBlack = AppState.CurrentDirectory + "/files/icons/tray/tray_black.ico";
 		private readonly string _iconPathWhite = AppState.CurrentDirectory + "/files/icons/tray/tray_white.ico";
 		private readonly MainWindow _window;
@@ -27,9 +28,11 @@ namespace TabletPal
 		private readonly ThemeListManager _themeList;
 
 		private AppFocusMonitor _focusMonitor;
-		private MenuItem _focusedApp;
+		private NativeMenuItem _focusedApp;
 		public TrayManager(MainWindow window, LayoutListManager layoutList, ThemeListManager themeList, AppFocusMonitor focusMonitor)
-		{
+        // public TrayManager(MainWindow window, LayoutListManager layoutList, ThemeListManager themeList)
+
+        {
 			_window = window;
 			_layoutList = layoutList;
 			_themeList = themeList;
@@ -53,8 +56,8 @@ namespace TabletPal
 			_icon.Clicked += MouseDown;
 			CreateMenu();
 
-			EventBeacon.Subscribe(Events.ChangeLayout, OnUpdateLayoutList);
-			EventBeacon.Subscribe(Events.FilesChanged, OnUpdateLayoutList);
+			// EventBeacon.Subscribe(Events.ChangeLayout, OnUpdateLayoutList);
+			// EventBeacon.Subscribe(Events.FilesChanged, OnUpdateLayoutList);
 		}
 
 		private void MouseDown(object sender, EventArgs e)
@@ -77,21 +80,35 @@ namespace TabletPal
 
 		private void CreateMenu()
 		{
+            var layoutsMenu = new NativeMenuItem("layouts") { 
+                Header = "layouts",
+                Menu = new NativeMenu()
+            };
 			foreach (var nativeItem in _layoutList.GetNativeMenuItems())
             {
-                _icon.Menu.Items.Add(nativeItem);
+                layoutsMenu.Menu.Items.Add(nativeItem);
             }
+            _icon.Menu.Items.Add(layoutsMenu);
+
+            var themesMenu = new NativeMenuItem("themes") { 
+                Header = "themes",
+                Menu = new NativeMenu()
+            };
             foreach (var nativeItem in _themeList.GetNativeMenuItems())
             {
-                _icon.Menu.Items.Add(nativeItem);
+                themesMenu.Menu.Items.Add(nativeItem);
             }
+            _icon.Menu.Items.Add(themesMenu);
 			// _icon.ContextMenu.Items.Add(_layoutList.CloneMenu());
 			// _icon.ContextMenu.Items.Add(_themeList.CloneMenu());
             _dockingContextMenu.Items.Add(_layoutList.CloneMenu());
             _dockingContextMenu.Items.Add(_themeList.CloneMenu());
 			DockingMenuFactory.CreateDockingMenu(_dockingContextMenu);
 
-			var settings = new MenuItem() { Header = "settings" };
+			var settings = new NativeMenuItem() { 
+                Header = "settings",
+                Menu = new NativeMenu()
+            };
 
 			// if (AppState.Settings.AddToAutostart)
 			// {
@@ -136,11 +153,11 @@ namespace TabletPal
 			_focusedApp = AddSubmenuItem(settings, "focused app: none");
 			_focusMonitor.OnAppChanged += OnAppChanged;
 
-            foreach (var nativeItem in ConvertToNativeMenuItems(settings))
-            {
-                _icon.Menu.Items.Add(nativeItem);
-            }
-			
+            // foreach (var nativeItem in settings.Menu.Items)
+            // {
+            //     settings.Menu.Items.Add(nativeItem);
+            // }
+			_icon.Menu.Items.Add(settings);
 			_icon.Menu.Add(new NativeMenuItemSeparator());
 			AddMenuItem("about", OnAbout);
 			AddMenuItem("quit", OnQuit);
@@ -179,7 +196,7 @@ namespace TabletPal
 		// 	EventBeacon.SendEvent(Events.UpdateSettings);
 		// }
 
-		private void OnAutoUpdateToggle(object sender, RoutedEventArgs e)
+		private void OnAutoUpdateToggle(object sender, EventArgs e)
 		{
 			AppState.Settings.UpdateCheckingEnabled = !AppState.Settings.UpdateCheckingEnabled;
 
@@ -211,7 +228,7 @@ namespace TabletPal
 		// 	EventBeacon.SendEvent(Events.UpdateSettings);
 		// }
 
-		private void OnPerAppLayoutsToggle(object sender, RoutedEventArgs e)
+		private void OnPerAppLayoutsToggle(object sender, EventArgs e)
 		{
 			AppState.Settings.PerAppLayoutsEnabled = !AppState.Settings.PerAppLayoutsEnabled;
 
@@ -227,7 +244,7 @@ namespace TabletPal
 		}
 
 
-		private void OnAbout(object sender, RoutedEventArgs e)
+		private void OnAbout(object sender, EventArgs e)
 		{
 			var startInfo = new ProcessStartInfo()
 			{
@@ -257,9 +274,9 @@ namespace TabletPal
 			return item;
 		}
 
-		private MenuItem AddSubmenuItem(MenuItem menu, string header, EventHandler<RoutedEventArgs> click = null)
+		private NativeMenuItem AddSubmenuItem(NativeMenuItem menu, string header, EventHandler click = null)
 		{
-			var item = new MenuItem() { Header = header };
+			var item = new NativeMenuItem() { Header = header };
 			if (click != null)
 			{
 				item.Click += click;
@@ -268,11 +285,11 @@ namespace TabletPal
 			{
 				item.IsEnabled = false;
 			}
-			menu.Items.Add(item);
+			menu.Menu.Items.Add(item);
 			return item;
 		}
 
-		private void OnOpenLayoutsDirectory(object sender, RoutedEventArgs e)
+		private void OnOpenLayoutsDirectory(object sender, EventArgs e)
 		{
 			var startInfo = new ProcessStartInfo()
 			{
@@ -283,7 +300,7 @@ namespace TabletPal
 		}
 
 
-		private void OnQuit(object sender, RoutedEventArgs e)
+		private void OnQuit(object sender, EventArgs e)
 		{
 			AppBarFunctions.SetAppBar(_window, DockingMode.None);
 			_icon.Dispose();

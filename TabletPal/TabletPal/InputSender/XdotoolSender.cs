@@ -26,6 +26,7 @@ namespace TabletPal.InputSender
         }
         public async Task SendChord(string keys)
         {
+            Console.WriteLine($"KeyAction.cs - SendChord - keys: {keys}");
             var keysSplit = keys.Split('+');
 
             var down = string.Join(" ", keysSplit.Select(k => $"keydown {k}"));
@@ -36,6 +37,8 @@ namespace TabletPal.InputSender
 
         public async Task SendClick(string keys)
         {
+
+            Console.WriteLine($"KeyAction.cs - SendClick - keys: {keys}");
             await Run($"key {keys}");
         }
 

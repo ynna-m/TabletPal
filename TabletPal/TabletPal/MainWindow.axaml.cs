@@ -1,15 +1,14 @@
-using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Input;
-using Avalonia.Markup.Xaml;
 using Avalonia.Threading;
 using System;
 using System.ComponentModel;
 using System.IO;
 using System.Threading;
 using TabletPal.Docking;
-using System.Threading;
 using System.Threading.Tasks;
+using System.Diagnostics;
+using System.Runtime.InteropServices;
 
 
 namespace TabletPal
@@ -39,21 +38,19 @@ namespace TabletPal
         }
         public MainWindow()
         {
+            
             InitializeComponent();
-            this.Opacity = MinOpacity;
-            this.PointerEntered += OnPointerEnter;
-            this.PointerExited += OnPointerLeave;
-
             var focusMonitor = new AppFocusMonitor();
+            // this.Opacity = MinOpacity;
+            // this.PointerEntered += OnPointerEnter;
+            // this.PointerExited += OnPointerLeave;
 
-            Console.WriteLine($"Current directory: {AppState.CurrentDirectory}");
+            Console.WriteLine($"MainWindow.axaml.cs - Constructor - Current directory: {AppState.CurrentDirectory}");
             Directory.SetCurrentDirectory(AppState.CurrentDirectory);
 
             Topmost = true;
 
             PointerPressed += OnPointerPressed;
-
-            
 
             _file = new FileManager();
 
@@ -62,9 +59,6 @@ namespace TabletPal
             _theme = new ThemeManager();
             _layout = new LayoutManager();
 
-            // _settings = new Settings();
-            // _settings.Apply();
-            // _settings.Save();
             Settings.Load();
 
             Installer.TryInstall();
@@ -77,13 +71,8 @@ namespace TabletPal
 
             OnUpdateLayoutList();
 
-            _layoutSwitcher = new AutomaticLayoutSwitcher(focusMonitor);
+            _layoutSwitcher = new AutomaticLayoutSwitcher(focusMonitor); 
             _tray = new TrayManager(this, _layoutList, _themeList, focusMonitor);
-
-            // if (AppState.Settings.AddToAutostart)
-            //     AutostartManager.SetAutostart();
-            // else
-            //     AutostartManager.ResetAutostart();
 
             EventBeacon.Subscribe(Events.ToggleMinimize, OnToggleMinimize);
             EventBeacon.Subscribe(Events.Maximize, OnMaximize);
@@ -93,17 +82,14 @@ namespace TabletPal
             EventBeacon.Subscribe(Events.DockingChanged, OnDockingChanged);
 
             Opened += OnOpened;
+            Console.WriteLine($"MainWindow.axaml.cs - Constructor finished");
         }
-        // private void InitializeComponent()
-        // {
-        //     AvaloniaXamlLoader.Load(this);
-        // }
-        private async void OnPointerEnter(object? sender, Avalonia.Input.PointerEventArgs e)
+        private async void OnPointerEnter(object? sender, PointerEventArgs e)
         {
             await AnimateOpacity(this.Opacity, MaxOpacity, FadeInDurationMs);
         }
 
-        private async void OnPointerLeave(object? sender, Avalonia.Input.PointerEventArgs e)
+        private async void OnPointerLeave(object? sender, PointerEventArgs e)
         {
             await Task.Delay(FadeOutDelayMs);
             // Only fade out if the pointer is still not over the window
@@ -292,5 +278,103 @@ namespace TabletPal
                 await Task.Delay(delay);
             }
         }    
+        private string _lastWindowId;
+
+        public void CaptureFocusedWindow()
+        {
+            var psi = new ProcessStartInfo
+            {
+                FileName = "xdotool",
+                Arguments = "getwindowfocus",
+                RedirectStandardOutput = true,
+                UseShellExecute = false
+            };
+
+            var p = Process.Start(psi);
+            _lastWindowId = p.StandardOutput.ReadToEnd().Trim();
+            Console.WriteLine($"MainWindow.axaml.cs - CaptureFocusedWindow() - Captured window ID: {_lastWindowId}");
+        }
+        public void RestoreFocus()
+        {
+            if (string.IsNullOrEmpty(_lastWindowId))
+                return;
+
+            Process.Start("xdotool", $"windowactivate {_lastWindowId}");
+            Console.WriteLine($"MainWindow.axaml.cs - RestoreFocus() - Restoring focus to window ID: {_lastWindowId}");
+
+        }
+        protected override void OnOpened(EventArgs e)
+        {
+            base.OnOpened(e);
+
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+            {
+                SetX11NoFocus(this);
+            }
+        }
+        private void SetX11NoFocus(Window window)
+        {
+            // Get the underlying X11 Window ID (XID)
+            var xid = window.TryGetPlatformHandle()?.Handle;
+            if (xid == null || xid == IntPtr.Zero) return;
+
+            IntPtr display = XOpenDisplay(null);
+            if (display == IntPtr.Zero) return;
+
+            try
+            {
+                // 1. Set WM_HINTS to tell the WM not to give this window input focus
+                IntPtr hintsPtr = XAllocWMHints();
+                XWMHints hints = Marshal.PtrToStructure<XWMHints>(hintsPtr);
+                
+                hints.flags = (IntPtr)InputHint;
+                hints.input = 0; // False: Window does not want input focus
+
+                Marshal.StructureToPtr(hints, hintsPtr, false);
+                XSetWMHints(display, xid.Value, hintsPtr);
+                XFree(hintsPtr);
+
+                // 2. Optional: Set _NET_WM_STATE_SKIP_TASKBAR to make it feel like a tool/overlay
+                IntPtr stateAtom = XInternAtom(display, "_NET_WM_STATE", false);
+                IntPtr skipTaskbarAtom = XInternAtom(display, "_NET_WM_STATE_SKIP_TASKBAR", false);
+                
+                XChangeProperty(display, xid.Value, stateAtom, (IntPtr)4, 32, 0, 
+                    new IntPtr[] { skipTaskbarAtom }, 1);
+
+                XFlush(display);
+            }
+            finally
+            {
+                XCloseDisplay(display);
+            }
+        }
+
+        #region X11 P/Invoke
+        private const string X11Lib = "libX11.so.6";
+        private const long InputHint = 1L << 0;
+
+        [DllImport(X11Lib)] private static extern IntPtr XOpenDisplay(string display);
+        [DllImport(X11Lib)] private static extern int XCloseDisplay(IntPtr display);
+        [DllImport(X11Lib)] private static extern IntPtr XAllocWMHints();
+        [DllImport(X11Lib)] private static extern int XSetWMHints(IntPtr display, IntPtr window, IntPtr hints);
+        [DllImport(X11Lib)] private static extern int XFree(IntPtr data);
+        [DllImport(X11Lib)] private static extern int XFlush(IntPtr display);
+        [DllImport(X11Lib)] private static extern IntPtr XInternAtom(IntPtr display, string name, bool only_if_exists);
+        [DllImport(X11Lib)] private static extern int XChangeProperty(IntPtr display, IntPtr window, IntPtr property, IntPtr type, int format, int mode, IntPtr[] data, int nelements);
+
+        [StructLayout(LayoutKind.Sequential)]
+        struct XWMHints
+        {
+            public IntPtr flags;
+            public int input;
+            public int initial_state;
+            public IntPtr icon_pixmap;
+            public IntPtr icon_window;
+            public int icon_x;
+            public int icon_y;
+            public IntPtr icon_mask;
+            public IntPtr window_group;
+        }
+        #endregion
     }
 }

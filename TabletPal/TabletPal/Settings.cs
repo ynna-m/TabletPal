@@ -60,7 +60,7 @@ namespace TabletPal
 		{
             // try
             // {
-                Console.WriteLine($"Settings.cs - OnUpdateSettings() - Updating settings... {obj.Length} {AppState.CurrentLayoutName} args");
+                // Console.WriteLine($"Settings.cs - OnUpdateSettings() - Updating settings... {obj.Length} {AppState.CurrentLayoutName} args");
                 FirstLaunch = false;
                 if (AppState.LastManuallySetLayout == null)
                 {
@@ -71,7 +71,7 @@ namespace TabletPal
                     Layout = Path.GetRelativePath(AppState.CurrentDirectory, AppState.LastManuallySetLayout);
                 }
                 Theme = Path.GetRelativePath(AppState.CurrentDirectory, AppState.CurrentThemeName);
-                Console.WriteLine($"Settings.cs - OnUpdateSettings() - Theme {Theme} CurrentThemeName {AppState.CurrentThemeName} args");
+                // Console.WriteLine($"Settings.cs - OnUpdateSettings() - Theme {Theme} CurrentThemeName {AppState.CurrentThemeName} args");
                 // if (!double.IsNaN(Application.Current.MainWindow.Left))
                 // {
                 // 	WindowX = Application.Current.MainWindow.Left;
@@ -103,7 +103,7 @@ namespace TabletPal
 		{
             try
             {
-                Console.WriteLine("Settings.cs - Save() - Saving settings...");
+                // Console.WriteLine("Settings.cs - Save() - Saving settings...");
                 var serializer = new SerializerBuilder()
                     .WithNamingConvention(UnderscoredNamingConvention.Instance)
                     .Build();
@@ -112,7 +112,7 @@ namespace TabletPal
             }
             catch (Exception e)
             {
-                Console.WriteLine($"Settings.cs - Save() - error: {e.Message}");
+                // Console.WriteLine($"Settings.cs - Save() - error: {e.Message}");
                 // throw;
             }
 			

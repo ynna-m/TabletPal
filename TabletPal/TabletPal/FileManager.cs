@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using Avalonia.Threading;
 
 namespace TabletPal
@@ -6,20 +7,22 @@ namespace TabletPal
 	public class FileManager
 	{
 		private FileSystemWatcher _watcher;
+        private DateTime _lastEventTime = DateTime.MinValue;
+        private readonly TimeSpan _debounceDelay = TimeSpan.FromMilliseconds(200);
 
 		public FileManager()
 		{
 			_watcher = new FileSystemWatcher();
 			_watcher.Path = AppState.FilesRoot;
-			_watcher.NotifyFilter = NotifyFilters.FileName
-				| NotifyFilters.DirectoryName
-				| NotifyFilters.Attributes
-				| NotifyFilters.Size
-				| NotifyFilters.LastWrite
-				| NotifyFilters.LastAccess
-				| NotifyFilters.CreationTime
-				| NotifyFilters.Security;
-
+			// _watcher.NotifyFilter = NotifyFilters.FileName
+			// 	| NotifyFilters.DirectoryName
+			// 	| NotifyFilters.Attributes
+			// 	| NotifyFilters.Size
+			// 	| NotifyFilters.LastWrite
+			// 	| NotifyFilters.LastAccess
+			// 	| NotifyFilters.CreationTime
+			// 	| NotifyFilters.Security;
+            _watcher.NotifyFilter =  NotifyFilters.FileName | NotifyFilters.LastWrite;
 
 			_watcher.Changed += OnChanged;
 			_watcher.Created += OnChanged;
@@ -33,7 +36,14 @@ namespace TabletPal
 
 		private void OnChanged(object sender, FileSystemEventArgs args)
 		{
-			RefreshLists();
+            // Apparently, needs a debouncer in Linux, otherwise, we're stuck in a loop.
+            var now = DateTime.Now;
+
+            if (now - _lastEventTime < _debounceDelay)
+                return;
+
+            _lastEventTime = now;
+            RefreshLists();
 			EventBeacon.SendEvent(Events.FilesChanged, sender, args);
 		}
 
