@@ -20,7 +20,8 @@ using Avalonia.Media;
 using Avalonia.Media.Imaging;
 using Avalonia;
 using Avalonia.Platform;
-using IconPacks.Avalonia.MaterialDesign;
+using Material.Icons;
+using Material.Icons.Avalonia;
 
 namespace TabletPal
 {
@@ -279,29 +280,53 @@ namespace TabletPal
 
 			uiButton.Content = text;
 
-			if (button.Icon != null)
-			{
-				uiButton.Content = button.Icon;
-				if (!string.IsNullOrEmpty(button.Text))
-				{
-                    var toolTip = new ToolTip(){
-                        Content = button.Text
-                    };
-                    // toolTip.Styles.Add(Application.Current.Resources["tool_tip"] as Styles);
-					ToolTip.SetTip(uiButton, toolTip);
-                    // uiButton.ToolTip = new ToolTip()
-					// {
-					// 	Style = Application.Current.Resources["tool_tip"] as Style,
-					// 	Content = button.Text,
-					// 	HasDropShadow = true,
-					// };
-				}
-			}
+			// if (button.Icon != null)
+			// {
+			// 	uiButton.Content = button.Icon;
+			// 	if (!string.IsNullOrEmpty(button.Text))
+			// 	{
+                    
+            //         // toolTip.Styles.Add(Application.Current.Resources["tool_tip"] as Styles);
+					
+            //         // uiButton.ToolTip = new ToolTip()
+			// 		// {
+			// 		// 	Style = Application.Current.Resources["tool_tip"] as Style,
+			// 		// 	Content = button.Text,
+			// 		// 	HasDropShadow = true,
+			// 		// };
+			// 	}
+			// }
+            if (!string.IsNullOrEmpty(button.IconPath))
+            {
+                var image = new Image
+                {
+                    Source = new Bitmap(button.IconPath),
+                    Stretch = button.IconStretch
+                };
 
+                uiButton.Content = image;
+            }
+            else if (!string.IsNullOrEmpty(button.IconName))
+            {
+                if (Enum.TryParse<MaterialIconKind>(button.IconName, true, out var kind))
+                {
+                    Console.WriteLine($"UiFactory.cs - Resolving icon '{button.IconName}' as '{kind.ToString()}'");
+                    var ico = new MaterialIcon
+                    {
+                        Kind = kind
+                        
+                    };
+                    uiButton.Content = ico;
+                }
+            }
+            var toolTip = new ToolTip(){
+                Content = button.Text
+            };
+            ToolTip.SetTip(uiButton, toolTip);
 			var style = button.Style;
 			if (style == null)
 			{
-				style = theme.DefaultStyle;
+				// style = theme.DefaultStyle;
 			}
 
 			if (isToggle)
@@ -320,7 +345,7 @@ namespace TabletPal
 			{
 				if (style == null)
 				{
-					uiButton.Styles.Clear();
+					// uiButton.Styles.Clear();
 				}
 				else
 				{
@@ -347,6 +372,16 @@ namespace TabletPal
 
 			}
 
+            // var icon = new PackIconMaterialDesign
+            // {
+            //     Kind = PackIconMaterialDesignKind.Home,
+            //     Width = 16,
+            //     Height = 16,
+            //     Foreground = Brushes.White
+            // };
+            // uiButton.Content = icon;
+            // Canvas.SetTop(uiButton,0);
+            // Canvas.SetLeft(uiButton,0);
 			Canvas.SetTop(uiButton, layout.CellSize * position.Y + layout.Margin + offset.Y);
 			Canvas.SetLeft(uiButton, layout.CellSize * position.X + layout.Margin + offset.X);
 			window.MainCanvas.Children.Add(uiButton);

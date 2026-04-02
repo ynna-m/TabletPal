@@ -9,7 +9,7 @@
         Title="MainWindow" 
         Height="300" 
         Width="200" 
-        TransparencyLevelHint="AcrylicBlur, Blur, Transparent"
+        TransparencyLevelHint="Transparent"
 		ShowInTaskbar="False"
 		Background="Transparent"
 		UseLayoutRounding="True"

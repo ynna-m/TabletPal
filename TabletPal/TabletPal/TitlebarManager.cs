@@ -5,24 +5,25 @@ using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Media;
 using Avalonia.Media.Imaging;
-using IconPacks.Avalonia.MaterialDesign;
+// using IconPacks.Avalonia.MaterialDesign;
 using Avalonia;
 using Avalonia.Styling;
+using Material.Icons;
+using Material.Icons.Avalonia;
 
 namespace TabletPal
 {
 	public static class TitlebarManager
 	{
 
-		private const PackIconMaterialDesignKind _defaultIcon = PackIconMaterialDesignKind.CircleOutline;
-		private const PackIconMaterialDesignKind _minimizedIcon = PackIconMaterialDesignKind.Circle;
+		private const MaterialIconKind _defaultIcon = MaterialIconKind.RhombusMediumOutline;
+		private const MaterialIconKind _minimizedIcon = MaterialIconKind.RhombusMedium;
 		private const double _baseTitlebarHeight = 12;
-
 		private static bool _minimizedMode = false;
 		private static bool _minimized = false;
 		public static bool Minimized => _minimized;
 
-		private static PackIconMaterialDesign _ico;
+		private static MaterialIcon _ico;
 		private static MainWindow _window;
 		private static ThemeModel _theme;
 		private static LayoutModel _layout;
@@ -82,7 +83,7 @@ namespace TabletPal
 			uiButton.Height = GetTitlebarHeight(_layout);
 
 			// uiButton.Styles.Add(Application.Current.Resources["shy"] as Styles);
-			_ico = new PackIconMaterialDesign();
+			_ico = new MaterialIcon();
 			if (_minimizedMode)
 			{
 				_ico.Kind = _minimizedIcon;

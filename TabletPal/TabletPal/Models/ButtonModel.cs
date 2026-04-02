@@ -9,8 +9,7 @@ using TabletPal.Actions;
 using TabletPal.Data;
 using Avalonia.Controls;
 using Avalonia.Media;
-using Avalonia.Media.Imaging;
-using IconPacks.Avalonia.MaterialDesign;
+using System.Linq;
 
 namespace TabletPal.Models
 {
@@ -19,8 +18,10 @@ namespace TabletPal.Models
 		public ButtonAction Action;
 
 		public string Text = "";
-		public object? Icon;
-
+		// public object? Icon;
+        public string IconName;
+        public string IconPath;
+        public Stretch IconStretch;
 		public Vector2 Position = Vector2.Zero;
 		public Vector2 Size = Vector2.One;
 
@@ -53,20 +54,30 @@ namespace TabletPal.Models
 				{
 					var ico = new Image();
 
-					ico.Source = new Bitmap(Path.Combine(AppState.CurrentDirectory, data.Icon));
+					// ico.Source = new Bitmap(Path.Combine(AppState.CurrentDirectory, data.Icon));
 					ico.Stretch = (Stretch)data.IconStretch;
 
-					Icon = ico;
+					// Icon = ico;
+                    IconPath = Path.Combine(AppState.CurrentDirectory, data.Icon);
+                    IconStretch =  (Stretch) data.IconStretch;
 				}
 				else
 				{
-					var iconName = data.Icon.Replace("_", "").Replace("-", ""); // Sanitizing the icon.
-					// if (Enum.TryParse<PackIconMaterialDesignKind>(iconName, true, out var kind))
-					// {
-					// 	var ico = new PackIconMaterialDesign();
-					// 	ico.Kind = kind;
+					//IconName = data.Icon.Replace("_", "").Replace("-", ""); // Sanitizing the icon.
+					
+                    var parts = data.Icon.Split(new[] { '_', '-' }, StringSplitOptions.RemoveEmptyEntries);
+                    IconName = string.Concat(parts.Select(p => char.ToUpper(p[0]) + p.Substring(1)));
 
-					// 	Icon = ico;
+                    
+                    // Console.WriteLine($"ButtonModel.cs - Resolving icon '{data.Icon}' as '{iconName}'");
+                    // if (Enum.TryParse<PackIconMaterialDesignKind>(iconName, true, out var kind))
+					// {
+                    //     // var ico = new PackIconMaterialDesign
+                    //     // {
+                    //     //     Kind = kind
+                    //     // };
+                    //     // Console.WriteLine($"ButtonModel.cs - Resolved icon '{ico.Name}' {kind.ToString()} ");
+                    //     // Icon = ico;
 					// }
 				}
 			}

@@ -5,7 +5,7 @@ using System.IO;
 using Avalonia.Controls;
 using Avalonia.Threading;
 using Avalonia.Interactivity;
-using System.Threading.Tasks;
+using System;
 namespace TabletPal
 {
 	public class LayoutListManager
@@ -19,7 +19,7 @@ namespace TabletPal
 
 			OnUpdateLayoutList();
 			EventBeacon.Subscribe(Events.ChangeLayout, OnChangeLayout);
-			EventBeacon.Subscribe(Events.UpdateLayoutList,  OnUpdateLayoutList);
+			EventBeacon.Subscribe(Events.UpdateLayoutList, OnUpdateLayoutList);
 		}
 
 		private void OnChangeLayout(object[] obj)
@@ -101,17 +101,35 @@ namespace TabletPal
 			return menu;
 		}
         // New method for tray icon
-        public IEnumerable<NativeMenuItemBase> GetNativeMenuItems()
+        public NativeMenuItem GetNativeMenu()
         {
+            var nativeMenu = new NativeMenuItem() { 
+                Header = "layouts", 
+                Menu = new NativeMenu(),
+                IsEnabled = Menu.Items.Count > 0
+            };
             // var nativeMenu = new NativeMenu();
+            Console.WriteLine($"LayoutListManager.cs - GetNativeMenu(). Menu has {Menu.Items.Count} items.");
             foreach (MenuItem item in Menu.Items)
             {
-                var nativeItem = new NativeMenuItem(item.Header?.ToString() ?? "");
+                NativeMenuItemToggleType toggleType = item.ToggleType switch
+                {
+                    MenuItemToggleType.None => NativeMenuItemToggleType.None,
+                    MenuItemToggleType.CheckBox => NativeMenuItemToggleType.CheckBox,
+                    MenuItemToggleType.Radio => NativeMenuItemToggleType.Radio,
+                    _ => NativeMenuItemToggleType.None
+                };
+                var nativeItem = new NativeMenuItem(item.Header?.ToString() ?? "")
+                {
+                    Header = item.Header?.ToString() ?? "",
+                    ToggleType = toggleType,
+					IsChecked = item.IsChecked,
+                };
                 nativeItem.Click += (s, e) => EventBeacon.SendEvent(Events.ChangeLayout, item.DataContext);
-                // nativeMenu.Items.Add(nativeItem);
-                yield return nativeItem;
+                nativeMenu.Menu.Items.Add(nativeItem);
+                // yield return nativeItem;
             }
-            // return nativeMenu;
+            return nativeMenu;
         }
 	}
 }

@@ -16,7 +16,7 @@ namespace TabletPal
 	public class TrayManager
 	{
 		private TrayIcon _icon;
-        private ContextMenu _dockingContextMenu;
+        private NativeMenuItem _dockingMenu;
 		private NativeMenuItem _autostartMenuItem;
 		private NativeMenuItem _autoUpdateMenuItem;
 		// private MenuItem _autohideMenuItem;
@@ -30,15 +30,13 @@ namespace TabletPal
 		private AppFocusMonitor _focusMonitor;
 		private NativeMenuItem _focusedApp;
 		public TrayManager(MainWindow window, LayoutListManager layoutList, ThemeListManager themeList, AppFocusMonitor focusMonitor)
-        // public TrayManager(MainWindow window, LayoutListManager layoutList, ThemeListManager themeList)
-
         {
 			_window = window;
 			_layoutList = layoutList;
 			_themeList = themeList;
 			_focusMonitor = focusMonitor;
             
-            _dockingContextMenu = new ContextMenu();
+            // _dockingMenu = new NativeMenuItem(){ Header = "docking", Menu = new NativeMenu() };
 			_icon = new TrayIcon();
 
 			// if (_isLightTheme)
@@ -56,8 +54,8 @@ namespace TabletPal
 			_icon.Clicked += MouseDown;
 			CreateMenu();
 
-			// EventBeacon.Subscribe(Events.ChangeLayout, OnUpdateLayoutList);
-			// EventBeacon.Subscribe(Events.FilesChanged, OnUpdateLayoutList);
+			EventBeacon.Subscribe(Events.ChangeLayout, OnUpdateLayoutList);
+			EventBeacon.Subscribe(Events.FilesChanged, OnUpdateLayoutList);
 		}
 
 		private void MouseDown(object sender, EventArgs e)
@@ -80,31 +78,15 @@ namespace TabletPal
 
 		private void CreateMenu()
 		{
-            var layoutsMenu = new NativeMenuItem("layouts") { 
-                Header = "layouts",
-                Menu = new NativeMenu()
-            };
-			foreach (var nativeItem in _layoutList.GetNativeMenuItems())
-            {
-                layoutsMenu.Menu.Items.Add(nativeItem);
-            }
+
+            var layoutsMenu = _layoutList.GetNativeMenu();
             _icon.Menu.Items.Add(layoutsMenu);
 
-            var themesMenu = new NativeMenuItem("themes") { 
-                Header = "themes",
-                Menu = new NativeMenu()
-            };
-            foreach (var nativeItem in _themeList.GetNativeMenuItems())
-            {
-                themesMenu.Menu.Items.Add(nativeItem);
-            }
+            var themesMenu = _themeList.GetNativeMenu();
             _icon.Menu.Items.Add(themesMenu);
-			// _icon.ContextMenu.Items.Add(_layoutList.CloneMenu());
-			// _icon.ContextMenu.Items.Add(_themeList.CloneMenu());
-            _dockingContextMenu.Items.Add(_layoutList.CloneMenu());
-            _dockingContextMenu.Items.Add(_themeList.CloneMenu());
-			DockingMenuFactory.CreateDockingMenu(_dockingContextMenu);
-
+            
+			_dockingMenu = DockingMenuFactory.CreateNativeDockingMenu();
+            _icon.Menu.Items.Add(_dockingMenu);
 			var settings = new NativeMenuItem() { 
                 Header = "settings",
                 Menu = new NativeMenu()
@@ -255,9 +237,9 @@ namespace TabletPal
 			Process.Start(startInfo);
 		}
 
-		private MenuItem AddMenuItem(string header, EventHandler<RoutedEventArgs> click = null)
+		private NativeMenuItem AddMenuItem(string header, EventHandler click = null)
 		{
-			var item = new MenuItem() { Header = header };
+			var item = new NativeMenuItem() { Header = header };
 			if (click != null)
 			{
 				item.Click += click;
@@ -266,11 +248,7 @@ namespace TabletPal
 			{
 				item.IsEnabled = false;
 			}
-            foreach (var nativeItem in ConvertToNativeMenuItems(item))
-            {
-                _icon.Menu.Items.Add(nativeItem);
-            }
-			// _icon.Menu.Items.Add(item);
+			_icon.Menu.Items.Add(item);
 			return item;
 		}
 

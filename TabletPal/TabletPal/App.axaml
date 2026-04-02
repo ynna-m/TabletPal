@@ -2,22 +2,38 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:themes="clr-namespace:Material.Styles.Themes;assembly=Material.Styles"
+        xmlns:materialIcons="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+        xmlns:grammars="clr-namespace:TextMateSharp.Grammars;assembly=TextMateSharp.Grammars"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="TabletPal.App"
+        
         >
   <Application.Styles>
     <FluentTheme />
+    <themes:MaterialTheme PrimaryColor="Purple" SecondaryColor="Indigo">
+      <themes:MaterialTheme.Resources>
+        <ResourceDictionary>
+          <ResourceDictionary.ThemeDictionaries>
+            <ResourceDictionary x:Key="{x:Static themes:Theme.MaterialLight}">
+              <grammars:ThemeName x:Key="AvaloniaEditThemeName">Light</grammars:ThemeName>
+            </ResourceDictionary>
+            <ResourceDictionary x:Key="{x:Static themes:Theme.MaterialDark}" />
+          </ResourceDictionary.ThemeDictionaries>
+        </ResourceDictionary>
+      </themes:MaterialTheme.Resources>
+    </themes:MaterialTheme>
+    <materialIcons:MaterialIconStyles />
   </Application.Styles>
 
   <Application.Resources>
 
     <!-- TOGGLE BUTTON -->
-    <Style x:Key="toggle" Selector="ToggleButton">
-      <Setter Property="Background" Value="{DynamicResource AccentFillColorDefaultBrush}"/>
-      <!-- <Setter Property="Foreground" Value="{DynamicResource MaterialDesignFont}"/> -->
+    <ControlTheme x:Key="toggle"  TargetType="ToggleButton">
+      <Setter Property="Background" Value="{DynamicResource PrimaryHueMidBrush}"/>
+      <Setter Property="Foreground" Value="{DynamicResource MaterialDesignFont}"/>
       <Setter Property="CornerRadius" Value="8"/>
-    </Style>
-
+    </ControlTheme>
     <!-- DEFAULT BUTTON -->
     <Style x:Key="default" Selector="Button">
       <Setter Property="Padding" Value="0"/>

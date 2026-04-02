@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
 using Avalonia.Controls;
@@ -84,6 +85,8 @@ namespace TabletPal
         public IEnumerable<NativeMenuItemBase> GetNativeMenuItems()
         {
             // var nativeMenu = new NativeMenu();
+            Console.WriteLine($"ThemeListManager.cs - GetNativeMenuItems(). Menu has {Menu.Items.Count} items.");
+
             foreach (MenuItem item in Menu.Items)
             {
                 var nativeItem = new NativeMenuItem(item.Header?.ToString() ?? "");
@@ -92,6 +95,36 @@ namespace TabletPal
                 yield return nativeItem;
             }
             // return nativeMenu;
+        }
+        public NativeMenuItem GetNativeMenu()
+        {
+            var nativeMenu = new NativeMenuItem() { 
+                Header = "themes", 
+                Menu = new NativeMenu(),
+                IsEnabled = Menu.Items.Count > 0
+            };
+            // var nativeMenu = new NativeMenu();
+            Console.WriteLine($"ThemeListManager.cs - GetNativeMenu(). Menu has {Menu.Items.Count} items.");
+            foreach (MenuItem item in Menu.Items)
+            {
+                NativeMenuItemToggleType toggleType = item.ToggleType switch
+                {
+                    MenuItemToggleType.None => NativeMenuItemToggleType.None,
+                    MenuItemToggleType.CheckBox => NativeMenuItemToggleType.CheckBox,
+                    MenuItemToggleType.Radio => NativeMenuItemToggleType.Radio,
+                    _ => NativeMenuItemToggleType.None
+                };
+                var nativeItem = new NativeMenuItem(item.Header?.ToString() ?? "")
+                {
+                    Header = item.Header?.ToString() ?? "",
+                    ToggleType = toggleType,
+					IsChecked = item.IsChecked,
+                };
+                nativeItem.Click += (s, e) => EventBeacon.SendEvent(Events.ChangeLayout, item.DataContext);
+                nativeMenu.Menu.Items.Add(nativeItem);
+                // yield return nativeItem;
+            }
+            return nativeMenu;
         }
 	}
 }

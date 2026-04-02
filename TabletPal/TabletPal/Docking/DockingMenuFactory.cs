@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 // using System.Windows.Controls;
 // using WpfAppBar;
 using Avalonia.Controls;
+using Avalonia.Controls.Primitives;
 using Avalonia.Interactivity;
 
 namespace TabletPal.Docking
@@ -39,7 +40,39 @@ namespace TabletPal.Docking
 
 			menu.Items.Add(docking);
 		}
+        public static NativeMenuItem CreateNativeDockingMenu()
+		{
+			
+            // Console.WriteLine("CreateNativeDockingMenu");
+            var menu = new NativeMenuItem()
+            {
+                Header = "docking",
+                Menu = new NativeMenu()
+            };
+			var item = new NativeMenuItem() { Header = "none" };
+			item.Click += (sender, e) => OnDocking(DockingMode.None);
+			menu.Menu.Items.Add(item);
 
+			item = new NativeMenuItem() { Header = "left" };
+			item.Click += (sender, e) => OnDocking(DockingMode.Left);
+			menu.Menu.Items.Add(item);
+            
+			item = new NativeMenuItem() { Header = "top" };
+			item.Click += (sender, e) => OnDocking(DockingMode.Top);
+			menu.Menu.Items.Add(item);
+
+			item = new NativeMenuItem() { Header = "right" };
+			item.Click += (sender, e) => OnDocking(DockingMode.Right);
+			menu.Menu.Items.Add(item);
+
+			// Bottom docking is broken as fuck. Maybe will fix it someday.
+			//item = new MenuItem() {Header = "bottom"};
+			//item.Click += (sender, e) => OnDocking(ABEdge.Bottom);
+			//menu.Items.Add(item);
+
+			// menu.Menu.Items.Add(docking);
+            return menu;
+		}
 		private static void OnDocking(DockingMode side) =>
 			EventBeacon.SendEvent(Events.DockingChanged, side);
 	}
