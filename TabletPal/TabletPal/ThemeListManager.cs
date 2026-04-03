@@ -60,7 +60,12 @@ namespace TabletPal
 			EventBeacon.SendEvent(Events.ChangeLayout, AppState.CurrentLayoutName);
 		}
 
-
+        private void OnClick(object sender, EventArgs e)
+		{
+			var item = (MenuItem)sender;
+			EventBeacon.SendEvent(Events.ChangeTheme, item.DataContext);
+			EventBeacon.SendEvent(Events.ChangeLayout, AppState.CurrentLayoutName);
+		}
 		public MenuItem CloneMenu()
 		{
 			var menu = new MenuItem() { Header = "themes" };
@@ -120,7 +125,9 @@ namespace TabletPal
                     ToggleType = toggleType,
 					IsChecked = item.IsChecked,
                 };
-                nativeItem.Click += (s, e) => EventBeacon.SendEvent(Events.ChangeLayout, item.DataContext);
+                nativeItem.Click += (s, e) => { EventBeacon.SendEvent(Events.ChangeTheme, item.DataContext);
+                    EventBeacon.SendEvent(Events.ChangeLayout, AppState.CurrentLayoutName);
+                };
                 nativeMenu.Menu.Items.Add(nativeItem);
                 // yield return nativeItem;
             }

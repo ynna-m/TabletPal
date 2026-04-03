@@ -58,7 +58,11 @@ namespace TabletPal
 			EventBeacon.SendEvent(Events.ChangeLayout, item.DataContext);
 		}
 
-		
+		private void OnClick(object sender, EventArgs e)
+		{
+			var item = (MenuItem)sender;
+			EventBeacon.SendEvent(Events.ChangeLayout, item.DataContext);
+		}
 		public MenuItem[] GetClonedItems()
 		{
 			var items = new List<MenuItem>();

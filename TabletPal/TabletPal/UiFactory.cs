@@ -87,12 +87,15 @@ namespace TabletPal
 			var windowSizeChanged = newWidth != window.Width || newHeight != window.Height;
 
 			var wasMinimized = TitlebarManager.Minimized;
-			if (windowSizeChanged)
+
+            Console.WriteLine($"Width: {window.Width}, Height: {window.Height}");
+            Console.WriteLine($"NewHeight: {newHeight} {wasMinimized} {windowSizeChanged} {AppState.Settings.DockingMode.ToString()}");
+			if (windowSizeChanged )
 			{
 				if (
 					   AppState.Settings.DockingMode == DockingMode.Left
-					|| AppState.Settings.DockingMode == DockingMode.Right
-					|| AppState.Settings.DockingMode == DockingMode.None
+                    || AppState.Settings.DockingMode == DockingMode.Right
+                    || AppState.Settings.DockingMode == DockingMode.None
 				)
 				{
 					window.Width = newWidth;
@@ -100,7 +103,7 @@ namespace TabletPal
 				if (
 					   AppState.Settings.DockingMode == DockingMode.Top
 					|| AppState.Settings.DockingMode == DockingMode.Bottom
-					|| AppState.Settings.DockingMode == DockingMode.None
+                    || AppState.Settings.DockingMode == DockingMode.None
 				)
 				{
 					if (!wasMinimized)
@@ -108,7 +111,7 @@ namespace TabletPal
 						window.Height = newHeight;
 					}
 				}
-			}
+            }
 
 			var offset = Vector2.Zero;
 			if (AppState.Settings.DockingMode != DockingMode.None)
@@ -116,7 +119,9 @@ namespace TabletPal
 				if (AppState.Settings.DockingMode == DockingMode.Top || AppState.Settings.DockingMode == DockingMode.Bottom)
 				{
 					// offset.X = (float)(SystemParameters.PrimaryScreenWidth - newWidth) / 2;
-                    var screen = window.Screens?.Primary ?? window.Screens?.All[0];
+                    var screen = window.Screens.ScreenCount > 1
+                        ? window.Screens.ScreenFromPoint(window.Position)
+                        : window.Screens.Primary;
                     if (screen != null)
                     {
                         offset.X = (float)(screen.Bounds.Width - newWidth) / 2;
@@ -125,7 +130,9 @@ namespace TabletPal
 				else
 				{
 					// offset.Y = (float)(SystemParameters.PrimaryScreenHeight - newHeight) / 2;
-                    var screen = window.Screens?.Primary ?? window.Screens?.All[0];
+                    var screen = window.Screens.ScreenCount > 1
+                        ? window.Screens.ScreenFromPoint(window.Position)
+                        : window.Screens.Primary;
                     if (screen != null)
                     {
                         offset.Y = (float)(screen.Bounds.Height - newHeight) / 2;
@@ -162,13 +169,13 @@ namespace TabletPal
             // window.PointerEntered += window.OnPointerEnteredFade;
             // window.PointerExited += window.OnPointerExitedFade;
 
-			// Application.Current.Resources["PrimaryHueMidBrush"] = new SolidColorBrush(theme.PrimaryColor);
-			// Application.Current.Resources["PrimaryHueMidForegroundBrush"] = new SolidColorBrush(theme.SecondaryColor);
-			// Application.Current.Resources["MaterialDesignToolForeground"] = new SolidColorBrush(theme.SecondaryColor);
+			Application.Current.Resources["MaterialPrimaryMidBrush"] = new SolidColorBrush(theme.PrimaryColor);
+			Application.Current.Resources["MaterialPrimaryForegroundBrush"] = new SolidColorBrush(theme.SecondaryColor);
+			Application.Current.Resources["MaterialPrimaryMidForegroundBrush"] = new SolidColorBrush(theme.SecondaryColor);
 
-			// Application.Current.Resources["MaterialDesignPaper"] = new SolidColorBrush(theme.BackgroundColor);
-			// Application.Current.Resources["MaterialDesignFont"] = new SolidColorBrush(theme.SecondaryColor);
-			// Application.Current.Resources["MaterialDesignBody"] = new SolidColorBrush(theme.SecondaryColor);
+			Application.Current.Resources["MaterialDesignPaper"] = new SolidColorBrush(theme.BackgroundColor);
+			Application.Current.Resources["MaterialDesignFont"] = new SolidColorBrush(theme.SecondaryColor);
+			Application.Current.Resources["MaterialDesignBody"] = new SolidColorBrush(theme.SecondaryColor);
 
 			window.MainBorder.Background = new SolidColorBrush(theme.BackgroundColor);
 
@@ -210,7 +217,8 @@ namespace TabletPal
 
 
 			TitlebarManager.CreateTitlebar(window, theme, layout, newHeight, wasMinimized);
-		}
+            
+        }
 
 		private static void CreateButton(
 			LayoutModel layout,
@@ -243,6 +251,7 @@ namespace TabletPal
 					uiButton = new Button();
 				}
 			}
+            
 			uiButton.Width = layout.CellSize * size.X - layout.Margin;
 			uiButton.Height = layout.CellSize * size.Y - layout.Margin;
 
@@ -310,29 +319,29 @@ namespace TabletPal
             {
                 if (Enum.TryParse<MaterialIconKind>(button.IconName, true, out var kind))
                 {
-                    Console.WriteLine($"UiFactory.cs - Resolving icon '{button.IconName}' as '{kind.ToString()}'");
+                    // Console.WriteLine($"UiFactory.cs - Resolving icon '{button.IconName}' as '{kind.ToString()}'");
                     var ico = new MaterialIcon
                     {
                         Kind = kind
-                        
                     };
                     uiButton.Content = ico;
                 }
             }
             var toolTip = new ToolTip(){
-                Content = button.Text
+                Content = button.Text,
+                Theme = (ControlTheme)Application.Current.Resources["tool_tip"]
             };
             ToolTip.SetTip(uiButton, toolTip);
 			var style = button.Style;
 			if (style == null)
 			{
-				// style = theme.DefaultStyle;
+				style = theme.DefaultStyle;
 			}
 
 			if (isToggle)
 			{
 				// uiButton.Styles.Add(Application.Current.Resources["toggle"] as Style);
-
+                uiButton.Theme = (ControlTheme)Application.Current.Resources["toggle"];
 				var key = ((ToggleAction)button.Action).Key;
 				var toggle = (ToggleButton)uiButton;
 				if (ToggleManager.IsHeld(key))
@@ -346,10 +355,12 @@ namespace TabletPal
 				if (style == null)
 				{
 					// uiButton.Styles.Clear();
+                    uiButton.Theme = null;
 				}
 				else
 				{
 					// uiButton.Styles.Add(Application.Current.Resources[style] as Style);
+                    uiButton.Theme = (ControlTheme)Application.Current.Resources[style];
 				}
 			}
 
@@ -371,17 +382,6 @@ namespace TabletPal
 
 
 			}
-
-            // var icon = new PackIconMaterialDesign
-            // {
-            //     Kind = PackIconMaterialDesignKind.Home,
-            //     Width = 16,
-            //     Height = 16,
-            //     Foreground = Brushes.White
-            // };
-            // uiButton.Content = icon;
-            // Canvas.SetTop(uiButton,0);
-            // Canvas.SetLeft(uiButton,0);
 			Canvas.SetTop(uiButton, layout.CellSize * position.Y + layout.Margin + offset.Y);
 			Canvas.SetLeft(uiButton, layout.CellSize * position.X + layout.Margin + offset.X);
 			window.MainCanvas.Children.Add(uiButton);

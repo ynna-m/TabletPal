@@ -59,7 +59,7 @@ namespace TabletPal
             _theme = new ThemeManager();
             _layout = new LayoutManager();
 
-            Settings.Load();
+            Settings.Load(this);
 
             Installer.TryInstall();
             _ = UpdateChecker.Check();
@@ -180,7 +180,6 @@ namespace TabletPal
             AppState.Settings.DockingMode = side;
 
             UiFactory.CreateUi(AppState.CurrentLayout, this);
-
             if (IsVisible)
             {
                 AppBarFunctions.SetAppBar(this, side);
@@ -211,6 +210,7 @@ namespace TabletPal
 
                 if (!_firstToggle)
                 {
+                    Console.WriteLine($"MainWindow.axaml.cs - OnToggleMinimize() - Not first toggle");
                     AppBarFunctions.SetAppBar(this, AppState.Settings.DockingMode);
                 }
                 else

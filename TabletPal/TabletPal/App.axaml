@@ -3,6 +3,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:themes="clr-namespace:Material.Styles.Themes;assembly=Material.Styles"
+        xmlns:controls="clr-namespace:Material.Styles.Controls;assembly=Material.Styles"
         xmlns:materialIcons="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
         xmlns:grammars="clr-namespace:TextMateSharp.Grammars;assembly=TextMateSharp.Grammars"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
@@ -10,8 +11,7 @@
         
         >
   <Application.Styles>
-    <FluentTheme />
-    <themes:MaterialTheme PrimaryColor="Purple" SecondaryColor="Indigo">
+    <themes:MaterialTheme>
       <themes:MaterialTheme.Resources>
         <ResourceDictionary>
           <ResourceDictionary.ThemeDictionaries>
@@ -27,49 +27,79 @@
   </Application.Styles>
 
   <Application.Resources>
-
     <!-- TOGGLE BUTTON -->
-    <ControlTheme x:Key="toggle"  TargetType="ToggleButton">
-      <Setter Property="Background" Value="{DynamicResource PrimaryHueMidBrush}"/>
-      <Setter Property="Foreground" Value="{DynamicResource MaterialDesignFont}"/>
+    <ControlTheme x:Key="toggle"  TargetType="ToggleButton" BasedOn="{StaticResource MaterialFlatToggleButton}">
+      <Setter Property="Foreground" Value="{DynamicResource MaterialDesignFont}"/>  
+      <!-- <Setter Property="Background" Value="{DynamicResource MaterialPrimaryMidBrush}"/> -->
       <Setter Property="CornerRadius" Value="8"/>
+      <Setter Property="Padding" Value="0"/>
     </ControlTheme>
     <!-- DEFAULT BUTTON -->
-    <Style x:Key="default" Selector="Button">
+    <ControlTheme x:Key="default"  TargetType="Button" BasedOn="{StaticResource MaterialFlatButton}">
+      <Setter Property="Foreground" Value="{DynamicResource MaterialPrimaryMidBrush}"/>  
       <Setter Property="Padding" Value="0"/>
-    </Style>
-
+    </ControlTheme>
     <!-- ACCENT BUTTON -->
-    <Style x:Key="accent" Selector="Button">
-      <Setter Property="Background" Value="{DynamicResource AccentFillColorDefaultBrush}"/>
+    <ControlTheme x:Key="accent"  TargetType="Button" BasedOn="{StaticResource MaterialFlatButton}">
+      <Setter Property="Foreground" Value="{DynamicResource MaterialDesignFont}"/>
+      <Setter Property="Background" Value="{DynamicResource MaterialPrimaryMidBrush}"/>
       <Setter Property="Padding" Value="0"/>
-    </Style>
-
+    </ControlTheme>
+    <!-- CIRCULAR ACCENT -->
+    <ControlTheme x:Key="circular_accent"  TargetType="Button" BasedOn="{StaticResource MaterialFloatingButton}">
+      <Setter Property="Padding" Value="0"/>
+    </ControlTheme>
     <!-- OUTLINED -->
-    <Style x:Key="outlined" Selector="Button">
+    <ControlTheme x:Key="outlined" TargetType="Button" BasedOn="{StaticResource MaterialOutlineButton}">
       <Setter Property="BorderThickness" Value="1"/>
       <Setter Property="Padding" Value="0"/>
-    </Style>
-
-    <!-- CIRCULAR -->
-    <Style x:Key="circular" Selector="Button">
-      <Setter Property="CornerRadius" Value="999"/>
+    </ControlTheme>
+    <!-- SHY -->
+    <ControlTheme x:Key="shy" TargetType="Button" BasedOn="{StaticResource MaterialFlatButton}">
+      <Setter Property="Foreground" Value="{DynamicResource MaterialDesignFont}"/> 
+      <Setter Property="Background" Value="Transparent"/>
       <Setter Property="Padding" Value="0"/>
-    </Style>
- <!-- SHY -->
-    <Style x:Key="shy" Selector="Button">
-      <Setter Property="CornerRadius" Value="999"/>
-      <Setter Property="Padding" Value="0"/>
-        <Setter Property="Background" Value="{DynamicResource AccentFillColorDefaultBrush}"/>
-    </Style>
-
-
+    </ControlTheme>
     <!-- TOOLTIP -->
-    <Style x:Key="tool_tip" Selector="ToolTip">
-      <!-- <Setter Property="Foreground" Value="{DynamicResource MaterialDesignFont}"/> -->
-      <Setter Property="Background" Value="{DynamicResource SystemControlBackgroundChromeMediumLowBrush}"/>
+    <ControlTheme x:Key="tool_tip" TargetType="ToolTip" BasedOn="{StaticResource MaterialToolTip}">
+      <Setter Property="Foreground" Value="{DynamicResource MaterialDesignFont}"/>
+      <Setter Property="Background" Value="{DynamicResource MaterialDesignPaper}"/>
+    </ControlTheme>
 
-    </Style>
-
+    <!-- BASIC -->
+    <!-- TOGGLE BUTTON -->
+    <!-- <ControlTheme x:Key="toggle"  TargetType="ToggleButton"> -->
+      <!-- <Setter Property="Background" Value="{DynamicResource PrimaryHueMidBrush}"/>
+      <Setter Property="Foreground" Value="{DynamicResource MaterialDesignFont}"/> -->
+      <!-- <Setter Property="CornerRadius" Value="8"/> -->
+      <!-- <Setter Property="Padding" Value="0"/> -->
+    <!-- </ControlTheme> -->
+    <!-- DEFAULT BUTTON -->
+    <!-- <ControlTheme x:Key="default"  TargetType="Button">
+      <Setter Property="Padding" Value="0"/>
+      
+    </ControlTheme> -->
+    <!-- ACCENT BUTTON -->
+    <!-- <ControlTheme x:Key="accent"  TargetType="Button">
+      <Setter Property="Padding" Value="0"/>
+    </ControlTheme> -->
+    <!-- CIRCULAR ACCENT -->
+    <!-- <ControlTheme x:Key="circular_accent"  TargetType="Button">
+      <Setter Property="Padding" Value="0"/>
+    </ControlTheme> -->
+    <!-- OUTLINED -->
+    <!-- <ControlTheme x:Key="outlined" TargetType="Button">
+      <Setter Property="BorderThickness" Value="1"/>
+      <Setter Property="Padding" Value="0"/>
+    </ControlTheme> -->
+    <!-- SHY -->
+    <!-- <ControlTheme x:Key="shy" TargetType="Button">
+      <Setter Property="Padding" Value="0"/>
+    </ControlTheme> -->
+    <!-- TOOLTIP -->
+    <!-- <ControlTheme x:Key="tool_tip" TargetType="ToolTip"> -->
+      <!-- <Setter Property="Foreground" Value="{DynamicResource MaterialDesignFont}"/>
+      <Setter Property="Background" Value="{DynamicResource MaterialDesignPaper}"/> -->
+    <!-- </ControlTheme> -->
   </Application.Resources>
 </Application>

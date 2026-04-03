@@ -268,6 +268,7 @@ namespace TabletPal.Docking
             public double Width { get; set; }
             public double Height { get; set; }
             public bool Topmost { get; set; }
+            public DockingMode PreviousDockingMode { get; set; }
         }
 
         private static readonly Dictionary<Window, WindowState> _states = new();
@@ -297,17 +298,27 @@ namespace TabletPal.Docking
                 return;
             }
 
-            var screen = window.Screens.Primary;
+            var screen = window.Screens.ScreenCount > 1
+                ? window.Screens.ScreenFromPoint(window.Position)
+                : window.Screens.Primary;
             if (screen == null) return;
 
             var bounds = screen.Bounds;
 
             // Save original state before docking
             GetState(window);
+            // Save new position on every dock, to make sure we can restore to the last position when undocking, even after multiple docks.
+            if(_states[window].PreviousDockingMode == DockingMode.None){
+                _states[window].Position = window.Position;
+            }
 
+            _states[window].PreviousDockingMode = mode;
             // Make it look like a dock
             window.SystemDecorations = SystemDecorations.None;
             window.Topmost = true;
+
+
+            Console.WriteLine($"AppBarFunctions.cs - SetAppBar() - Get Window State Height {_states[window].Height.ToString()} {window.Height.ToString()}");
 
             switch (mode)
             {
@@ -337,13 +348,14 @@ namespace TabletPal.Docking
         {
             if (!_states.TryGetValue(window, out var state))
                 return;
-
-            window.SystemDecorations = SystemDecorations.Full;
+            Console.WriteLine($"AppBarFunctions.cs - Undock() - Height {state.Height.ToString()}");
+            window.SystemDecorations = SystemDecorations.None;
             window.Topmost = state.Topmost;
 
             window.Position = state.Position;
             window.Width = state.Width;
             window.Height = state.Height;
+            state.PreviousDockingMode = DockingMode.None;
         }
     }
 }
