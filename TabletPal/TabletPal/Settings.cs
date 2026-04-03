@@ -46,9 +46,7 @@ namespace TabletPal
             if (window != null)
             {
                 window.Position = new PixelPoint((int)WindowX, (int)WindowY);
-                Console.WriteLine($"Settings.cs - Apply() - Get WindowPosition{WindowX} {WindowY}");
             }
-            Console.WriteLine($"Settings.cs - Apply() - Get WindowPosition{WindowX} {WindowY}");
             
 			
 			EventBeacon.SendEvent(Events.DockingChanged, DockingMode);
@@ -85,7 +83,6 @@ namespace TabletPal
                     var window = desktop.MainWindow;
                     if (window != null)
                     {
-                        Console.WriteLine($"Settings.cs - OnUpdateSettings() - Get Window Position {window.Position.ToString()}");
                         WindowX = window.Position.X;
                         WindowY = window.Position.Y;
                     }
@@ -144,10 +141,7 @@ namespace TabletPal
                         Console.WriteLine($"Settings.cs - Load() - error: {e.Message}");
 					}
 				}
-                Console.WriteLine($"Settings.cs - Load() - text string {text}");
 				AppState.Settings = deserializer.Deserialize<Settings>(text);
-                Console.WriteLine($"Settings.cs - Load() - AppState Settings Window Position {AppState.Settings.WindowX} {AppState.Settings.WindowY}");
-
 			}
 			catch
 			{

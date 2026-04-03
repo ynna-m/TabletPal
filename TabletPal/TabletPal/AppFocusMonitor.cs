@@ -72,12 +72,10 @@ namespace TabletPal
         public AppFocusMonitor()
         {
             _ = MonitorLoop(_cts.Token);
-            Console.WriteLine("AppFocusMonitor.cs -  app focus monitor loop");
         }
 
         private async Task MonitorLoop(CancellationToken token)
         {
-            Console.WriteLine("AppFocusMonitor.cs - Starting app focus monitor loop");
             while (!token.IsCancellationRequested)
             {
                 try

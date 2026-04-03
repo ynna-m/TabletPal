@@ -113,7 +113,6 @@ namespace TabletPal
                 IsEnabled = Menu.Items.Count > 0
             };
             // var nativeMenu = new NativeMenu();
-            Console.WriteLine($"LayoutListManager.cs - GetNativeMenu(). Menu has {Menu.Items.Count} items.");
             foreach (MenuItem item in Menu.Items)
             {
                 NativeMenuItemToggleType toggleType = item.ToggleType switch

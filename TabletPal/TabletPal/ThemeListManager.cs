@@ -90,8 +90,6 @@ namespace TabletPal
         public IEnumerable<NativeMenuItemBase> GetNativeMenuItems()
         {
             // var nativeMenu = new NativeMenu();
-            Console.WriteLine($"ThemeListManager.cs - GetNativeMenuItems(). Menu has {Menu.Items.Count} items.");
-
             foreach (MenuItem item in Menu.Items)
             {
                 var nativeItem = new NativeMenuItem(item.Header?.ToString() ?? "");
@@ -109,7 +107,6 @@ namespace TabletPal
                 IsEnabled = Menu.Items.Count > 0
             };
             // var nativeMenu = new NativeMenu();
-            Console.WriteLine($"ThemeListManager.cs - GetNativeMenu(). Menu has {Menu.Items.Count} items.");
             foreach (MenuItem item in Menu.Items)
             {
                 NativeMenuItemToggleType toggleType = item.ToggleType switch
