@@ -283,7 +283,7 @@ namespace TabletPal.Docking
                 Position = window.Position,
                 Width = window.Width,
                 Height = window.Height,
-                Topmost = window.Topmost
+                Topmost = true
             };
 
             _states[window] = state;
@@ -350,7 +350,7 @@ namespace TabletPal.Docking
                 return;
             Console.WriteLine($"AppBarFunctions.cs - Undock() - Height {state.Height.ToString()}");
             window.SystemDecorations = SystemDecorations.None;
-            window.Topmost = state.Topmost;
+            window.Topmost = true;
 
             window.Position = state.Position;
             window.Width = state.Width;
