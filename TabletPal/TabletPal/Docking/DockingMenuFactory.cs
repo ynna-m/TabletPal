@@ -1,13 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-// using System.Windows.Controls;
-// using WpfAppBar;
-using Avalonia.Controls;
-using Avalonia.Controls.Primitives;
-using Avalonia.Interactivity;
+﻿using Avalonia.Controls;
 
 namespace TabletPal.Docking
 {
@@ -43,7 +34,6 @@ namespace TabletPal.Docking
         public static NativeMenuItem CreateNativeDockingMenu()
 		{
 			
-            // Console.WriteLine("CreateNativeDockingMenu");
             var menu = new NativeMenuItem()
             {
                 Header = "docking",

@@ -1,10 +1,6 @@
-﻿// using MaterialDesignThemes.Wpf;
-using System;
+﻿using System;
 using System.IO;
 using System.Numerics;
-// using System.Windows.Controls;
-// using System.Windows.Media;
-// using System.Windows.Media.Imaging;
 using TabletPal.Actions;
 using TabletPal.Data;
 using Avalonia.Controls;
@@ -18,7 +14,6 @@ namespace TabletPal.Models
 		public ButtonAction Action;
 
 		public string Text = "";
-		// public object? Icon;
         public string IconName;
         public string IconPath;
         public Stretch IconStretch;
@@ -54,31 +49,15 @@ namespace TabletPal.Models
 				{
 					var ico = new Image();
 
-					// ico.Source = new Bitmap(Path.Combine(AppState.CurrentDirectory, data.Icon));
 					ico.Stretch = (Stretch)data.IconStretch;
 
-					// Icon = ico;
                     IconPath = Path.Combine(AppState.CurrentDirectory, data.Icon);
                     IconStretch =  (Stretch) data.IconStretch;
 				}
 				else
 				{
-					//IconName = data.Icon.Replace("_", "").Replace("-", ""); // Sanitizing the icon.
-					
                     var parts = data.Icon.Split(new[] { '_', '-' }, StringSplitOptions.RemoveEmptyEntries);
                     IconName = string.Concat(parts.Select(p => char.ToUpper(p[0]) + p.Substring(1)));
-
-                    
-                    // Console.WriteLine($"ButtonModel.cs - Resolving icon '{data.Icon}' as '{iconName}'");
-                    // if (Enum.TryParse<PackIconMaterialDesignKind>(iconName, true, out var kind))
-					// {
-                    //     // var ico = new PackIconMaterialDesign
-                    //     // {
-                    //     //     Kind = kind
-                    //     // };
-                    //     // Console.WriteLine($"ButtonModel.cs - Resolved icon '{ico.Name}' {kind.ToString()} ");
-                    //     // Icon = ico;
-					// }
 				}
 			}
 

@@ -1,8 +1,6 @@
 using Avalonia;
 using Avalonia.Markup.Xaml;
 using Avalonia.Controls.ApplicationLifetimes;
-using System.Collections.Generic;
-using TabletPal.Models;
 
 namespace TabletPal;
 

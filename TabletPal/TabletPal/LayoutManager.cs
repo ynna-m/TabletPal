@@ -1,13 +1,8 @@
-﻿using System;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using System.IO;
 using System.Numerics;
-// using System.Printing;
-// using System.Windows;
 using TabletPal.Actions;
 using TabletPal.Models;
-// using WindowsInput.Events;
-// using WpfAppBar;
 using MsBox.Avalonia;
 using MsBox.Avalonia.Enums;
 using Avalonia.Threading;
@@ -93,12 +88,7 @@ namespace TabletPal
                     "Load failure!","No layouts found! Make sure you have at least one valid layout in the layouts folder.",
                     ButtonEnum.Ok, Icon.Error);
                 await boxError.ShowAsync();
-				// MessageBox.Show(
-				// 	"No layouts found!",
-				// 	"Load failure!",
-				// 	MessageBoxButton.OK,
-				// 	MessageBoxImage.Error
-				// );
+
 				return;
 			}
 			if (!AppState.Layouts.TryGetValue(path, out var layout)) // TODO: fix the check lul.
@@ -109,12 +99,7 @@ namespace TabletPal
                         "Load failure!",$"Cannot load '{path}'! Trying to fall back to default layout.",
                         ButtonEnum.Ok, Icon.Error);
                     await boxError.ShowAsync();
-					// MessageBox.Show(
-					// 	"Cannot load '" + path +"'! Trying to fall back to default layout.",
-					// 	"Load failure!",
-					// 	MessageBoxButton.OK,
-					// 	MessageBoxImage.Error
-					// );
+
 					layout = AppState.Layouts["default"];
 				}
 				else
@@ -123,12 +108,7 @@ namespace TabletPal
                         "Man you really screwed up","No default layout found! Make sure you have a valid layout named 'default.yaml'.",
                         ButtonEnum.Ok, Icon.Error);
                     await boxError.ShowAsync();
-					// MessageBox.Show(
-					// 	"No default layout found! Make sure you have a valid layout named 'default.yaml'",
-					// 	"Man you really screwed up",
-					// 	MessageBoxButton.OK,
-					// 	MessageBoxImage.Error
-					// );
+
 					// Nothing to fall back on, we're fucked.
 					layout = _fallbackLayout;
 				}
@@ -139,7 +119,7 @@ namespace TabletPal
 				AppState.CurrentLayout.Dispose();
 			}
 
-			if (layout == null)// || layout == AppState.CurrentLayout)
+			if (layout == null)
 			{
 				return;
 			}

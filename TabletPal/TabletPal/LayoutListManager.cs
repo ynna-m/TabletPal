@@ -1,7 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.IO;
-// using System.Windows;
-// using System.Windows.Controls;
 using Avalonia.Controls;
 using Avalonia.Threading;
 using Avalonia.Interactivity;
@@ -112,7 +110,6 @@ namespace TabletPal
                 Menu = new NativeMenu(),
                 IsEnabled = Menu.Items.Count > 0
             };
-            // var nativeMenu = new NativeMenu();
             foreach (MenuItem item in Menu.Items)
             {
                 NativeMenuItemToggleType toggleType = item.ToggleType switch
@@ -130,7 +127,6 @@ namespace TabletPal
                 };
                 nativeItem.Click += (s, e) => EventBeacon.SendEvent(Events.ChangeLayout, item.DataContext);
                 nativeMenu.Menu.Items.Add(nativeItem);
-                // yield return nativeItem;
             }
             return nativeMenu;
         }

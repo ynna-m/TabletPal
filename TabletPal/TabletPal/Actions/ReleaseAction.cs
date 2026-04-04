@@ -1,7 +1,5 @@
 ﻿using System.Threading.Tasks;
 using TabletPal.InputSender;
-// using WindowsInput;
-// using WindowsInput.Events;
 
 namespace TabletPal.Actions
 {

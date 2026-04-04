@@ -16,9 +16,6 @@ namespace TabletPal.Actions
 		{
 			var process = new Process();
 			var startInfo = new ProcessStartInfo();
-			// startInfo.WindowStyle = ProcessWindowStyle.Hidden;
-			// startInfo.FileName = "cmd.exe";
-			// startInfo.Arguments = "/C " + _terminal;
             startInfo.FileName = "/bin/bash";
             startInfo.Arguments = "-c \"" + _terminal + "\"";
             startInfo.RedirectStandardOutput = false;

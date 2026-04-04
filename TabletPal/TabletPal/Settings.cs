@@ -1,18 +1,15 @@
-﻿using System;
-using System.IO;
-using System.Windows;
-// using WpfAppBar;
+﻿using System.IO;
 using YamlDotNet.Serialization;
 using YamlDotNet.Serialization.NamingConventions;
 using TabletPal.Docking;
 using Avalonia;
-using Avalonia.Controls;
 
 namespace TabletPal
 {
 	public class Settings
 	{
-		public bool AddToAutostart = true;
+        // Commented out to let you guys know that I'm not implementing an option here to do autostart. You can do this with your desktop environment manager in Linux
+		// public bool AddToAutostart = true;
 		public int WindowX = 0;
 		public int WindowY = 0;
 		public string Layout = "default";
@@ -55,64 +52,45 @@ namespace TabletPal
 
 		private void OnUpdateSettings(object[] obj)
 		{
-            // try
+            FirstLaunch = false;
+            if (AppState.LastManuallySetLayout == null)
+            {
+                Layout = Path.GetRelativePath(AppState.CurrentDirectory, AppState.CurrentLayoutName);
+            }
+            else
+            {
+                Layout = Path.GetRelativePath(AppState.CurrentDirectory, AppState.LastManuallySetLayout);
+            }
+            Theme = Path.GetRelativePath(AppState.CurrentDirectory, AppState.CurrentThemeName);
+            // if (!double.IsNaN(Application.Current.MainWindow.Left))
             // {
-                // Console.WriteLine($"Settings.cs - OnUpdateSettings() - Updating settings... {obj.Length} {AppState.CurrentLayoutName} args");
-                FirstLaunch = false;
-                if (AppState.LastManuallySetLayout == null)
-                {
-                    Layout = Path.GetRelativePath(AppState.CurrentDirectory, AppState.CurrentLayoutName);
-                }
-                else
-                {
-                    Layout = Path.GetRelativePath(AppState.CurrentDirectory, AppState.LastManuallySetLayout);
-                }
-                Theme = Path.GetRelativePath(AppState.CurrentDirectory, AppState.CurrentThemeName);
-                // Console.WriteLine($"Settings.cs - OnUpdateSettings() - Theme {Theme} CurrentThemeName {AppState.CurrentThemeName} args");
-                // if (!double.IsNaN(Application.Current.MainWindow.Left))
-                // {
-                // 	WindowX = Application.Current.MainWindow.Left;
-                // }
-                // if (!double.IsNaN(Application.Current.MainWindow.Top))
-                // {
-                // 	WindowY = Application.Current.MainWindow.Top;
-                // }
-                if (Application.Current?.ApplicationLifetime 
-                    is Avalonia.Controls.ApplicationLifetimes.IClassicDesktopStyleApplicationLifetime desktop)
-                {
-                    var window = desktop.MainWindow;
-                    if (window != null)
-                    {
-                        WindowX = window.Position.X;
-                        WindowY = window.Position.Y;
-                    }
-                }
-                Save();
+            // 	WindowX = Application.Current.MainWindow.Left;
             // }
-            // catch (Exception e)
+            // if (!double.IsNaN(Application.Current.MainWindow.Top))
             // {
-            //     Console.WriteLine($"Settings.cs - OnUpdateSettings() - error: {e.Message}");
+            // 	WindowY = Application.Current.MainWindow.Top;
             // }
-			
+            if (Application.Current?.ApplicationLifetime 
+                is Avalonia.Controls.ApplicationLifetimes.IClassicDesktopStyleApplicationLifetime desktop)
+            {
+                var window = desktop.MainWindow;
+                if (window != null)
+                {
+                    WindowX = window.Position.X;
+                    WindowY = window.Position.Y;
+                }
+            }
+            Save();			
 		}
 
 		public void Save()
 		{
-            try
-            {
-                // Console.WriteLine("Settings.cs - Save() - Saving settings...");
-                var serializer = new SerializerBuilder()
-                    .WithNamingConvention(UnderscoredNamingConvention.Instance)
-                    .Build();
+            var serializer = new SerializerBuilder()
+                .WithNamingConvention(UnderscoredNamingConvention.Instance)
+                .Build();
 
-                File.WriteAllText(SettingsPath, serializer.Serialize(this));
-            }
-            catch (Exception e)
-            {
-                // Console.WriteLine($"Settings.cs - Save() - error: {e.Message}");
-                // throw;
-            }
-			
+            File.WriteAllText(SettingsPath, serializer.Serialize(this));
+	
 		}
 
 
@@ -130,16 +108,9 @@ namespace TabletPal
 				string text = null;
 				for (var i = 0; i < 32; i += 1)
 				{
-					try
-					{
-						text = File.ReadAllText(SettingsPath)
-							.Replace("\t", "  "); // The thing doesn't like tabs.
-						break;
-					}
-					catch (Exception e)
-					{
-                        Console.WriteLine($"Settings.cs - Load() - error: {e.Message}");
-					}
+                    text = File.ReadAllText(SettingsPath)
+                        .Replace("\t", "  "); // The thing doesn't like tabs.
+                    break;
 				}
 				AppState.Settings = deserializer.Deserialize<Settings>(text);
 			}

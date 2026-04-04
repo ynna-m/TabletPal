@@ -1,15 +1,10 @@
-﻿using Microsoft.Win32;
-using System;
+﻿using System;
 using System.Diagnostics;
 using System.IO;
-using System.Threading;
 using TabletPal.Docking;
 using Avalonia.Controls;
-using Avalonia.Interactivity;
 using Avalonia.Threading;
 using System.Collections.Generic;
-using System.Threading.Tasks;
-using System.Linq;
 
 namespace TabletPal
 {
@@ -17,10 +12,11 @@ namespace TabletPal
 	{
 		private TrayIcon _icon;
         private NativeMenuItem _dockingMenu;
-		private NativeMenuItem _autostartMenuItem;
+        // Commented out to let you guys know that I'm not implementing an option here to do autostart. You can do this with your desktop environment manager in Linux
+		// private NativeMenuItem _autostartMenuItem;
 		private NativeMenuItem _autoUpdateMenuItem;
-		// private MenuItem _autohideMenuItem;
 		private NativeMenuItem _perAppLayoutsMenuItem;
+        // I haven't implemented light and dark theme. Currently, it's set to dark theme.
 		// private readonly string _iconPathBlack = AppState.CurrentDirectory + "/files/icons/tray/tray_black.ico";
 		private readonly string _iconPathWhite = AppState.CurrentDirectory + "/files/icons/tray/tray_white.ico";
 		private readonly MainWindow _window;
@@ -36,9 +32,9 @@ namespace TabletPal
 			_themeList = themeList;
 			_focusMonitor = focusMonitor;
             
-            // _dockingMenu = new NativeMenuItem(){ Header = "docking", Menu = new NativeMenu() };
 			_icon = new TrayIcon();
 
+            // See comment on _iconPathBlack
 			// if (_isLightTheme)
 			// {
 			// 	_icon.Icon = new WindowIcon(_iconPathBlack);
@@ -92,15 +88,6 @@ namespace TabletPal
                 Menu = new NativeMenu()
             };
 
-			// if (AppState.Settings.AddToAutostart)
-			// {
-			// 	_autostartMenuItem = AddSubmenuItem(settings, "remove from autostart", OnAutostartToggle);
-			// }
-			// else
-			// {
-			// 	_autostartMenuItem = AddSubmenuItem(settings, "add to autostart", OnAutostartToggle);
-			// }
-
 			if (AppState.Settings.UpdateCheckingEnabled)
 			{
 				_autoUpdateMenuItem = AddSubmenuItem(settings, "don't check for updates", OnAutoUpdateToggle);
@@ -109,7 +96,7 @@ namespace TabletPal
 			{
 				_autoUpdateMenuItem = AddSubmenuItem(settings, "check for updates", OnAutoUpdateToggle);
 			}
-
+            // Not implementing auto hide either, but retaining this just in case.
 			// if (AppState.Settings.ToolbarAutohideEnabled)
 			// {
 			// 	_autohideMenuItem = AddSubmenuItem(settings, "disable toolbar autohide", OnAutohideToggle);
@@ -135,10 +122,7 @@ namespace TabletPal
 			_focusedApp = AddSubmenuItem(settings, "focused app: none");
 			_focusMonitor.OnAppChanged += OnAppChanged;
 
-            // foreach (var nativeItem in settings.Menu.Items)
-            // {
-            //     settings.Menu.Items.Add(nativeItem);
-            // }
+
 			_icon.Menu.Items.Add(settings);
 			_icon.Menu.Add(new NativeMenuItemSeparator());
 			AddMenuItem("about", OnAbout);
@@ -147,12 +131,7 @@ namespace TabletPal
 
 		private void OnAppChanged(string app)
 		{
-			// _focusedApp.Dispatcher.Invoke(
-			// 	() =>
-			// 	{
-			// 		_focusedApp.Header = "focused app: " + app;
-			// 	}
-			// );	
+
             Dispatcher.UIThread.Invoke(
                 () =>
                 {
@@ -160,23 +139,6 @@ namespace TabletPal
                 }
             );
 		}
-
-		// private void OnAutostartToggle(object sender, RoutedEventArgs e)
-		// {
-		// 	AppState.Settings.AddToAutostart = !AppState.Settings.AddToAutostart;
-
-		// 	if (AppState.Settings.AddToAutostart)
-		// 	{
-		// 		AutostartManager.SetAutostart();
-		// 		_autostartMenuItem.Header = "remove from autostart";
-		// 	}
-		// 	else
-		// 	{
-		// 		AutostartManager.ResetAutostart();
-		// 		_autostartMenuItem.Header = "add to autostart";
-		// 	}
-		// 	EventBeacon.SendEvent(Events.UpdateSettings);
-		// }
 
 		private void OnAutoUpdateToggle(object sender, EventArgs e)
 		{
@@ -193,22 +155,6 @@ namespace TabletPal
 			EventBeacon.SendEvent(Events.UpdateSettings);
 		}
 
-		// private void OnAutohideToggle(object sender, RoutedEventArgs e)
-		// {
-		// 	AppState.Settings.ToolbarAutohideEnabled = !AppState.Settings.ToolbarAutohideEnabled;
-
-		// 	if (AppState.Settings.ToolbarAutohideEnabled)
-		// 	{
-		// 		_autohideMenuItem.Header = "disable toolbar autohide";
-		// 		ToolbarAutohider.StartWatching();
-		// 	}
-		// 	else
-		// 	{
-		// 		_autohideMenuItem.Header = "enable toolbar autohide";
-		// 		ToolbarAutohider.StopWatching();
-		// 	}
-		// 	EventBeacon.SendEvent(Events.UpdateSettings);
-		// }
 
 		private void OnPerAppLayoutsToggle(object sender, EventArgs e)
 		{
@@ -284,32 +230,6 @@ namespace TabletPal
 			_icon.Dispose();
 			EventBeacon.SendEvent(Events.UpdateSettings);
 			Process.GetCurrentProcess().Kill();
-		}
-
-        public IEnumerable<NativeMenuItemBase> ConvertToNativeMenuItems(MenuItem Menu)
-        {
-            // var nativeMenu = new NativeMenu();
-            foreach (MenuItem item in Menu.Items)
-            {
-                var nativeItem = new NativeMenuItem(item.Header?.ToString() ?? "");
-                nativeItem.Click += (s, e) => EventBeacon.SendEvent(Events.ChangeLayout, item.DataContext);
-                // nativeMenu.Items.Add(nativeItem);
-                yield return nativeItem;
-            }
-            // return nativeMenu;
-        }
-		// private bool _isLightTheme
-		// {
-		// 	get
-		// 	{
-		// 		var key = Registry.GetValue(
-		// 			@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Themes\Personalize", 
-		// 			"SystemUsesLightTheme", 
-		// 			0
-		// 		);
-		// 		return !(key == null || (int)key == 0);
-		// 	}
-		// }
-        
+		}        
 	}
 }

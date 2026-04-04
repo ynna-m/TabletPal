@@ -7,12 +7,12 @@ using System.Net;
 using System.Net.Http;
 using System.Reflection;
 using System.Threading.Tasks;
-// using System.Windows;
 using MsBox.Avalonia;
 using MsBox.Avalonia.Enums;
 
 namespace TabletPal
 {
+    //This needs to be audited too
 	public static class UpdateChecker
 	{
 		private static Version _version = Assembly.GetExecutingAssembly().GetName().Version;
@@ -57,21 +57,6 @@ namespace TabletPal
                     ButtonEnum.YesNo
                     ,Icon.Question);
             var result = await box.ShowAsync();
-			// var result = MessageBox.Show(
-			// 	"A new version of Tablet Pal is available."
-			// 	+ Environment.NewLine
-			// 	+ Environment.NewLine
-			// 	+ "v" + newVersion
-			// 	+ Environment.NewLine
-			// 	+ Environment.NewLine
-			// 	+ changes
-			// 	+ Environment.NewLine
-			// 	+ Environment.NewLine
-			// 	+ "Would you like to download it?",
-			// 	"Update!",
-			// 	MessageBoxButton.YesNo,
-			// 	MessageBoxImage.Question
-			// );
 
 			if (result != ButtonResult.Yes)
 			{
@@ -90,15 +75,6 @@ namespace TabletPal
                     ButtonEnum.Ok
                     ,Icon.Error);
                 await boxError.ShowAsync();
-				//  MessageBox.Show(
-				// 	"DOWNLOAD FAILED:"
-				// 	+ Environment.NewLine
-				// 	+ Environment.NewLine
-				// 	+ e.Message,
-				// 	"Download failed!",
-				// 	MessageBoxButton.OK,
-				// 	MessageBoxImage.Error
-				// );
 
 				return;
 			}
@@ -132,13 +108,7 @@ namespace TabletPal
                     ButtonEnum.Ok
                     ,Icon.Info);
             await box.ShowAsync();
-			// MessageBox.Show(
-			// 	"A new version of Tablet Pal has been downloaded. "
-			// 	+ "Please unzip and install the new version. Tablet Pal will be closed.",
-			// 	"Update!",
-			// 	MessageBoxButton.OK,
-			// 	MessageBoxImage.Information
-			// );
+
 
 			var startInfo = new ProcessStartInfo()
 			{

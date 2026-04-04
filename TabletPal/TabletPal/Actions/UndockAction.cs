@@ -1,5 +1,4 @@
 ﻿using System.Threading.Tasks;
-// using WpfAppBar;
 using TabletPal.Docking;
 
 namespace TabletPal.Actions

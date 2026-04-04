@@ -1,7 +1,5 @@
 ﻿using System.Threading.Tasks;
 using TabletPal.InputSender;
-// using WindowsInput;
-// using WindowsInput.Events;
 
 namespace TabletPal.Actions
 {
@@ -17,7 +15,6 @@ namespace TabletPal.Actions
 
 		}
 		public override async Task Invoke() =>
-			// await Simulate.Events().Hold(_keys).Invoke();
             await _inputSender.SendHold(_keys);
 	}
 }

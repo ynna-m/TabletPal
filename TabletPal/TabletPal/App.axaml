@@ -8,7 +8,6 @@
         xmlns:grammars="clr-namespace:TextMateSharp.Grammars;assembly=TextMateSharp.Grammars"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="TabletPal.App"
-        
         >
   <Application.Styles>
     <themes:MaterialTheme>
@@ -65,41 +64,5 @@
       <Setter Property="Foreground" Value="{DynamicResource MaterialDesignFont}"/>
       <Setter Property="Background" Value="{DynamicResource MaterialDesignPaper}"/>
     </ControlTheme>
-
-    <!-- BASIC -->
-    <!-- TOGGLE BUTTON -->
-    <!-- <ControlTheme x:Key="toggle"  TargetType="ToggleButton"> -->
-      <!-- <Setter Property="Background" Value="{DynamicResource PrimaryHueMidBrush}"/>
-      <Setter Property="Foreground" Value="{DynamicResource MaterialDesignFont}"/> -->
-      <!-- <Setter Property="CornerRadius" Value="8"/> -->
-      <!-- <Setter Property="Padding" Value="0"/> -->
-    <!-- </ControlTheme> -->
-    <!-- DEFAULT BUTTON -->
-    <!-- <ControlTheme x:Key="default"  TargetType="Button">
-      <Setter Property="Padding" Value="0"/>
-      
-    </ControlTheme> -->
-    <!-- ACCENT BUTTON -->
-    <!-- <ControlTheme x:Key="accent"  TargetType="Button">
-      <Setter Property="Padding" Value="0"/>
-    </ControlTheme> -->
-    <!-- CIRCULAR ACCENT -->
-    <!-- <ControlTheme x:Key="circular_accent"  TargetType="Button">
-      <Setter Property="Padding" Value="0"/>
-    </ControlTheme> -->
-    <!-- OUTLINED -->
-    <!-- <ControlTheme x:Key="outlined" TargetType="Button">
-      <Setter Property="BorderThickness" Value="1"/>
-      <Setter Property="Padding" Value="0"/>
-    </ControlTheme> -->
-    <!-- SHY -->
-    <!-- <ControlTheme x:Key="shy" TargetType="Button">
-      <Setter Property="Padding" Value="0"/>
-    </ControlTheme> -->
-    <!-- TOOLTIP -->
-    <!-- <ControlTheme x:Key="tool_tip" TargetType="ToolTip"> -->
-      <!-- <Setter Property="Foreground" Value="{DynamicResource MaterialDesignFont}"/>
-      <Setter Property="Background" Value="{DynamicResource MaterialDesignPaper}"/> -->
-    <!-- </ControlTheme> -->
   </Application.Resources>
 </Application>

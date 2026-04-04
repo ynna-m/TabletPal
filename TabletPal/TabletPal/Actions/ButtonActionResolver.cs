@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-// using WindowsInput.Events;
 
 namespace TabletPal.Actions
 {
@@ -72,8 +71,6 @@ namespace TabletPal.Actions
 			{
 				return ResolveUndockAction();
 			}
-
-			// return new KeyAction(StringToKeyCode(actionString));
             return new KeyAction(actionString);
 		}
 

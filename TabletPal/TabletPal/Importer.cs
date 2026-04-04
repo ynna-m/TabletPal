@@ -1,10 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Reflection.Metadata.Ecma335;
 using System.Threading;
-// using System.Windows;
-// using System.Windows.Controls.Primitives;
 using TabletPal.Data;
 using TabletPal.Models;
 using YamlDotNet.Serialization;
@@ -72,12 +69,6 @@ namespace TabletPal
                     "Load failure!",$"Cannot load '{path}': {e.Message}",
                     ButtonEnum.Ok, Icon.Error);
                 await box.ShowAsync();
-				// MessageBox.Show(
-				// 	"Cannot load '" + path + "': " + e.Message,
-				// 	"Load failure!",
-				// 	MessageBoxButton.OK,
-				// 	MessageBoxImage.Error
-				// );
 			}
 			return null;
 		}
@@ -96,12 +87,6 @@ namespace TabletPal
                     "Load failure!",$"Cannot load '{path}': {e.Message}",
                     ButtonEnum.Ok, Icon.Error);
                 await box.ShowAsync();
-				// MessageBox.Show(
-				// 	"Cannot load '" + path + "': " + e.Message,
-				// 	"Load failure!",
-				// 	MessageBoxButton.OK,
-				// 	MessageBoxImage.Error
-				// );
 			}
 			return null;
 		}
@@ -117,12 +102,6 @@ namespace TabletPal
                     "File not found!",$"'{path}' does not exist!",
                     ButtonEnum.Ok, Icon.Error);
                 await box.ShowAsync();
-				// MessageBox.Show(
-				// 	"'" + path + "' does not exist!",
-				// 	"File not found!",
-				// 	MessageBoxButton.OK,
-				// 	MessageBoxImage.Error
-				// );
 
 				return default(T);
 			}

@@ -45,7 +45,6 @@ namespace TabletPal
             // this.PointerEntered += OnPointerEnter;
             // this.PointerExited += OnPointerLeave;
 
-            Console.WriteLine($"MainWindow.axaml.cs - Constructor - Current directory: {AppState.CurrentDirectory}");
             Directory.SetCurrentDirectory(AppState.CurrentDirectory);
 
             Topmost = true;
@@ -53,8 +52,6 @@ namespace TabletPal
             PointerPressed += OnPointerPressed;
 
             _file = new FileManager();
-
-            ToggleManager.Init();
 
             _theme = new ThemeManager();
             _layout = new LayoutManager();
@@ -82,7 +79,6 @@ namespace TabletPal
             EventBeacon.Subscribe(Events.DockingChanged, OnDockingChanged);
 
             Opened += OnOpened;
-            Console.WriteLine($"MainWindow.axaml.cs - Constructor finished");
         }
         private async void OnPointerEnter(object? sender, PointerEventArgs e)
         {
@@ -206,13 +202,11 @@ namespace TabletPal
         {
             if (!IsVisible)
             {
-                // Show();
                 this.IsVisible=true;
                 Topmost=false;
                 Topmost=true;
                 if (!_firstToggle)
                 {
-                    Console.WriteLine($"MainWindow.axaml.cs - OnToggleMinimize() - Not first toggle");
                     AppBarFunctions.SetAppBar(this, AppState.Settings.DockingMode);
                 }
                 else
@@ -228,8 +222,6 @@ namespace TabletPal
             }
             else
             {
-                //AppBarFunctions.SetAppBar(this, DockingMode.None);
-                // Hide();
                 this.IsVisible=false;
             }
         }
@@ -238,7 +230,6 @@ namespace TabletPal
             if (IsVisible)
             {
                 AppBarFunctions.SetAppBar(this, DockingMode.None);
-                // Hide();
                 this.IsVisible=false;
             }
         }
@@ -297,7 +288,6 @@ namespace TabletPal
 
             var p = Process.Start(psi);
             _lastWindowId = p.StandardOutput.ReadToEnd().Trim();
-            Console.WriteLine($"MainWindow.axaml.cs - CaptureFocusedWindow() - Captured window ID: {_lastWindowId}");
         }
         public void RestoreFocus()
         {
@@ -305,8 +295,6 @@ namespace TabletPal
                 return;
 
             Process.Start("xdotool", $"windowactivate {_lastWindowId}");
-            Console.WriteLine($"MainWindow.axaml.cs - RestoreFocus() - Restoring focus to window ID: {_lastWindowId}");
-
         }
         protected override void OnOpened(EventArgs e)
         {
@@ -317,6 +305,7 @@ namespace TabletPal
                 SetX11NoFocus(this);
             }
         }
+        // The following code below is an X11 equivalent to WS_EX_NOACTIVATE
         private void SetX11NoFocus(Window window)
         {
             // Get the underlying X11 Window ID (XID)

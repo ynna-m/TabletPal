@@ -3,9 +3,6 @@ using TabletPal.Docking;
 using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Interactivity;
-using Avalonia.Media;
-using Avalonia.Media.Imaging;
-// using IconPacks.Avalonia.MaterialDesign;
 using Avalonia;
 using Avalonia.Styling;
 using Material.Icons;
@@ -82,7 +79,6 @@ namespace TabletPal
 			uiButton.Width = 32;
 			uiButton.Height = GetTitlebarHeight(_layout);
 
-			// uiButton.Styles.Add(Application.Current.Resources["shy"] as Styles);
             uiButton.Theme = (ControlTheme)Application.Current.Resources["shy"];
 			_ico = new MaterialIcon();
 			if (_minimizedMode)

@@ -25,16 +25,11 @@ namespace TabletPal
 			}
             var box = MessageBoxManager.GetMessageBoxStandard(
                     "Hello!"
-                    ,"Welcome to Tablet Pal! See the https://github.com/ynna-m/TabletPal#readme if you have any questions. Would you like to move Tablet Pal to AppData?",
+                    ,"Welcome to Tablet Pal! See the https://github.com/ynna-m/TabletPal#readme if you have any questions. Would you like to move Tablet Pal to your Home directory?",
                     ButtonEnum.YesNo
                     ,Icon.Question);
             var result = await box.ShowAsync();
-			// var result = MessageBox.Show(
-			// 	"Welcome to Tablet Pal! See the https://github.com/Martenfur/TabletPal#readme if you have any questions. Would you like to move Tablet Pal to AppData?",
-			// 	"Hello",
-			// 	MessageBoxButton.YesNo,
-			// 	MessageBoxImage.Question
-			// );
+
 			if (result == ButtonResult.Yes)
 			{
 				try
@@ -52,15 +47,7 @@ namespace TabletPal
                             , ButtonEnum.YesNo
                             ,Icon.Info);
                         await boxLayoutInfo.ShowAsync();
-						// MessageBox.Show(
-						// 	"Another version of Tablet Pal detected. 'files' directory will be overwritten. " +
-						// 	"Previous version's layouts, themes and icons will be moved to 'files.backup'. " +
-						// 	Environment.NewLine +
-						// 	"WARNING: If you are updating from 1.0 to 2.0, layout and theme structure has been changed. " +
-						// 	"If you have your own layouts you will need to update them manually. See https://github.com/Martenfur/TabletPal#readme for the instructions.",
-						// 	"Update",
-						// 	MessageBoxButton.OK
-						// );
+
 						if (Directory.Exists(Path.Combine(_preferredDirectory, "files")))
 						{
 							DirectoryCopy(
@@ -69,6 +56,7 @@ namespace TabletPal
 							);
 						}
 					}
+                    //Needs to be checked and audited
 					DirectoryCopy(AppState.CurrentDirectory, _preferredDirectory, "*.dll");
 					DirectoryCopy(AppState.CurrentDirectory, _preferredDirectory, "*.exe");
 					DirectoryCopy(AppState.CurrentDirectory, _preferredDirectory, "*.json");
@@ -80,12 +68,6 @@ namespace TabletPal
                         "Error!",$"Failed to copy the files: {e.Message}. Make sure all other instances of Tablet Pal are closed and try again.",
                         ButtonEnum.Ok, Icon.Error);
                     await boxError.ShowAsync();
-					// MessageBox.Show(
-					// 	"Failed to copy the files: '" + e.Message + "'. Make sure all other instances of Tablet Pal are closed and try again.",
-					// 	"Error!",
-					// 	MessageBoxButton.OK,
-					// 	MessageBoxImage.Error
-					// );
 				}
 				Process.GetCurrentProcess().Kill();
 				Environment.Exit(0);

@@ -1,17 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using Avalonia.Controls.Primitives;
 using Avalonia.Threading;
 using TabletPal.InputSender;
-// using System.Windows;
-// using System.Windows.Controls.Primitives;
-// using WindowsInput;
-// using WindowsInput.Events;
-// using WindowsInput.Events.Sources;
 
 namespace TabletPal
 {
@@ -20,8 +12,6 @@ namespace TabletPal
 		public static HashSet<string> _heldKeys = new HashSet<string>();
 		private static long _inputLocked;
         private static readonly IInputSender _inputSender = InputSenderFactory.Create();
-
-		// private static IKeyboardEventSource _keyboard;
 
 		private static Dictionary<string, List<ToggleButton>> _buttons = new Dictionary<string, List<ToggleButton>>();
 
@@ -89,13 +79,6 @@ namespace TabletPal
 		public static bool IsHeld(string key) =>
 			_heldKeys.Contains(key);
 
-		public static void Init()
-		{
-			// _keyboard = Capture.Global.KeyboardAsync();
-
-			// //Capture all events from the keyboard
-			// _keyboard.KeyEvent += KeyEvent;
-		}
 
 
 		public static async Task Toggle(string key)
@@ -105,13 +88,11 @@ namespace TabletPal
 			if (!IsHeld(key))
 			{
                 await _inputSender.SendHold(key);
-				// await Simulate.Events().Hold(key).Invoke();
 				_heldKeys.Add(key);
 				SetButtons(key, true);
 			}
 			else
 			{
-				// await Simulate.Events().Release(key).Invoke();
 				await _inputSender.SendRelease(key);
 				_heldKeys.Remove(key);
 				SetButtons(key, false);
@@ -119,19 +100,5 @@ namespace TabletPal
 
 			Interlocked.Exchange(ref _inputLocked, 0);
 		}
-
-		// private static void KeyEvent(object sender, EventSourceEventArgs<KeyboardEvent> e)
-		// {
-		// 	var key = e.Data?.KeyUp?.Key;
-		// 	if (!key.HasValue)
-		// 	{
-		// 		key = e.Data?.KeyDown?.Key;
-		// 	}
-		// 	if (Interlocked.Read(ref _inputLocked) == 0 && key.HasValue && IsHeld(key.Value))
-		// 	{
-		// 		DisableAllButtons(key.Value);
-		// 		_heldKeys.Remove(key.Value);
-		// 	}
-		// }
 	}
 }

@@ -1,11 +1,7 @@
-﻿// using System.Windows;
-using TabletPal.Models;
-using TabletPal.Docking;
+﻿using TabletPal.Models;
 using Avalonia.Threading;
 using MsBox.Avalonia;
 using MsBox.Avalonia.Enums;
-using System;
-using System.Threading.Tasks;
 
 namespace TabletPal
 {
@@ -48,77 +44,51 @@ namespace TabletPal
 
 		public async void LoadTheme(string path)
 		{
-			// try
-            // {
-                if (AppState.Themes.Count == 0)
+            if (AppState.Themes.Count == 0)
+            {
+                var box = MessageBoxManager.GetMessageBoxStandard(
+                    "Load failure!",
+                    "No themes found!",
+                    ButtonEnum.Ok,
+                    Icon.Error
+                );
+                await box.ShowAsync();
+                return;
+            }
+            if (!AppState.Themes.TryGetValue(path, out var theme)) // TODO: fix the check lul.
+            {
+                if (AppState.Themes.ContainsKey("default"))
                 {
                     var box = MessageBoxManager.GetMessageBoxStandard(
                         "Load failure!",
-                        "No themes found!",
+                        $"Cannot load '{path}'! Trying to fall back to default theme.",
                         ButtonEnum.Ok,
                         Icon.Error
                     );
                     await box.ShowAsync();
-                    // MessageBox.Show(
-                    // 	"No themes found!",
-                    // 	"Load failure!",
-                    // 	MessageBoxButton.OK,
-                    // 	MessageBoxImage.Error
-                    // );
-                    return;
+                    theme = AppState.Themes["default"];
                 }
-                // Console.WriteLine($"ThemeManager.cs - LoadTheme() - Attempting to load theme: {path} {AppState.Themes.Count}");
-                if (!AppState.Themes.TryGetValue(path, out var theme)) // TODO: fix the check lul.
+                else
                 {
-                    if (AppState.Themes.ContainsKey("default"))
-                    {
-                        var box = MessageBoxManager.GetMessageBoxStandard(
-                            "Load failure!",
-                            $"Cannot load '{path}'! Trying to fall back to default theme.",
-                            ButtonEnum.Ok,
-                            Icon.Error
-                        );
-                        await box.ShowAsync();
-                        // MessageBox.Show(
-                        // 	"Cannot load '" + path + "'! Trying to fall back to default theme.",
-                        // 	"Load failure!",
-                        // 	MessageBoxButton.OK,
-                        // 	MessageBoxImage.Error
-                        // );
-                        theme = AppState.Themes["default"];
-                    }
-                    else
-                    {
-                        var box = MessageBoxManager.GetMessageBoxStandard(
-                            "Man you really screwed up",
-                            "No default theme found! Make sure you have a valid theme named 'default.yaml'",
-                            ButtonEnum.Ok,
-                            Icon.Error
-                        );
-                        await box.ShowAsync();
-                        // MessageBox.Show(
-                        // 	"No default theme found! Make sure you have a valid theme named 'default.yaml'",
-                        // 	"Man you really screwed up",
-                        // 	MessageBoxButton.OK,
-                        // 	MessageBoxImage.Error
-                        // );
+                    var box = MessageBoxManager.GetMessageBoxStandard(
+                        "Man you really screwed up",
+                        "No default theme found! Make sure you have a valid theme named 'default.yaml'",
+                        ButtonEnum.Ok,
+                        Icon.Error
+                    );
+                    await box.ShowAsync();
 
-                        theme = _fallbackTheme;
-                    }
+                    theme = _fallbackTheme;
                 }
+            }
 
-                if (theme == null)
-                {
-                    return;
-                }
+            if (theme == null)
+            {
+                return;
+            }
 
-                AppState.CurrentTheme = theme;
-                AppState.CurrentThemeName = path;
-            // }
-            // catch (Exception e)
-            // {
-            //     Console.WriteLine($"ThemeManager.cs - LoadTheme() - error: {e.Message}");
-            // }
+            AppState.CurrentTheme = theme;
+            AppState.CurrentThemeName = path;
 		}
 
 	}

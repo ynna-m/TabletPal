@@ -1,25 +1,16 @@
-﻿// using MaterialDesignThemes.Wpf;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Numerics;
-// using System.Windows;
-// using System.Windows.Controls;
-// using System.Windows.Controls.Primitives;
-// using System.Windows.Input;
-// using System.Windows.Media;
 using TabletPal.Actions;
 using TabletPal.Models;
 using TabletPal.Docking;
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
 using Avalonia.Styling;
-using Avalonia.Input;
-using Avalonia.Interactivity;
 using Avalonia.Media;
 using Avalonia.Media.Imaging;
 using Avalonia;
-using Avalonia.Platform;
 using Material.Icons;
 using Material.Icons.Avalonia;
 
@@ -32,8 +23,6 @@ namespace TabletPal
 			Debug.WriteLine("UI created!");
 			ToggleManager.ClearButtons();
 			var theme = AppState.CurrentTheme;
-
-            // Console.WriteLine($"UiFactory.cs: Creating UI with theme '{theme}' and settings-dockingmode '{AppState.Settings.DockingMode}'");
 
 			window.MainCanvas.Children.Clear();
 
@@ -88,9 +77,7 @@ namespace TabletPal
 
 			var wasMinimized = TitlebarManager.Minimized;
 
-            Console.WriteLine($"UiFactory.cs - Width: {window.Width}, Height: {window.Height}");
-            Console.WriteLine($"UiFactory.cs - NewHeight: {newHeight} {wasMinimized} {windowSizeChanged} {AppState.Settings.DockingMode.ToString()}");
-			if (windowSizeChanged )
+			if (windowSizeChanged)
 			{
 				if (
 					   AppState.Settings.DockingMode == DockingMode.Left
@@ -120,7 +107,6 @@ namespace TabletPal
 			{
 				if (AppState.Settings.DockingMode == DockingMode.Top || AppState.Settings.DockingMode == DockingMode.Bottom)
 				{
-					// offset.X = (float)(SystemParameters.PrimaryScreenWidth - newWidth) / 2;
                     var screen = window.Screens.ScreenCount > 1
                         ? window.Screens.ScreenFromPoint(window.Position)
                         : window.Screens.Primary;
@@ -131,7 +117,6 @@ namespace TabletPal
                 }
 				else
 				{
-					// offset.Y = (float)(SystemParameters.PrimaryScreenHeight - newHeight) / 2;
                     var screen = window.Screens.ScreenCount > 1
                         ? window.Screens.ScreenFromPoint(window.Position)
                         : window.Screens.Primary;
@@ -155,8 +140,10 @@ namespace TabletPal
 				window.MinOpacity = layout.MinOpacity;
 			}
 			window.MaxOpacity = layout.MaxOpacity;
-			// window.BeginAnimation(UIElement.OpacityProperty, null);
 			window.Opacity = layout.MaxOpacity;
+            // This is a code for when you hover over the panel, I believe it fades in or out.
+            // It's kinda unneccessary if you ask me. Otherwise, I believe the code below isn't 
+            // properly coded and will have to require another look.
 			// if (window.IsPointerOver)
 			// {
 			// 	window.BeginAnimation(UIElement.OpacityProperty, window.FadeIn);
@@ -246,7 +233,6 @@ namespace TabletPal
 				if (isRepeat)
 				{
 					uiButton = new RepeatButton();
-					// Stylus.SetIsPressAndHoldEnabled(uiButton, false);
 				}
 				else
 				{
@@ -285,28 +271,11 @@ namespace TabletPal
 			}
 			if (fontWeight > 0)
 			{
-				// text.FontWeight = FontWeight.FromOpenTypeWeight(Math.Min(999, fontWeight));
                 text.FontWeight = (FontWeight)Math.Clamp(fontWeight, 1, 999);
             }
 
 			uiButton.Content = text;
 
-			// if (button.Icon != null)
-			// {
-			// 	uiButton.Content = button.Icon;
-			// 	if (!string.IsNullOrEmpty(button.Text))
-			// 	{
-                    
-            //         // toolTip.Styles.Add(Application.Current.Resources["tool_tip"] as Styles);
-					
-            //         // uiButton.ToolTip = new ToolTip()
-			// 		// {
-			// 		// 	Style = Application.Current.Resources["tool_tip"] as Style,
-			// 		// 	Content = button.Text,
-			// 		// 	HasDropShadow = true,
-			// 		// };
-			// 	}
-			// }
             if (!string.IsNullOrEmpty(button.IconPath))
             {
                 var image = new Image
@@ -321,7 +290,6 @@ namespace TabletPal
             {
                 if (Enum.TryParse<MaterialIconKind>(button.IconName, true, out var kind))
                 {
-                    // Console.WriteLine($"UiFactory.cs - Resolving icon '{button.IconName}' as '{kind.ToString()}'");
                     var ico = new MaterialIcon
                     {
                         Kind = kind
@@ -342,7 +310,6 @@ namespace TabletPal
 
 			if (isToggle)
 			{
-				// uiButton.Styles.Add(Application.Current.Resources["toggle"] as Style);
                 uiButton.Theme = (ControlTheme)Application.Current.Resources["toggle"];
 				var key = ((ToggleAction)button.Action).Key;
 				var toggle = (ToggleButton)uiButton;
@@ -356,26 +323,16 @@ namespace TabletPal
 			{
 				if (style == null)
 				{
-					// uiButton.Styles.Clear();
                     uiButton.Theme = null;
 				}
 				else
 				{
-					// uiButton.Styles.Add(Application.Current.Resources[style] as Style);
                     uiButton.Theme = (ControlTheme)Application.Current.Resources[style];
 				}
 			}
 
 			if (button.Action != null)
 			{
-				// uiButton.Click += (e, o) => _ = button.Action.Invoke();
-                // Console.WriteLine($"UiFactory.cs - Creating button with action: {button.Action}");
-                // uiButton.PointerPressed += async (_, __) =>
-                // {
-                //     window.CaptureFocusedWindow();
-                //     await button.Action.Invoke();
-                //     window.RestoreFocus();
-                // };
                 uiButton.Click += async (_, __) => {
                     window.CaptureFocusedWindow();
                     await button.Action.Invoke();

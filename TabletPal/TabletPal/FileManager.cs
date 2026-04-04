@@ -14,14 +14,6 @@ namespace TabletPal
 		{
 			_watcher = new FileSystemWatcher();
 			_watcher.Path = AppState.FilesRoot;
-			// _watcher.NotifyFilter = NotifyFilters.FileName
-			// 	| NotifyFilters.DirectoryName
-			// 	| NotifyFilters.Attributes
-			// 	| NotifyFilters.Size
-			// 	| NotifyFilters.LastWrite
-			// 	| NotifyFilters.LastAccess
-			// 	| NotifyFilters.CreationTime
-			// 	| NotifyFilters.Security;
             _watcher.NotifyFilter =  NotifyFilters.FileName | NotifyFilters.LastWrite;
 
 			_watcher.Changed += OnChanged;
