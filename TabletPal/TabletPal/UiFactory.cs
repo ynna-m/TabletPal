@@ -88,8 +88,8 @@ namespace TabletPal
 
 			var wasMinimized = TitlebarManager.Minimized;
 
-            Console.WriteLine($"Width: {window.Width}, Height: {window.Height}");
-            Console.WriteLine($"NewHeight: {newHeight} {wasMinimized} {windowSizeChanged} {AppState.Settings.DockingMode.ToString()}");
+            Console.WriteLine($"UiFactory.cs - Width: {window.Width}, Height: {window.Height}");
+            Console.WriteLine($"UiFactory.cs - NewHeight: {newHeight} {wasMinimized} {windowSizeChanged} {AppState.Settings.DockingMode.ToString()}");
 			if (windowSizeChanged )
 			{
 				if (
@@ -111,6 +111,8 @@ namespace TabletPal
 						window.Height = newHeight;
 					}
 				}
+                AppBarFunctions.OnChangeLayoutHeight(window, newHeight);
+                AppBarFunctions.OnChangeLayoutWidth(window, newWidth);
             }
 
 			var offset = Vector2.Zero;

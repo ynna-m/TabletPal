@@ -206,8 +206,10 @@ namespace TabletPal
         {
             if (!IsVisible)
             {
-                Show();
-
+                // Show();
+                this.IsVisible=true;
+                Topmost=false;
+                Topmost=true;
                 if (!_firstToggle)
                 {
                     Console.WriteLine($"MainWindow.axaml.cs - OnToggleMinimize() - Not first toggle");
@@ -226,8 +228,9 @@ namespace TabletPal
             }
             else
             {
-                AppBarFunctions.SetAppBar(this, DockingMode.None);
-                Hide();
+                //AppBarFunctions.SetAppBar(this, DockingMode.None);
+                // Hide();
+                this.IsVisible=false;
             }
         }
          private void OnMinimize(object[] obj)
@@ -235,14 +238,16 @@ namespace TabletPal
             if (IsVisible)
             {
                 AppBarFunctions.SetAppBar(this, DockingMode.None);
-                Hide();
+                // Hide();
+                this.IsVisible=false;
             }
         }
         private void OnMaximize(object[] obj)
         {
             if (!IsVisible)
             {
-                Show();
+                // Show();
+                this.IsVisible=true;
                 AppBarFunctions.SetAppBar(this, AppState.Settings.DockingMode);
             }
         }

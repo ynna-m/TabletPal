@@ -357,5 +357,23 @@ namespace TabletPal.Docking
             window.Height = state.Height;
             state.PreviousDockingMode = DockingMode.None;
         }
+                public static void OnChangeLayoutHeight(MainWindow window, double height)
+        {
+            if (!_states.TryGetValue(window, out var state))
+                return;
+            if(state.Height != height)
+            {
+                state.Height = height;
+            }
+        }
+        public static void OnChangeLayoutWidth(MainWindow window, double width)
+        {
+            if (!_states.TryGetValue(window, out var state))
+                return;
+            if(state.Width != width)
+            {
+                state.Width = width;
+            }
+        }
     }
 }
