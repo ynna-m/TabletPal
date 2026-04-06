@@ -217,9 +217,9 @@ namespace TabletPal
 		{
 			var startInfo = new ProcessStartInfo()
 			{
-				Arguments = Path.Combine(AppState.CurrentDirectory, "files"),
-				FileName = "explorer.exe"
+				FileName = "xdg-open"
 			};
+            startInfo.ArgumentList.Add(Path.Combine(AppState.CurrentDirectory, "files"));
 			Process.Start(startInfo);
 		}
 
