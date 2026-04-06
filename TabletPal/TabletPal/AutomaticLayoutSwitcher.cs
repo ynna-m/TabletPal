@@ -66,22 +66,6 @@ namespace TabletPal
                     }
                 }
             });
-			// Application.Current.Dispatcher.Invoke(
-			// 	delegate
-			// 	{
-			// 		if (MatchesApp(app, out var key))
-			// 		{
-			// 			EventBeacon.SendEvent(Events.ChangeLayout, key, LayoutChangeMethod.Automatic);
-			// 		}
-			// 		else
-			// 		{
-			// 			if (AppState.LastManuallySetLayout != null)
-			// 			{
-			// 				EventBeacon.SendEvent(Events.ChangeLayout, AppState.LastManuallySetLayout, LayoutChangeMethod.Automatic);
-			// 			}
-			// 		}
-			// 	}
-			// );
 		}
 
 		private bool MatchesApp(string app, out string layout)

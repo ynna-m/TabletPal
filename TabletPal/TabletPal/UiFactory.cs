@@ -143,7 +143,7 @@ namespace TabletPal
 			window.Opacity = layout.MaxOpacity;
             // This is a code for when you hover over the panel, I believe it fades in or out.
             // It's kinda unneccessary if you ask me. Otherwise, I believe the code below isn't 
-            // properly coded and will have to require another look.
+            // properly coded for Avalonia/Linux and will have to require another look.
 			// if (window.IsPointerOver)
 			// {
 			// 	window.BeginAnimation(UIElement.OpacityProperty, window.FadeIn);

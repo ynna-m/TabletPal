@@ -37,8 +37,6 @@ namespace TabletPal
 			{
 				EventBeacon.SendEvent(Events.ChangeLayout, Layout);
 			}
-			// Application.Current.MainWindow.Left = WindowX;
-			// Application.Current.MainWindow.Top = WindowY;
 
             if (window != null)
             {
@@ -62,14 +60,7 @@ namespace TabletPal
                 Layout = Path.GetRelativePath(AppState.CurrentDirectory, AppState.LastManuallySetLayout);
             }
             Theme = Path.GetRelativePath(AppState.CurrentDirectory, AppState.CurrentThemeName);
-            // if (!double.IsNaN(Application.Current.MainWindow.Left))
-            // {
-            // 	WindowX = Application.Current.MainWindow.Left;
-            // }
-            // if (!double.IsNaN(Application.Current.MainWindow.Top))
-            // {
-            // 	WindowY = Application.Current.MainWindow.Top;
-            // }
+            
             if (Application.Current?.ApplicationLifetime 
                 is Avalonia.Controls.ApplicationLifetimes.IClassicDesktopStyleApplicationLifetime desktop)
             {

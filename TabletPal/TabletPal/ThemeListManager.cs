@@ -86,18 +86,6 @@ namespace TabletPal
 
 			return menu;
 		}
-        public IEnumerable<NativeMenuItemBase> GetNativeMenuItems()
-        {
-            // var nativeMenu = new NativeMenu();
-            foreach (MenuItem item in Menu.Items)
-            {
-                var nativeItem = new NativeMenuItem(item.Header?.ToString() ?? "");
-                nativeItem.Click += (s, e) => EventBeacon.SendEvent(Events.ChangeLayout, item.DataContext);
-                // nativeMenu.Items.Add(nativeItem);
-                yield return nativeItem;
-            }
-            // return nativeMenu;
-        }
         public NativeMenuItem GetNativeMenu()
         {
             var nativeMenu = new NativeMenuItem() { 
@@ -105,7 +93,6 @@ namespace TabletPal
                 Menu = new NativeMenu(),
                 IsEnabled = Menu.Items.Count > 0
             };
-            // var nativeMenu = new NativeMenu();
             foreach (MenuItem item in Menu.Items)
             {
                 NativeMenuItemToggleType toggleType = item.ToggleType switch
@@ -125,7 +112,6 @@ namespace TabletPal
                     EventBeacon.SendEvent(Events.ChangeLayout, AppState.CurrentLayoutName);
                 };
                 nativeMenu.Menu.Items.Add(nativeItem);
-                // yield return nativeItem;
             }
             return nativeMenu;
         }

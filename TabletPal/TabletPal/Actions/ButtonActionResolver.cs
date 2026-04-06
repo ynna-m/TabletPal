@@ -123,31 +123,6 @@ namespace TabletPal.Actions
 
 			return actions.ToArray();
 		}
-
-
-		// private static KeyCode[] StringToKeyCode(string keyString)
-		// {
-		// 	try
-		// 	{
-		// 		var args = keyString.Replace(" ", "").Replace("_", "").Split("+");
-		// 		var keysList = new List<KeyCode>();
-
-		// 		foreach (var arg in args)
-		// 		{
-		// 			keysList.Add(Enum.Parse<KeyCode>(Translate(arg), true));
-		// 		}
-
-		// 		return keysList.ToArray();
-		// 	}
-		// 	catch (Exception e)
-		// 	{
-		// 		throw new FormatException(
-		// 			"Error parsing '" + keyString + "'. Command or key combination may be invalid. "
-		// 			+ Environment.NewLine + e.Message
-		// 		);
-		// 	}
-		// }
-
 		private static string Translate(string inputKey)
 		{
 			if (_translationTable.TryGetValue(inputKey, out var outputKey))
