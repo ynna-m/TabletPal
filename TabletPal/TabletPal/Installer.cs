@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Diagnostics;
 using System.IO;
+using Avalonia;
+using Avalonia.Media;
 using MsBox.Avalonia;
 using MsBox.Avalonia.Enums;
+using TabletPal.Models;
 /***
 *Needs to be updated to just installing to Home directory in Linux.
 **/
@@ -12,6 +15,8 @@ namespace TabletPal
 	{
 		private static readonly string _preferredDirectory =
 			Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "TabletPal");
+        private static string appImagePath = Path.GetDirectoryName(Environment.GetEnvironmentVariable("APPIMAGE"));
+        private static string appDir = AppContext.BaseDirectory;
 
 		public async static void TryInstall()
 		{
@@ -23,6 +28,15 @@ namespace TabletPal
 			{
 				return;
 			}
+            var theme = new ThemeModel();
+            Application.Current.Resources["MaterialPrimaryMidBrush"] = new SolidColorBrush(theme.PrimaryColor);
+			Application.Current.Resources["MaterialPrimaryForegroundBrush"] = new SolidColorBrush(theme.SecondaryColor);
+			Application.Current.Resources["MaterialPrimaryMidForegroundBrush"] = new SolidColorBrush(theme.SecondaryColor);
+
+			Application.Current.Resources["MaterialDesignPaper"] = new SolidColorBrush(theme.BackgroundColor);
+			Application.Current.Resources["MaterialDesignFont"] = new SolidColorBrush(theme.SecondaryColor);
+			Application.Current.Resources["MaterialDesignBody"] = new SolidColorBrush(theme.SecondaryColor);
+
             var box = MessageBoxManager.GetMessageBoxStandard(
                     "Hello!"
                     ,"Welcome to Tablet Pal! See the https://github.com/ynna-m/TabletPal#readme if you have any questions. Would you like to move Tablet Pal to your Home directory?",
@@ -57,10 +71,15 @@ namespace TabletPal
 						}
 					}
                     //Needs to be checked and audited
-					DirectoryCopy(AppState.CurrentDirectory, _preferredDirectory, "*.dll");
-					DirectoryCopy(AppState.CurrentDirectory, _preferredDirectory, "*.exe");
-					DirectoryCopy(AppState.CurrentDirectory, _preferredDirectory, "*.json");
-					Process.Start(Path.Combine(_preferredDirectory, "TabletPal.exe"));
+					// DirectoryCopy(AppState.CurrentDirectory, _preferredDirectory, "*.dll");
+					// DirectoryCopy(AppState.CurrentDirectory, _preferredDirectory, "*.exe");
+					// DirectoryCopy(AppState.CurrentDirectory, _preferredDirectory, "*.json");
+					// Process.Start(Path.Combine(_preferredDirectory, "TabletPal.exe"));
+
+                    // DirectoryCopy(Path.Combine(appDir,AppState.FilesRelativePath), Path.Combine(_preferredDirectory, AppState.FilesRelativePath), "*.*");
+                    DirectoryCopy(appImagePath, _preferredDirectory, "*.AppImage");
+					Process.Start(Path.Combine(_preferredDirectory, "TabletPal*.AppImage"));
+
 				}
 				catch (Exception e)
 				{

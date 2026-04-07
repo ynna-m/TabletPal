@@ -7,11 +7,14 @@ namespace TabletPal
 {
 	public static class AppState
 	{
-		public static readonly string CurrentDirectory = AppDomain.CurrentDomain.BaseDirectory;
+		 public static readonly string CurrentDirectory = Path.GetDirectoryName(Environment.GetEnvironmentVariable("APPIMAGE"));
+        public static readonly string FilesRelativePath = "files";
+		public static readonly string LayoutsRelativePath = "files/layouts";
+		public static readonly string ThemesRelativePath = "files/themes";
 
-		public static readonly string FilesRoot = Path.Combine(CurrentDirectory, "files");
-		public static readonly string LayoutsRoot = Path.Combine(CurrentDirectory, "files/layouts");
-		public static readonly string ThemesRoot = Path.Combine(CurrentDirectory, "files/themes");
+		public static readonly string FilesRoot = Path.Combine(CurrentDirectory, FilesRelativePath);
+		public static readonly string LayoutsRoot = Path.Combine(CurrentDirectory, LayoutsRelativePath);
+		public static readonly string ThemesRoot = Path.Combine(CurrentDirectory, ThemesRelativePath);
 
 		public const string ConfigExtension = "*.yaml";
 
