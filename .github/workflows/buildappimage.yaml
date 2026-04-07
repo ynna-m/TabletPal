@@ -1,0 +1,154 @@
+name: Build AppImage
+
+on:
+  push:
+    tags:
+      - 'v*'   # triggers on version tags like v1.0.0
+
+jobs:
+  build:
+    runs-on: ubuntu-22.04
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 10.0.x
+
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y wget file
+
+      - name: Publish app
+        run: |
+          dotnet publish -c Release -r linux-x64 --self-contained true -p:PublishSingleFile=true
+
+      - name: Prepare AppDir
+        run: |
+          mkdir -p TabletPal.AppDir/usr/bin
+          mkdir -p TabletPal.AppDir/usr/lib
+
+          cp -r publish/* AppDir/
+
+      - name: Bundle xdotool
+        run: |
+          sudo apt-get install -y xdotool
+          cp /usr/bin/xdotool TabletPal.AppDir/usr/bin/
+          chmod +x TabletPal.AppDir/usr/bin/xdotool
+
+      - name: Create AppRun
+        run: |
+          cat > AppDir/AppRun << 'EOF'
+          #!/bin/bash
+          HERE="$(dirname "$(readlink -f "$0")")"
+          APPIMAGE_DIR="$(dirname "$APPIMAGE_PATH")"
+          # Add bundled binaries to PATH
+          export PATH="$HERE/usr/bin:$PATH"
+
+          set -e
+
+          # Get the directory where the AppImage is located
+
+          # Path inside AppImage
+          FILES_SRC="$HERE/files"
+
+          # Destination: same directory as AppImage
+          FILES_DEST="$APPIMAGE_DIR/files"
+
+          # Path to settings.yaml in the AppImage directory
+          SETTINGS_FILE="$APPIMAGE_DIR/settings.yaml"
+
+          get_first_launch() {
+              if [ -f "$SETTINGS_FILE" ]; then
+                  # parse first_launch: true/false
+                  grep -E "^first_launch:" "$SETTINGS_FILE" | awk '{print $2}' | tr -d '[:space:]'
+              else
+                  echo "true"  # default to true if settings.yaml doesn't exist
+              fi
+          }
+
+          FIRST_LAUNCH=$(get_first_launch)
+          if [ "$FIRST_LAUNCH" = "true" ]; then
+              # Prompt the user (zenity or kdialog)
+              if command -v zenity >/dev/null 2>&1; then
+                  RESPONSE=$(zenity --question --title="TabletPal First Launch" \
+                      --text="Do you want to extract the needed files from the AppImage to this folder? Clicking No will not make the app run" \
+                      && echo "yes" || echo "no")
+              elif command -v kdialog >/dev/null 2>&1; then
+                  kdialog --yesno "Do you want to extract the needed files from the AppImage to this folder? Clicking No will not make the app run"
+                  if [ $? -eq 0 ]; then
+                      RESPONSE="yes"
+                  else
+                      RESPONSE="no"
+                  fi
+              else
+                  # fallback in terminal
+                  echo -n "Do you want to extract the needed files from the AppImage to this folder? Choosing No will not make the app run [y/N]: "
+                  read answer
+                  if [[ "$answer" == "y" || "$answer" == "Y" ]]; then
+                      RESPONSE="yes"
+                  else
+                      RESPONSE="no"
+                  fi
+              fi
+
+              # Copy files if user said yes
+              if [ "$RESPONSE" = "yes" ]; then
+                  # Create destination if missing
+                  mkdir -p "$FILES_DEST"
+                  cp -r "$FILES_SRC/." "$FILES_DEST/"
+                  echo "'files' directory copied successfully."
+                  # Run your app
+                  exec "$HERE/TabletPal" "$@"
+              fi
+          else
+              exec "$HERE/TabletPal" "$@"
+          fi
+          EOF
+
+          chmod +x TabletPal.AppDir/AppRun
+
+      - name: Create desktop file
+        run: |
+          cat > AppDir/TabletPal.desktop << 'EOF'
+          [Desktop Entry]
+          Name=TabletPal
+          Exec=TabletPal
+          Icon=icon
+          Type=Application
+          Categories=Utility;
+          EOF
+
+      - name: Add icon
+        run: |
+          cp files/icons/icon.png TabletPal.AppDir/icon.png || true
+
+      - name: Download appimagetool
+        run: |
+          wget https://github.com/AppImage/AppImageKit/releases/download/continuous/appimagetool-x86_64.AppImage
+          chmod +x appimagetool-x86_64.AppImage
+
+      - name: Build AppImage
+        run: |
+          ./appimagetool-x86_64.AppImage TabletPal.AppDir
+
+      - name: Rename artifact
+        run: |
+          mv *.AppImage TabletPal-x86_64.AppImage
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: TabletPal-AppImage
+          path: TabletPal-x86_64.AppImage
+
+      - name: Create Release & Upload
+        uses: softprops/action-gh-release@v2
+        with:
+          files: TabletPal-x86_64.AppImage
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
