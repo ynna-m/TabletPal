@@ -32,7 +32,7 @@ jobs:
           mkdir -p TabletPal.AppDir/usr/bin
           mkdir -p TabletPal.AppDir/usr/lib
 
-          cp -r publish/* AppDir/
+          cp -r publish/* TabletPal.AppDir/
 
       - name: Bundle xdotool
         run: |
@@ -42,7 +42,7 @@ jobs:
 
       - name: Create AppRun
         run: |
-          cat > AppDir/AppRun << 'EOF'
+          cat > TabletPal.AppDir/AppRun << 'EOF'
           #!/bin/bash
           HERE="$(dirname "$(readlink -f "$0")")"
           APPIMAGE_DIR="$(dirname "$APPIMAGE_PATH")"
@@ -114,7 +114,7 @@ jobs:
 
       - name: Create desktop file
         run: |
-          cat > AppDir/TabletPal.desktop << 'EOF'
+          cat > TabletPal.AppDir/TabletPal.desktop << 'EOF'
           [Desktop Entry]
           Name=TabletPal
           Exec=TabletPal
