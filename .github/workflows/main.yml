@@ -32,7 +32,7 @@ jobs:
           mkdir -p TabletPal.AppDir/usr/bin
           mkdir -p TabletPal.AppDir/usr/lib
 
-          cp -r publish/* TabletPal.AppDir/
+          cp -r bin/Release/*/linux-x64/publish/*  TabletPal.AppDir/
 
       - name: Bundle xdotool
         run: |
