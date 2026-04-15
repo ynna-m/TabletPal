@@ -153,7 +153,12 @@
 #       #   env: 
 #       #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 name: BuildTabletPal
-on: [push]
+on: 
+ push:
+  branches:
+   - main
+  tags:
+   - 'v*'
 jobs:
   build:
     runs-on: ubuntu-latest
