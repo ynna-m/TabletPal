@@ -1,4 +1,4 @@
-# Tablet Pal - In Progress. Nothing's working yet as of 03/27/2026. Not even description is right, right now.
+# Tablet Pal - In Progress. README will be re-written, but for now, the general directions should somewhat work, except what is released isn't an .exe file but an AppImage. "cmd" action is now "terminal", that should be the biggest change, but besides that, I think everything else is working similarly to the original TabletFriend.
 
 ![logo](icons/logo.png)
 
