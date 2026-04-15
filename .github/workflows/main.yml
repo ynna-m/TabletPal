@@ -1,4 +1,4 @@
-name: BuildTabletPal
+name: TabletPalReleaseBuild
 on: 
  push:
   branches:
