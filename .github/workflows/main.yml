@@ -1,8 +1,6 @@
 name: TabletPalReleaseBuild
 on: 
  push:
-  branches:
-   - master
   tags:
    - 'v*'
 jobs:
