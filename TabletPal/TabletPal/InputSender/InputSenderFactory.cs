@@ -8,10 +8,7 @@ namespace TabletPal.InputSender
         {
             var session = Environment.GetEnvironmentVariable("XDG_SESSION_TYPE");
 
-            if (session == "wayland")
-                return new YdotoolSender();
-
-            return new XdotoolSender();
+            return new X11Sender();
         }
     }
 }

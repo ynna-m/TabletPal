@@ -5,10 +5,9 @@ namespace TabletPal.Actions
 {
 	public class UndockAction : ButtonAction
 	{
-		public override Task Invoke()
+		public override void Invoke()
 		{
 			EventBeacon.SendEvent(Events.DockingChanged, DockingMode.None);
-			return Task.CompletedTask;
 		}
 	}
 }

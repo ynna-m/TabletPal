@@ -5,7 +5,7 @@ namespace TabletPal.Actions
 {
 	public abstract class ButtonAction : IDisposable
 	{
-		public abstract Task Invoke();
+		public abstract void Invoke();
 
 		public virtual void Dispose() {}
 	}

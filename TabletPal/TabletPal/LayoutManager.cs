@@ -16,7 +16,7 @@ namespace TabletPal
 				new ButtonModel()
 				{
 					Text = "ERROR",
-					Action = new KeyAction("N"),
+					Action = new KeyAction(["N"]),
 					Size = new Vector2(4, 2)
 				}
 			}

@@ -2,7 +2,7 @@
 {
 	public class RepeatAction : KeyAction
 	{
-		public RepeatAction(string keys) : base(keys)
+		public RepeatAction(string[] keys) : base(keys)
 		{
 		}
 	}

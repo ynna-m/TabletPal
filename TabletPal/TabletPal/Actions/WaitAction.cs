@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Threading;
+using System.Threading.Tasks;
 
 namespace TabletPal.Actions
 {
@@ -12,7 +13,7 @@ namespace TabletPal.Actions
 		}
 
 
-		public override async Task Invoke() =>
-			await Task.Delay(_delay);
+		public override void Invoke() =>
+			Thread.Sleep(_delay);
 	}
 }

@@ -274,27 +274,22 @@ namespace TabletPal
                 await Task.Delay(delay);
             }
         }    
-        private string _lastWindowId;
+        private IntPtr _lastWindowId;
+        private IntPtr _display = XOpenDisplay(IntPtr.Zero);
+        private const int RevertToParent = 2;
 
         public void CaptureFocusedWindow()
         {
-            var psi = new ProcessStartInfo
-            {
-                FileName = "xdotool",
-                Arguments = "getwindowfocus",
-                RedirectStandardOutput = true,
-                UseShellExecute = false
-            };
-
-            var p = Process.Start(psi);
-            _lastWindowId = p.StandardOutput.ReadToEnd().Trim();
+            _display = XOpenDisplay(IntPtr.Zero);
+            XGetInputFocus(_display, out var window, out _);
+            _lastWindowId = window;
         }
         public void RestoreFocus()
         {
-            if (string.IsNullOrEmpty(_lastWindowId))
+            if (_lastWindowId == IntPtr.Zero)
                 return;
-
-            Process.Start("xdotool", $"windowactivate {_lastWindowId}");
+            XSetInputFocus(_display, _lastWindowId, RevertToParent, IntPtr.Zero);
+            XFlush(_display);
         }
         protected override void OnOpened(EventArgs e)
         {
@@ -312,7 +307,7 @@ namespace TabletPal
             var xid = window.TryGetPlatformHandle()?.Handle;
             if (xid == null || xid == IntPtr.Zero) return;
 
-            IntPtr display = XOpenDisplay(null);
+            IntPtr display = XOpenDisplay(IntPtr.Zero);
             if (display == IntPtr.Zero) return;
 
             try
@@ -347,7 +342,7 @@ namespace TabletPal
         private const string X11Lib = "libX11.so.6";
         private const long InputHint = 1L << 0;
 
-        [DllImport(X11Lib)] private static extern IntPtr XOpenDisplay(string display);
+        [DllImport(X11Lib)] private static extern IntPtr XOpenDisplay(IntPtr display);
         [DllImport(X11Lib)] private static extern int XCloseDisplay(IntPtr display);
         [DllImport(X11Lib)] private static extern IntPtr XAllocWMHints();
         [DllImport(X11Lib)] private static extern int XSetWMHints(IntPtr display, IntPtr window, IntPtr hints);
@@ -355,6 +350,8 @@ namespace TabletPal
         [DllImport(X11Lib)] private static extern int XFlush(IntPtr display);
         [DllImport(X11Lib)] private static extern IntPtr XInternAtom(IntPtr display, string name, bool only_if_exists);
         [DllImport(X11Lib)] private static extern int XChangeProperty(IntPtr display, IntPtr window, IntPtr property, IntPtr type, int format, int mode, IntPtr[] data, int nelements);
+        [DllImport(X11Lib)] private static extern int XGetInputFocus(IntPtr display, out IntPtr focus, out int revert_to);
+        [DllImport("libX11.so.6")]  private static extern int XSetInputFocus(IntPtr display, IntPtr focus, int revert_to, IntPtr time);
 
         [StructLayout(LayoutKind.Sequential)]
         struct XWMHints

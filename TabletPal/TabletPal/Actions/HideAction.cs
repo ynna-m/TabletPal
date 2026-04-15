@@ -4,10 +4,9 @@ namespace TabletPal.Actions
 {
 	public class HideAction : ButtonAction
 	{
-		public override Task Invoke()
+		public override void Invoke()
 		{
 			EventBeacon.SendEvent(Events.ToggleMinimize);
-			return Task.CompletedTask;
 		}
 	}
 }

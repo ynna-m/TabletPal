@@ -71,17 +71,38 @@ namespace TabletPal.Actions
 			{
 				return ResolveUndockAction();
 			}
-            return new KeyAction(actionString);
+            return new KeyAction(KeyListArray(actionString));
 		}
+        private static string[] KeyListArray(string keyString)
+		{
+			try
+			{
+				var args = keyString.Replace(" ", "").Split("+");
+				var keysList = new List<string>();
 
+				foreach (var arg in args)
+				{
+					keysList.Add(Translate(arg));
+				}
+
+				return keysList.ToArray();
+			}
+			catch (Exception e)
+			{
+				throw new FormatException(
+					"Error parsing '" + keyString + "'. Command or key combination may be invalid. "
+					+ Environment.NewLine + e.Message
+				);
+			}
+		}
 		private static ButtonAction ResolveToggleAction(string actionString) =>
-			new ToggleAction(actionString);
+			new ToggleAction(KeyListArray(actionString));
 
 		private static ButtonAction ResolveHoldAction(string actionString) =>
-			new HoldAction(actionString);
+			new HoldAction(KeyListArray(actionString));
 
 		private static ButtonAction ResolveReleaseAction(string actionString) =>
-			new ReleaseAction(actionString);
+			new ReleaseAction(KeyListArray(actionString));
 
 		private static ButtonAction ResolveTypeAction(string actionString) =>
 			new TypeAction(actionString.Trim());
@@ -96,7 +117,7 @@ namespace TabletPal.Actions
 			new LayoutAction(actionString);
 		
 		private static ButtonAction ResolveRepeatAction(string actionString) =>
-			new RepeatAction(actionString);
+			new RepeatAction(KeyListArray(actionString));
 		
 		private static ButtonAction ResolveHideAction() =>
 			new HideAction();
@@ -137,11 +158,11 @@ namespace TabletPal.Actions
 		/// </summary>
 		private static Dictionary<string, string> _translationTable = new Dictionary<string, string>(StringComparer.InvariantCultureIgnoreCase)
 		{
-			{ "Windows", "Super" },   // Linux “Super” key
-            { "Win", "Super" },
-            { "Shift", "Shift" },
-            { "Ctrl", "Ctrl" },
-            { "Alt", "Alt" },
+			{ "Windows", "Super_L" },   // Linux “Super” key
+            { "Win", "Super_L" },
+            { "Shift", "Shift_L" },
+            { "Ctrl", "Control_L" },
+            { "Alt", "Alt_L" },
             { "0", "0" },
             { "1", "1" },
             { "2", "2" },

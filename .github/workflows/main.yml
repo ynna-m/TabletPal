@@ -158,5 +158,19 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: Hello, World!
-        run: echo "Hello, World!"
+      - name: Checkout repo 
+        uses: actions/checkout@v4
+        
+      - name: Setup .NET 
+        uses: actions/setup-dotnet@v4 
+        with: 
+          dotnet-version: 9.0.x 
+
+      - name: Install dependencies 
+        run: | 
+          sudo apt-get update 
+          sudo apt-get install -y wget file 
+
+      - name: Publish app 
+        run: | 
+          dotnet publish -c Release -r linux-x64 --self-contained true -p:PublishSingleFile=true

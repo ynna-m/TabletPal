@@ -9,7 +9,7 @@ namespace TabletPal
 {
 	public static class ToggleManager
 	{
-		public static HashSet<string> _heldKeys = new HashSet<string>();
+		public static HashSet<string[]> _heldKeys = new HashSet<string[]>();
 		private static long _inputLocked;
         private static readonly IInputSender _inputSender = InputSenderFactory.Create();
 
@@ -76,26 +76,28 @@ namespace TabletPal
 			_buttons = new Dictionary<string, List<ToggleButton>>();
 
 
-		public static bool IsHeld(string key) =>
+		public static bool IsHeld(string[] key) =>
 			_heldKeys.Contains(key);
 
 
 
-		public static async Task Toggle(string key)
+		public static void Toggle(string[] keys)
 		{
 			Interlocked.Exchange(ref _inputLocked, 1);
 
-			if (!IsHeld(key))
+
+            var keysJoin = string.Join("+", keys);
+			if (!IsHeld(keys))
 			{
-                await _inputSender.SendHold(key);
-				_heldKeys.Add(key);
-				SetButtons(key, true);
+                _inputSender.SendHold(keys);
+				_heldKeys.Add(keys);
+				SetButtons(keysJoin, true);
 			}
 			else
 			{
-				await _inputSender.SendRelease(key);
-				_heldKeys.Remove(key);
-				SetButtons(key, false);
+				_inputSender.SendRelease(keys);
+				_heldKeys.Remove(keys);
+				SetButtons(keysJoin, false);
 			}
 
 			Interlocked.Exchange(ref _inputLocked, 0);

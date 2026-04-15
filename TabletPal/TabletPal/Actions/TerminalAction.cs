@@ -12,7 +12,7 @@ namespace TabletPal.Actions
 			_terminal = terminal;
 		}
 
-		public override Task Invoke()
+		public override void Invoke()
 		{
 			var process = new Process();
 			var startInfo = new ProcessStartInfo();
@@ -24,7 +24,6 @@ namespace TabletPal.Actions
             startInfo.CreateNoWindow = true;
 			process.StartInfo = startInfo;
 			process.Start();
-			return Task.CompletedTask;
 		}
 	}
 }

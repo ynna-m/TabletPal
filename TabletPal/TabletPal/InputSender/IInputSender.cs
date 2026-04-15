@@ -4,9 +4,9 @@ namespace TabletPal.InputSender
 {
     public interface IInputSender
     {
-        Task SendHold(string keys);
-        Task SendChord(string keys);
-        Task SendRelease(string keys);
-        Task SendClick(string keys);
+        void SendHold(string[] keys);
+        void SendChord(string[] keys);
+        void SendRelease(string[] keys);
+        void SendClick(string keys);
     }
 }

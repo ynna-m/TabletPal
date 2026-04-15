@@ -17,10 +17,9 @@ namespace TabletPal.Actions
 				_side = DockingMode.Top;
 		}
 
-		public override Task Invoke()
+		public override void Invoke()
 		{
 			EventBeacon.SendEvent(Events.DockingChanged, _side);
-			return Task.CompletedTask;
 		}
 	}
 }

@@ -11,11 +11,11 @@ namespace TabletPal.Actions
 			_actions = actions;
 		}
 
-		public override async Task Invoke()
+		public override void Invoke()
 		{
 			for (var i = 0; i < _actions.Length; i += 1)
 			{
-				await _actions[i].Invoke();
+				_actions[i].Invoke();
 			}
 		}
 

@@ -12,10 +12,9 @@ namespace TabletPal.Actions
 			_layout = layout;
 		}
 
-		public override Task Invoke()
+		public override void Invoke()
 		{
 			EventBeacon.SendEvent(Events.ChangeLayout, Path.GetFileNameWithoutExtension(_layout));
-			return Task.CompletedTask;
 		}
 	}
 }

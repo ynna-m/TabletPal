@@ -14,7 +14,7 @@ namespace TabletPal.Actions
             _inputSender = InputSenderFactory.Create();
 		}
 
-		public override async Task Invoke() =>
-			await _inputSender.SendClick(_text);
+		public override void Invoke() =>
+			_inputSender.SendClick(_text);
 	}
 }

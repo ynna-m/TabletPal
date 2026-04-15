@@ -311,9 +311,10 @@ namespace TabletPal
 			if (isToggle)
 			{
                 uiButton.Theme = (ControlTheme)Application.Current.Resources["toggle"];
-				var key = ((ToggleAction)button.Action).Key;
+				var key = string.Join("+",((ToggleAction)button.Action).Key);
+                var keyToggle = ((ToggleAction)button.Action).Key;
 				var toggle = (ToggleButton)uiButton;
-				if (ToggleManager.IsHeld(key))
+				if (ToggleManager.IsHeld(keyToggle))
 				{
 					toggle.IsChecked = true;
 				}
@@ -333,9 +334,9 @@ namespace TabletPal
 
 			if (button.Action != null)
 			{
-                uiButton.Click += async (_, __) => {
+                uiButton.Click += (_, __) => {
                     window.CaptureFocusedWindow();
-                    await button.Action.Invoke();
+                    button.Action.Invoke();
                     window.RestoreFocus();
                 };
 

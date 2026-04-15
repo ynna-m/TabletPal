@@ -1,95 +1,95 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Threading;
-using System.Threading.Tasks;
-// I'm keeping the other commented codes in case I need them.
-namespace TabletPal
-{
-    public class AppFocusMonitor : IDisposable
-    {
-        public HashSet<string> IgnoredApps = new()
-        {
-            "TabletPal",
-            "dotnet", // when running from terminal
-        };
+﻿// using System;
+// using System.Collections.Generic;
+// using System.Diagnostics;
+// using System.Threading;
+// using System.Threading.Tasks;
+// // I'm keeping the other commented codes in case I need them.
+// namespace TabletPal
+// {
+//     public class AppFocusMonitor : IDisposable
+//     {
+//         public HashSet<string> IgnoredApps = new()
+//         {
+//             "TabletPal",
+//             "dotnet", // when running from terminal
+//         };
 
-        public string FocusedApp { get; private set; }
+//         public string FocusedApp { get; private set; }
 
-        public event Action<string> OnAppChanged;
+//         public event Action<string> OnAppChanged;
 
-        private CancellationTokenSource _cts = new();
+//         private CancellationTokenSource _cts = new();
 
-        public AppFocusMonitor()
-        {
-            _ = MonitorLoop(_cts.Token);
-        }
+//         public AppFocusMonitor()
+//         {
+//             _ = MonitorLoop(_cts.Token);
+//         }
 
-        private async Task MonitorLoop(CancellationToken token)
-        {
-            while (!token.IsCancellationRequested)
-            {
-                try
-                {
-                    var app = await GetFocusedApp();
+//         private async Task MonitorLoop(CancellationToken token)
+//         {
+//             while (!token.IsCancellationRequested)
+//             {
+//                 try
+//                 {
+//                     var app = await GetFocusedApp();
 
-                    if (!string.IsNullOrEmpty(app) &&
-                        !IgnoredApps.Contains(app) &&
-                        app != FocusedApp)
-                    {
-                        FocusedApp = app;
-                        OnAppChanged?.Invoke(FocusedApp);
-                    }
-                }
-                catch(Exception ex)
-                {
-                    Console.WriteLine($"Error occurred while monitoring app focus: {ex.Message}");
-                    // swallow errors like original
-                }
+//                     if (!string.IsNullOrEmpty(app) &&
+//                         !IgnoredApps.Contains(app) &&
+//                         app != FocusedApp)
+//                     {
+//                         FocusedApp = app;
+//                         OnAppChanged?.Invoke(FocusedApp);
+//                     }
+//                 }
+//                 catch(Exception ex)
+//                 {
+//                     Console.WriteLine($"Error occurred while monitoring app focus: {ex.Message}");
+//                     // swallow errors like original
+//                 }
 
-                await Task.Delay(300, token); // adjust responsiveness here
-            }
-        }
+//                 await Task.Delay(300, token); // adjust responsiveness here
+//             }
+//         }
 
-        private async Task<string> GetFocusedApp()
-        {
-            // Step 1: get PID of focused window
-            var pidOutput = await RunProcess("xdotool", "getwindowfocus getwindowpid");
-            if (!int.TryParse(pidOutput.Trim(), out var pid))
-                return null;
+//         private async Task<string> GetFocusedApp()
+//         {
+//             // Step 1: get PID of focused window
+//             var pidOutput = await RunProcess("xdotool", "getwindowfocus getwindowpid");
+//             if (!int.TryParse(pidOutput.Trim(), out var pid))
+//                 return null;
 
-            // Step 2: get process name
-            var nameOutput = await RunProcess("ps", $"-p {pid} -o comm=");
-            return nameOutput.Trim();
-        }
+//             // Step 2: get process name
+//             var nameOutput = await RunProcess("ps", $"-p {pid} -o comm=");
+//             return nameOutput.Trim();
+//         }
 
-        private async Task<string> RunProcess(string file, string args)
-        {
-            var process = new Process
-            {
-                StartInfo = new ProcessStartInfo
-                {
-                    FileName = file,
-                    Arguments = args,
-                    RedirectStandardOutput = true,
-                    RedirectStandardError = true,
-                    UseShellExecute = false
-                }
-            };
+//         private async Task<string> RunProcess(string file, string args)
+//         {
+//             var process = new Process
+//             {
+//                 StartInfo = new ProcessStartInfo
+//                 {
+//                     FileName = file,
+//                     Arguments = args,
+//                     RedirectStandardOutput = true,
+//                     RedirectStandardError = true,
+//                     UseShellExecute = false
+//                 }
+//             };
 
-            process.Start();
-            var output = await process.StandardOutput.ReadToEndAsync();
-            await process.WaitForExitAsync();
+//             process.Start();
+//             var output = await process.StandardOutput.ReadToEndAsync();
+//             await process.WaitForExitAsync();
 
-            return output;
-        }
+//             return output;
+//         }
 
-        public void Dispose()
-        {
-            _cts.Cancel();
-        }
-    }
-}
+//         public void Dispose()
+//         {
+//             _cts.Cancel();
+//         }
+//     }
+// }
 // using System;
 // using System.Collections.Generic;
 // using System.Diagnostics;
@@ -231,125 +231,125 @@ namespace TabletPal
 //     }
 // }
 
-// using System;
-// using System.Collections.Generic;
-// using System.Runtime.InteropServices;
-// using System.Threading;
+using System;
+using System.Collections.Generic;
+using System.Runtime.InteropServices;
+using System.Threading;
 
-// namespace TabletPal
-// {
-//     public class AppFocusMonitor : IDisposable
-//     {
-//         public HashSet<string> IgnoredApps = new HashSet<string> { "TabletPal", "dotnet", "gnome-shell" };
-//         public string FocusedApp { get; private set; }
-//         public event Action<string> OnAppChanged;
+namespace TabletPal
+{
+    public class AppFocusMonitor : IDisposable
+    {
+        public HashSet<string> IgnoredApps = new HashSet<string> { "TabletPal", "dotnet", "gnome-shell" };
+        public string FocusedApp { get; private set; }
+        public event Action<string> OnAppChanged;
 
-//         private IntPtr _display;
-//         private IntPtr _root;
-//         private IntPtr _activeWindowAtom;
-//         private CancellationTokenSource _cts = new CancellationTokenSource();
+        private IntPtr _display;
+        private IntPtr _root;
+        private IntPtr _activeWindowAtom;
+        private CancellationTokenSource _cts = new CancellationTokenSource();
 
-//         public AppFocusMonitor()
-//         {
-//             // Crucial: Initialize threads for Xlib before opening display
-//             XInitThreads();
+        public AppFocusMonitor()
+        {
+            // Crucial: Initialize threads for Xlib before opening display
+            XInitThreads();
             
-//             _display = XOpenDisplay(null);
-//             if (_display == IntPtr.Zero) throw new Exception("Unable to open X display.");
+            _display = XOpenDisplay(null);
+            if (_display == IntPtr.Zero) throw new Exception("Unable to open X display.");
 
-//             _root = XDefaultRootWindow(_display);
-//             _activeWindowAtom = XInternAtom(_display, "_NET_ACTIVE_WINDOW", false);
+            _root = XDefaultRootWindow(_display);
+            _activeWindowAtom = XInternAtom(_display, "_NET_ACTIVE_WINDOW", false);
 
-//             XSelectInput(_display, _root, (IntPtr)EventMask.PropertyChangeMask);
+            XSelectInput(_display, _root, (IntPtr)EventMask.PropertyChangeMask);
 
-//             Thread eventThread = new Thread(ListenForEvents) { IsBackground = true };
-//             eventThread.Start();
-//         }
+            Thread eventThread = new Thread(ListenForEvents) { IsBackground = true };
+            eventThread.Start();
+        }
 
-//         private void ListenForEvents()
-//         {
-//             XEvent ev = new XEvent();
-//             while (!_cts.IsCancellationRequested)
-//             {
-//                 XNextEvent(_display, ref ev); // Blocks here
-//                 if (ev.type == XEventName.PropertyNotify && ev.PropertyEvent.atom == _activeWindowAtom)
-//                 {
-//                     UpdateFocusedApp();
-//                 }
-//             }
-//         }
+        private void ListenForEvents()
+        {
+            XEvent ev = new XEvent();
+            while (!_cts.IsCancellationRequested)
+            {
+                XNextEvent(_display, ref ev); // Blocks here
+                if (ev.type == XEventName.PropertyNotify && ev.PropertyEvent.atom == _activeWindowAtom)
+                {
+                    UpdateFocusedApp();
+                }
+            }
+        }
 
-//         private void UpdateFocusedApp()
-//         {
-//             XGetWindowProperty(_display, _root, _activeWindowAtom, IntPtr.Zero, (IntPtr)1, false, (IntPtr)33, 
-//                 out _, out _, out _, out _, out IntPtr propRet);
+        private void UpdateFocusedApp()
+        {
+            XGetWindowProperty(_display, _root, _activeWindowAtom, IntPtr.Zero, (IntPtr)1, false, (IntPtr)33, 
+                out _, out _, out _, out _, out IntPtr propRet);
             
-//             if (propRet == IntPtr.Zero) return;
+            if (propRet == IntPtr.Zero) return;
 
-//             IntPtr windowId = Marshal.ReadIntPtr(propRet);
-//             XFree(propRet);
+            IntPtr windowId = Marshal.ReadIntPtr(propRet);
+            XFree(propRet);
 
-//             if (windowId == IntPtr.Zero) return;
+            if (windowId == IntPtr.Zero) return;
 
-//             if (XGetClassHint(_display, windowId, out XClassHint hint) != 0)
-//             {
-//                 string name = Marshal.PtrToStringAnsi(hint.res_name);
-//                 XFree(hint.res_name);
-//                 XFree(hint.res_class);
+            if (XGetClassHint(_display, windowId, out XClassHint hint) != 0)
+            {
+                string name = Marshal.PtrToStringAnsi(hint.res_name);
+                XFree(hint.res_name);
+                XFree(hint.res_class);
 
-//                 if (!string.IsNullOrEmpty(name) && !IgnoredApps.Contains(name) && FocusedApp != name)
-//                 {
-//                     FocusedApp = name;
-//                     OnAppChanged?.Invoke(FocusedApp);
-//                 }
-//             }
-//         }
+                if (!string.IsNullOrEmpty(name) && !IgnoredApps.Contains(name) && FocusedApp != name)
+                {
+                    FocusedApp = name;
+                    OnAppChanged?.Invoke(FocusedApp);
+                }
+            }
+        }
 
-//         public void Dispose()
-//         {
-//             _cts.Cancel();
-//             if (_display != IntPtr.Zero) XCloseDisplay(_display);
-//         }
+        public void Dispose()
+        {
+            _cts.Cancel();
+            if (_display != IntPtr.Zero) XCloseDisplay(_display);
+        }
 
-//         #region X11 P/Invoke
-//         private const string X11Lib = "libX11.so.6";
+        #region X11 P/Invoke
+        private const string X11Lib = "libX11.so.6";
 
-//         [DllImport(X11Lib)] private static extern int XInitThreads();
-//         [DllImport(X11Lib)] private static extern IntPtr XOpenDisplay(string display);
-//         [DllImport(X11Lib)] private static extern IntPtr XDefaultRootWindow(IntPtr display);
-//         [DllImport(X11Lib)] private static extern int XSelectInput(IntPtr display, IntPtr window, IntPtr mask);
-//         [DllImport(X11Lib)] private static extern IntPtr XInternAtom(IntPtr display, string name, bool only_if_exists);
-//         [DllImport(X11Lib)] private static extern int XNextEvent(IntPtr display, ref XEvent xevent);
-//         [DllImport(X11Lib)] private static extern int XFree(IntPtr data);
-//         [DllImport(X11Lib)] private static extern int XCloseDisplay(IntPtr display);
-//         [DllImport(X11Lib)] private static extern int XGetClassHint(IntPtr display, IntPtr window, out XClassHint hint);
-//         [DllImport(X11Lib)] private static extern int XGetWindowProperty(IntPtr display, IntPtr window, IntPtr atom, IntPtr long_offset, IntPtr long_length, bool delete, IntPtr req_type, out IntPtr actual_type, out int actual_format, out IntPtr nitems, out IntPtr bytes_after, out IntPtr prop);
+        [DllImport(X11Lib)] private static extern int XInitThreads();
+        [DllImport(X11Lib)] private static extern IntPtr XOpenDisplay(string display);
+        [DllImport(X11Lib)] private static extern IntPtr XDefaultRootWindow(IntPtr display);
+        [DllImport(X11Lib)] private static extern int XSelectInput(IntPtr display, IntPtr window, IntPtr mask);
+        [DllImport(X11Lib)] private static extern IntPtr XInternAtom(IntPtr display, string name, bool only_if_exists);
+        [DllImport(X11Lib)] private static extern int XNextEvent(IntPtr display, ref XEvent xevent);
+        [DllImport(X11Lib)] private static extern int XFree(IntPtr data);
+        [DllImport(X11Lib)] private static extern int XCloseDisplay(IntPtr display);
+        [DllImport(X11Lib)] private static extern int XGetClassHint(IntPtr display, IntPtr window, out XClassHint hint);
+        [DllImport(X11Lib)] private static extern int XGetWindowProperty(IntPtr display, IntPtr window, IntPtr atom, IntPtr long_offset, IntPtr long_length, bool delete, IntPtr req_type, out IntPtr actual_type, out int actual_format, out IntPtr nitems, out IntPtr bytes_after, out IntPtr prop);
 
-//         [StructLayout(LayoutKind.Sequential)]
-//         struct XClassHint { public IntPtr res_name; public IntPtr res_class; }
+        [StructLayout(LayoutKind.Sequential)]
+        struct XClassHint { public IntPtr res_name; public IntPtr res_class; }
 
-//         enum XEventName { PropertyNotify = 28 }
-//         enum EventMask { PropertyChangeMask = 1 << 22 }
+        enum XEventName { PropertyNotify = 28 }
+        enum EventMask { PropertyChangeMask = 1 << 22 }
 
-//         [StructLayout(LayoutKind.Explicit, Size = 192)] // Padded to prevent segfaults on 64-bit
-//         struct XEvent
-//         {
-//             [FieldOffset(0)] public XEventName type;
-//             [FieldOffset(0)] public XPropertyEvent PropertyEvent;
-//         }
+        [StructLayout(LayoutKind.Explicit, Size = 192)] // Padded to prevent segfaults on 64-bit
+        struct XEvent
+        {
+            [FieldOffset(0)] public XEventName type;
+            [FieldOffset(0)] public XPropertyEvent PropertyEvent;
+        }
 
-//         [StructLayout(LayoutKind.Sequential)]
-//         struct XPropertyEvent
-//         {
-//             public int type;
-//             public IntPtr serial;
-//             public bool send_event;
-//             public IntPtr display;
-//             public IntPtr window;
-//             public IntPtr atom;
-//             public IntPtr time;
-//             public int state;
-//         }
-//         #endregion
-//     }
-// }
+        [StructLayout(LayoutKind.Sequential)]
+        struct XPropertyEvent
+        {
+            public int type;
+            public IntPtr serial;
+            public bool send_event;
+            public IntPtr display;
+            public IntPtr window;
+            public IntPtr atom;
+            public IntPtr time;
+            public int state;
+        }
+        #endregion
+    }
+}
