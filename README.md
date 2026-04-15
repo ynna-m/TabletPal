@@ -1,8 +1,8 @@
-# Tablet Pal - In Progress. README will be re-written, but for now, the general directions should somewhat work, except what is released isn't an .exe file but an AppImage. "cmd" action is now "terminal", that should be the biggest change, but besides that, I think everything else is working similarly to the original TabletFriend.
+# Tablet Pal - Beta Version 
 
 ![logo](icons/logo.png)
 
-### [DOWNLOAD](https://github.com/Martenfur/TabletPal/releases/latest)
+### [DOWNLOAD](https://github.com/ynna-m/TabletPal/releases/latest)
 
 ### [SAMPLE LAYOUT](TabletPal/TabletPal/files/layouts/sample_layout.yaml)
 
