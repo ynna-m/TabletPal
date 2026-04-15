@@ -1,0 +1,28 @@
+<Window x:Class="TabletPal.MainWindow"
+        xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:TabletPal"
+		xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        mc:Ignorable="d"
+        Title="MainWindow" 
+        Height="300" 
+        Width="200" 
+        TransparencyLevelHint="Transparent"
+		ShowInTaskbar="False"
+		Background="Transparent"
+		UseLayoutRounding="True"
+		CanResize="False"
+        IsVisible="False"
+        SystemDecorations="None"
+		>
+        <Border Name="MainBorder">
+            <Canvas x:Name="MainCanvas" Name="MainCanvas"></Canvas>
+        </Border>
+        <Window.Transitions>
+            <Transitions>
+                <DoubleTransition Property="Opacity" Duration="0:0:0.3" />
+            </Transitions>
+        </Window.Transitions>
+</Window>

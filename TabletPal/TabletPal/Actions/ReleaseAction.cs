@@ -1,0 +1,20 @@
+﻿using System.Threading.Tasks;
+using TabletPal.InputSender;
+
+namespace TabletPal.Actions
+{
+	public class ReleaseAction : ButtonAction
+	{
+		private readonly string[] _keys;
+        private readonly IInputSender _inputSender;
+
+		public ReleaseAction(string[] keys)
+		{
+			_keys = keys;
+            _inputSender = InputSenderFactory.Create();
+		}
+
+		public override void Invoke() =>
+			_inputSender.SendRelease(_keys);
+	}
+}

@@ -1,0 +1,136 @@
+﻿using Newtonsoft.Json.Linq;
+using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
+using System.Net;
+using System.Net.Http;
+using System.Reflection;
+using System.Threading.Tasks;
+using MsBox.Avalonia;
+using MsBox.Avalonia.Enums;
+
+namespace TabletPal
+{
+    //This needs to be audited too
+	public static class UpdateChecker
+	{
+		private static Version _version = Assembly.GetExecutingAssembly().GetName().Version;
+
+		private static readonly HttpClient _client = new HttpClient();
+
+		private const string _repoLink = "https://api.github.com/repos/ynna-m/TabletPal/releases/latest";
+
+		private static string _downloadsPath =>
+			Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "Downloads", "tablet_pal");
+
+		
+		public static async Task Check()
+		{
+			try
+			{ 
+				await UpdateCheckRoutine();
+			}
+			catch { }
+		}
+
+
+		private static async Task UpdateCheckRoutine()
+		{
+			if (!AppState.Settings.UpdateCheckingEnabled)
+			{
+				return;
+			}
+
+			var response = await Get(_repoLink);
+
+			var newVersion = new Version(response["name"].ToString());
+			var changes = response["body"].ToString();
+
+			if (_version.CompareTo(newVersion) >= 0)
+			{
+				return;
+			}
+            var box = MessageBoxManager.GetMessageBoxStandard(
+                    "Update available!"
+                    ,"A new version of Tablet Pal is available.\n\nv" + newVersion + "\n\n" + changes + "\n\nWould you like to download it?",
+                    ButtonEnum.YesNo
+                    ,Icon.Question);
+            var result = await box.ShowAsync();
+
+			if (result != ButtonResult.Yes)
+			{
+				return;
+			}
+
+			try
+			{
+				await DownloadUpdate(response, newVersion.ToString());
+			}
+			catch (Exception e)
+			{
+                var boxError = MessageBoxManager.GetMessageBoxStandard(
+                    "Download failed!"
+                    ,$"DOWNLOAD FAILED:\n\n{e.Message}",
+                    ButtonEnum.Ok
+                    ,Icon.Error);
+                await boxError.ShowAsync();
+
+				return;
+			}
+
+			Process.GetCurrentProcess().Kill();
+		}
+
+		private static async Task DownloadUpdate(JObject response, string version)
+		{
+			var links = new List<string>();
+
+			var versionedDownloadsPath = _downloadsPath + "_" + version;
+
+			foreach (var asset in (JArray)response["assets"])
+			{
+				links.Add(asset["browser_download_url"].ToString());
+			}
+			Directory.CreateDirectory(versionedDownloadsPath);
+
+			using (var cliente = new WebClient())
+			{
+				foreach (var link in links)
+				{
+					var outFile = Path.Combine(versionedDownloadsPath, Path.GetFileName(link));
+					await cliente.DownloadFileTaskAsync(new Uri(link), outFile);
+				}
+			}
+            var box = MessageBoxManager.GetMessageBoxStandard(
+                    "Update downloaded!"
+                    ,$"A new version of Tablet Pal has been downloaded. Please unzip and install the new version. Tablet Pal will be closed.",
+                    ButtonEnum.Ok
+                    ,Icon.Info);
+            await box.ShowAsync();
+
+
+			var startInfo = new ProcessStartInfo()
+			{
+				Arguments = versionedDownloadsPath,
+				FileName = "xdg-open"
+			};
+			Process.Start(startInfo);
+		}
+
+
+		private async static Task<JObject> Get(string uri)
+		{
+			var request = new HttpRequestMessage()
+			{
+				RequestUri = new Uri(uri),
+				Method = HttpMethod.Get
+			};
+			request.Headers.Add("User-Agent", "foxe");
+
+			var response = await _client.SendAsync(request);
+			response.EnsureSuccessStatusCode();
+			return JObject.Parse(await response.Content.ReadAsStringAsync());
+		}
+	}
+}
