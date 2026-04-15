@@ -131,6 +131,19 @@ jobs:
         run: | 
           ./squashfs-root/AppRun TabletPal.AppDir
 
+      - name: Extract latest changelog
+        run: |
+          awk '
+            /^## \[/ {
+              if (found) exit
+              found=1
+            }
+            found {
+              if (/^---$/) exit
+              print
+            }
+          ' CHANGELOG.md > RELEASE_NOTES.md
+
       - name: Upload artifact 
         uses: actions/upload-artifact@v4 
         with: 
@@ -141,5 +154,6 @@ jobs:
         uses: softprops/action-gh-release@v2 
         with: 
           files: TabletPal-x86_64.AppImage 
+          body_path: RELEASE_NOTES.md
         env: 
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
