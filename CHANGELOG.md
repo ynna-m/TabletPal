@@ -13,6 +13,8 @@ Other than the changes indicated below, so far in this initial beta release, it 
 - After the prompt from above, since there is no AppData directory for Linux, it will instead just ask if you want to install TabletPal to your home directory.
 - I have also removed autohiding toolbar. It was a little too complicated to implement as of the moment on Linux
 
+If you found any errors or bugs in the app, please message me via the contact form at my website: `https://ynnadev.com/contact-me`
+And I will add that as an issue in the board as soon as I confirm it.
 ---
 
 ## [v0.4.1] - 04.15.2026
