@@ -1,4 +1,19 @@
 # Tablet Pal - Beta Version 
+## Introduction
+Tablet Friend here is renamed to Tablet Pal, since the initial plan was to make this cross-platform and still stick to Tablet Friend, and I was hoping to be able to push it to the original repository, but alas, that didn't exactly work out. If anyone can do that, please feel free to do so. 
+
+Since I work mostly on Linux, that if I do make any future updates on this, it is going to diverge pretty much from the original.
+
+With that said, there are some minor changes on first start up. Here are the instructions:
+
+## Startup
+![start1](docs/pics/start1.png)
+Clicking __No__ will not make the app run. In order for the app to run this way, is either to click __Yes__ or import from an old installation the files directory and settings.yaml with first_launch set to false;
+
+![start2](docs/pics/start2.png)
+Since AppData does not exist in most Linux installations, the second prompt instead will ask whether you want to install Tablet Pal to the Home directory or not.
+
+
 
 ![logo](icons/logo.png)
 
@@ -20,7 +35,7 @@ Here's what Tablet Pal can do:
 - Toggle buttons.
 - Type.
 - Press and hold buttons.
-- Execute command line commands - this allows you to launch any programs you wish or make custom scripts that do exactly what you want. Batch, Powershell - the sky is the limit.
+- Execute terminal commands - this allows you to launch any programs you wish or make custom scripts that do exactly what you want. 
 - Swap and link layouts seamlessly.
 - Chain any number of actions.
 - Use over 4000 built-in vector icons from [https://materialdesignicons.com](https://materialdesignicons.com) or arbitrary png icons.
@@ -31,7 +46,7 @@ Here's what Tablet Pal can do:
 
 ## Getting started
 
-Grab the latest release from [this page](https://github.com/Martenfur/TabletPal/releases/latest), unzip it... and that's it! No multistep installations, no hassle, you can start using the thing right away. 
+Grab the latest release from [this page](https://github.com/ynna-m/TabletPal/releases/latest), unzip it... and that's it! No multistep installations, no hassle, you can start using the thing right away. 
 
 ## Making your own toolbars
 
@@ -187,6 +202,6 @@ Note that unmodified 1.0 layouts and themes will still function but may get rend
 
 ## Making Tablet Pal better
 
-Tablet Pal is opensource, licensed under MIT and 100% free. You can help out the development by submitting your own toolbars to the [issues](https://github.com/Martenfur/TabletPal/issues) board or helping out with the code. 
+Tablet Pal is opensource, licensed under MIT and 100% free. You can help out the development by submitting your own toolbars to the [issues](https://github.com/ynna-m/TabletPal/issues) board or helping out with the code. 
 
-If you have any questions, you can contact me at `chaifoxes@gmail.com`
+If you have any questions, you can contact me at `https://ynnadev.com/contact-me`

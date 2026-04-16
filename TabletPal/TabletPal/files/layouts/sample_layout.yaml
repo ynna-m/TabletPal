@@ -101,7 +101,7 @@ buttons:
 
 
 	calc:
-		action: cmd calc.exe # cmd executes a command line command. For example, calc.exe will launch calculator app.
+		action: terminal kcalc # terminal executes a command line command. For example, this will launch calculator app.
 		icon: calculator
 		style: circular
 		size: 2,2
@@ -232,7 +232,7 @@ buttons:
 
 
 	honk:
-		action: cmd rundll32 user32.dll,MessageBeep
+		action: terminal rundll32 user32.dll,MessageBeep
 		font: comic sans ms
 		text: honk :)
 		size: 4,2

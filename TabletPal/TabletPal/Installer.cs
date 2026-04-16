@@ -71,12 +71,6 @@ namespace TabletPal
 						}
 					}
                     //Needs to be checked and audited
-					// DirectoryCopy(AppState.CurrentDirectory, _preferredDirectory, "*.dll");
-					// DirectoryCopy(AppState.CurrentDirectory, _preferredDirectory, "*.exe");
-					// DirectoryCopy(AppState.CurrentDirectory, _preferredDirectory, "*.json");
-					// Process.Start(Path.Combine(_preferredDirectory, "TabletPal.exe"));
-
-                    // DirectoryCopy(Path.Combine(appDir,AppState.FilesRelativePath), Path.Combine(_preferredDirectory, AppState.FilesRelativePath), "*.*");
                     DirectoryCopy(appImagePath, _preferredDirectory, "*.AppImage");
 					Process.Start(Path.Combine(_preferredDirectory, "TabletPal*.AppImage"));
 

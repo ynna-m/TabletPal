@@ -11,6 +11,7 @@ Other than the changes indicated below, so far in this initial beta release, it 
 - Only works with X11 Display Server Protocols. I don't think it works on Wayland. It might with XWayland, but it is untested there.
 - There's a prompt that will appear when you run TabletPal for the first time. It asks you if you want to extract the files directory from the AppImage, clicking __No__ will not make the AppImage run. The only other way for the AppImage to run if you click __No__ is to migrate your files directory and settings.yaml from a previous installation, and set first_launch: false in settings.yaml.
 - After the prompt from above, since there is no AppData directory for Linux, it will instead just ask if you want to install TabletPal to your home directory.
+- I have also removed autohiding toolbar. It was a little too complicated to implement as of the moment on Linux
 
 ---
 
