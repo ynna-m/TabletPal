@@ -6,15 +6,6 @@ Since I work mostly on Linux, that if I do make any future updates on this, it i
 
 With that said, there are some minor changes on first start up. Here are the instructions:
 
-## Startup
-![start1](docs/pics/start1.png)
-Clicking __No__ will not make the app run. In order for the app to run this way, is either to click __Yes__ or import from an old installation the files directory and settings.yaml with first_launch set to false;
-
-![start2](docs/pics/start2.png)
-Since AppData does not exist in most Linux installations, the second prompt instead will ask whether you want to install Tablet Pal to the Home directory or not.
-
-
-
 ![logo](icons/logo.png)
 
 ### [DOWNLOAD](https://github.com/ynna-m/TabletPal/releases/latest)
@@ -22,6 +13,16 @@ Since AppData does not exist in most Linux installations, the second prompt inst
 ### [SAMPLE LAYOUT](TabletPal/TabletPal/files/layouts/sample_layout.yaml)
 
 ### [VIDEO GUIDE](https://www.youtube.com/watch?v=rWkRrhrKmSY)
+Video Guide comes from Tablet Friend, which for now works similarly to Tablet Pal.
+
+## Startup
+The app released here is an AppImage, not exe, but it should more or less work like an exe for Linux. Depending on what Linux environment you're in, you might have to manually chmod +x on the terminal for the AppImage to run. In other environments, if you double click on it, a popup should appear and ask whether you want to execute the AppImage or not. Please click yes/ok.
+
+![start1](docs/pics/start1.png)
+Clicking __No__ will not make the app run. In order for the app to run this way, is either to click __Yes__ or import from an old installation the files directory and settings.yaml with first_launch set to false;
+
+![start2](docs/pics/start2.png)
+Since AppData does not exist in most Linux installations, the second prompt instead will ask whether you want to install Tablet Pal to the Home directory or not.
 
 Hey there! Working without a keyboard is hard. When you are on a tablet, you realize how much you miss certain key combinations. Well, no more! Tablet Pal will make your life on Surface Pro or any other Windows tablet easier by providing a highly customizable set of on-screen toolbars.
 
@@ -204,4 +205,4 @@ Note that unmodified 1.0 layouts and themes will still function but may get rend
 
 Tablet Pal is opensource, licensed under MIT and 100% free. You can help out the development by submitting your own toolbars to the [issues](https://github.com/ynna-m/TabletPal/issues) board or helping out with the code. 
 
-If you have any questions, you can contact me at `https://ynnadev.com/contact-me`
+If you have any questions, you can contact me via contact form at `https://ynnadev.com/contact-me`
